@@ -1,15 +1,21 @@
 import { ReactNode } from 'react';
 import Navbar from "../nav";
+import AuthNav from '../nav/authNav';
 
 interface layoutProps {
     children: ReactNode
 }
 
-const AuthLayout = ({ children }: layoutProps) => (
-    <div className='px-20 py-4'>
+export const AuthLayout = ({ children }: layoutProps) => (
+    <div className='bg-bg text-lightGrey'>
         <Navbar />
-        <div className='mt-28'>{children}</div>
+        <div className='pt-28 px-20'>{children}</div>
     </div>
 );
 
-export default AuthLayout;
+export const FeedsLayout = ({ children }: layoutProps) => (
+    <div className='bg-lightGrey text-dark'>
+        <AuthNav />
+        <div className='pt-28 px-20'>{children}</div>
+    </div>
+);

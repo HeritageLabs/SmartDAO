@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { HOME_URL } from '../utils/constants/pages';
+import { FEEDS, HOME_URL } from '../utils/constants/pages';
 import AOS from 'aos';
 
 const Home = React.lazy(() => import('../pages/home'));
+const Feeds = React.lazy(() => import('../pages/feeds'));
 
 const WebRoute = () => {
   useEffect(() => {
@@ -12,6 +13,7 @@ const WebRoute = () => {
 return (
   <Routes>
     <Route index path={HOME_URL} element={<Home />} />
+    <Route index path={FEEDS} element={<Feeds />} />
   </Routes>
 );
 };
