@@ -1,0 +1,49 @@
+@import url('//fonts.cdnfonts.com/css/gilroy-bold?styles=20876,20877,20878,20879,20880');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+  body {
+    font-family: 'Gilroy-Regular', 'sans-serif';
+    color: '#232C43';
+    background-color: #261E3E;
+    color: #f1f1f1;
+  }
+
+  .scrollBar {
+    overflow: auto;
+    overscroll-behavior-y: contain;
+    scroll-snap-type: y proximity;
+  }
+  
+  .scrollBar:hover {
+    overflow: auto;
+  }
+  
+  .scrollBar::-webkit-scrollbar {
+    width: 2px;
+    height: 5px;
+  }
+  
+  .scrollBar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .scrollBar::-webkit-scrollbar-thumb {
+    background: #4D4D4D;
+  }
+
+  .a-tag {
+    color: #0059DB;
+    text-decoration: underline;
+    font-family: 'Gilroy-Regular';
+  }
+
+  .trans {
+    transition: all 0.5s ease;
+  }
+
+  .first-background {
+    opacity: 0.3;
+    padding: 0 80px;
+  }
