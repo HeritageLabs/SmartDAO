@@ -1,5 +1,5 @@
 import { AddIcon, DaoIcon, DaoIconBlack, HomeIcon, HomeIconBlack, ProposalIcon, ProposalIconBlack } from "../../assets/svgs";
-import { DAOS, FEEDS } from "../../utils/constants/pages";
+import { DAOS, FEEDS, PROPOSALS } from "../../utils/constants/pages";
 import { ReactNode } from 'react';
 
 interface SidebarProp {
@@ -28,7 +28,7 @@ export const SidebarLinks: SidebarProp[] = [
     {
         title: 'Proposals',
         icon: ProposalIcon,
-        url: '#',
+        url: PROPOSALS,
         activeIcon: ProposalIconBlack,
         id: 3
     },

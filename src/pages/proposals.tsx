@@ -1,6 +1,6 @@
 /* eslint-disable react/style-prop-object */
 import Filters from "../components/common/filter";
-import AllDaos from "../components/daos/allDaos";
+import AllProposals from "../components/proposal/allProposals";
 import { FeedsLayout } from "../components/layouts";
 
 const Daos = () => (
@@ -10,7 +10,7 @@ const Daos = () => (
       <div className="ml-8 pt-14">
         <Filters />
         <div className="mt-8">
-          <AllDaos />
+          <AllProposals />
         </div>
       </div>
     </FeedsLayout>

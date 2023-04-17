@@ -27,6 +27,7 @@ const CustomButton = ({ children, bg, isLoading, disabled, width, href, color }:
       type="button"
       className={`${bg} px-4 py-3 rounded-lg hover:opacity-80 flex items-center trans disabled:opacity-50 w-${width} justify-center text-${color}`}
       disabled={disabled}
+      onClick={(e) => { e.preventDefault(); }}
     >
       {isLoading && Loader}
       {children}
