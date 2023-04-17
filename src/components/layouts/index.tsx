@@ -1,5 +1,4 @@
-import { ReactNode, useCallback, useRef, useState } from "react";
-import useOnClickOutside from "../../hooks/useOnClickOutside";
+import { ReactNode } from "react";
 import Navbar from "../nav";
 import AuthNav from "../nav/authNav";
 import SideBar from "../sidebar";
