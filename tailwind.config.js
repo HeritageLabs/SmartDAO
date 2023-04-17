@@ -51,9 +51,9 @@ module.exports = {
       xxl: '64.497px',
       xxxl: '70px'
     },
-    boxShadow: {
-      normal: '0 8px 32px rgba(232, 232, 232, 0.25)',
-    },
+    // boxShadow: {
+    //   normal: '0 8px 32px rgba(232, 232, 232, 0.25)',
+    // },
     fontFamily: {
       gilroyRegular: ['Gilroy-Regular', 'sans-serif'],
       gilroyMd: ['Gilroy-Medium', 'sans-serif'],

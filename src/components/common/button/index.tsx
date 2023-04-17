@@ -9,6 +9,7 @@ interface buttonProps {
   width: string;
   href: string;
   color: string;
+  handleClick: (arg0: any) => void;
 }
 
 const defaultProps: buttonProps = {
@@ -18,16 +19,17 @@ const defaultProps: buttonProps = {
   disabled: false,
   width: "fit-content",
   href: "",
-  color: "white"
+  color: "white",
+  handleClick: (e) => {}
 };
 
-const CustomButton = ({ children, bg, isLoading, disabled, width, href, color }: buttonProps) => (
+const CustomButton = ({ children, bg, isLoading, disabled, width, href, color, handleClick }: buttonProps) => (
   <a href={href}>
     <button
       type="button"
       className={`${bg} px-4 py-3 rounded-lg hover:opacity-80 flex items-center trans disabled:opacity-50 w-${width} justify-center text-${color}`}
       disabled={disabled}
-      onClick={(e) => { e.preventDefault(); }}
+      onClick={(e) => { e.preventDefault(); handleClick(e); }}
     >
       {isLoading && Loader}
       {children}
