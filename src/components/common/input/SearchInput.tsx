@@ -1,6 +1,10 @@
 import { SearchIcon } from "../../../assets/svgs";
+import useCurrentLocation from "../../../hooks/useCurrentLocation";
+import { DAOS } from "../../../utils/constants/pages";
 
-const SearchInput = () => (
+const SearchInput = () => {
+  const { pathname } = useCurrentLocation();
+return (
   <form className="flex items-center w-full">
     <label htmlFor="search" className="sr-only">
       Search
@@ -13,7 +17,7 @@ const SearchInput = () => (
         type="text"
         id="search"
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-quaternary focus:border-quaternary block w-full pl-10 p-2.5 focus-within:border-quaternary focus-within:outline-quaternary"
-        placeholder="Search"
+        placeholder={`Search by ${pathname === DAOS ? 'DAO name' : 'proposal title'}`}
         required
       />
     </div>
@@ -39,5 +43,6 @@ const SearchInput = () => (
     </button>
   </form>
 );
+};
 
 export default SearchInput;
