@@ -1,5 +1,5 @@
 import { AddIcon, DaoIcon, DaoIconBlack, HomeIcon, HomeIconBlack, ProposalIcon, ProposalIconBlack } from "../../assets/svgs";
-import { DAOS, FEEDS, PROPOSALS } from "../../utils/constants/pages";
+import { CREATE_DAO_URL, DAOS, FEEDS, PROPOSALS } from "../../utils/constants/pages";
 import { ReactNode } from 'react';
 
 interface SidebarProp {
@@ -45,7 +45,7 @@ export const Creation: CreationProp[] = [
     {
         title: 'Create DAO',
         icon: AddIcon,
-        url: '#',
+        url: CREATE_DAO_URL,
         id: 1
     },
     {

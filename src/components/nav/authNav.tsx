@@ -1,11 +1,20 @@
-import { useState } from "react";
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import { useContext, useState } from "react";
 import Logo from "../../assets/icons/logo-dark.svg";
+import { LogoutIcon } from "../../assets/svgs";
+import { useToastify } from "../../hooks/useToastify";
+import { IContextType } from "../../types/inext";
+import { UserContext } from "../../UserContext";
 import CustomButton from "../common/button";
+import DropdownMenu from "../common/dropdownMenu";
 import SearchInput from "../common/input/SearchInput";
 import ConnectWalletPopup from "../modals/connectWalletPopup";
 
 const AuthNav = () => {
   const [showModal, setShowModal] = useState(false);
+  const { value, setValue } = useContext(UserContext) as IContextType;
+  const { alertToast } = useToastify();
+
   return (
     <nav
       className="flex items-center w-full justify-between bg-lightGrey fixed z-40 px-14 py-3"
@@ -17,15 +26,34 @@ const AuthNav = () => {
       <div className="flex justify-between w-2/4 items-center">
         <SearchInput />
       </div>
-      <CustomButton bg="bg-quaternary" handleClick={() => setShowModal(true)}>
-        Connect wallet
-      </CustomButton>
+      {value ? (
+        <div className="flex items-center">
+          <div className="pr-3 w-fit cursor-pointer"><DropdownMenu>
+          <li>
+              <a
+                href="#"
+                className="block px-6 py-4 flex items-center hover:bg-[#F4FFF1] hover:text-quaternary font-gilroyMd trans"
+                onClick={() => { setValue(false); alertToast('error', 'Disconnected successfully');  }}
+              >
+                <div className="mr-3">{LogoutIcon}</div>
+                <p>Sign Out</p>
+              </a>
+            </li>
+            </DropdownMenu></div>
+          <CustomButton width="w-44" bg="bg-light" color="bg-black" handleClick={(e) => e.preventDefault()}>
+            <p className="text-ellipsis whitespace-nowrap overflow-hidden">0xb45cff62650919d243d59c66e65508dbb51daedd</p>
+          </CustomButton>
+        </div>
+      ): (
+        <CustomButton bg="bg-quaternary" handleClick={(e) => { setShowModal(true); e.preventDefault(); }}>
+          Connect wallet
+        </CustomButton>
+      )}
 
       {showModal && (
         <ConnectWalletPopup
           setOpenModal={setShowModal}
-          heading="Thanks for choosing Snappay."
-          subHeading="A confirmation mail will be sent to you within the next 24hrs once your account has been activated."
+          handleMetamaskConnect={() => { setValue(true); setShowModal(false); alertToast('success', 'Connected successfully');  }}
         />
       )}
     </nav>

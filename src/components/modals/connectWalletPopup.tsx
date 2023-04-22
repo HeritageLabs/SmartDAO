@@ -3,11 +3,10 @@ import { closeModal, CoinbaseLogo, MetamaskLogo } from "../../assets/svgs";
 
 interface props {
   setOpenModal: (arg0: boolean) => void;
-  heading: string;
-  subHeading: string;
+  handleMetamaskConnect: () => void;
 }
 
-const ConnectWalletPopup = ({ setOpenModal, heading, subHeading }: props) => {
+const ConnectWalletPopup = ({ setOpenModal, handleMetamaskConnect }: props) => {
   return (
     <>
       <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -44,6 +43,7 @@ const ConnectWalletPopup = ({ setOpenModal, heading, subHeading }: props) => {
                 <a
                   href="#"
                   className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-[#F4FFF1] hover:bg-grey-100 group hover:shadow-md dark:bg-gray dark:hover:bg-grey dark:text-white trans"
+                  onClick={handleMetamaskConnect}
                 >
                   {MetamaskLogo}
                   <span className="flex-1 ml-3 whitespace-nowrap font-gilroyBold">

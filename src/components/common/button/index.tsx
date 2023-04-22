@@ -17,7 +17,7 @@ const defaultProps: buttonProps = {
   bg: "bg-primary",
   isLoading: false,
   disabled: false,
-  width: "fit-content",
+  width: "w-fit-content",
   href: "",
   color: "white",
   handleClick: (e) => {}
@@ -27,9 +27,9 @@ const CustomButton = ({ children, bg, isLoading, disabled, width, href, color, h
   <a href={href}>
     <button
       type="button"
-      className={`${bg} px-4 py-3 rounded-lg hover:opacity-80 flex items-center trans disabled:opacity-50 w-${width} justify-center text-${color}`}
+      className={`${bg} px-4 py-3 rounded-lg hover:opacity-80 flex items-center trans disabled:opacity-50 ${width} justify-center text-${color}`}
       disabled={disabled}
-      onClick={(e) => { e.preventDefault(); handleClick(e); }}
+      onClick={handleClick}
     >
       {isLoading && Loader}
       {children}

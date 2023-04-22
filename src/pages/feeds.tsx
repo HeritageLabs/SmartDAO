@@ -3,7 +3,8 @@ import AllDaos from "../components/daos/allDaos";
 import { FeedsLayout } from "../components/layouts";
 import AllProposals from "../components/proposal/allProposals";
 
-const Feeds = () => (
+const Feeds = () => {
+return (
     <FeedsLayout>
       <p className="border-b-2 border-quaternary w-fit ml-8 font-gilroyMd text-quaternary">My Feeds</p>
       <div className="h-px bg-[#EEEEEE]" />
@@ -15,5 +16,6 @@ const Feeds = () => (
         </div>
     </FeedsLayout>
 );
+};
 
 export default Feeds;

@@ -2,6 +2,7 @@
 import CustomButton from "../components/common/button";
 import { FeedsLayout } from "../components/layouts";
 import AllDaos from "../components/daos/allDaos";
+import { CREATE_DAO_URL } from "../utils/constants/pages";
 
 const Feeds = () => (
     <FeedsLayout>
@@ -9,7 +10,7 @@ const Feeds = () => (
       <div className="h-px bg-[#EEEEEE]" />
       <div className="ml-8 pt-14 flex items-center w-3/12 justify-between">
         <h1>All DAOs</h1>
-        <CustomButton bg="bg-bg">Create new DAO</CustomButton>
+        <CustomButton bg="bg-bg" href={CREATE_DAO_URL}>Create new DAO</CustomButton>
       </div>
         <div className="mt-8 ml-8">
           <AllDaos />

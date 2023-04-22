@@ -2,15 +2,24 @@ import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/index.css';
+import "./styles/toastify.css";
 import 'aos/dist/aos.css';
 import reportWebVitals from './reportWebVitals';
 import WebRoute from './route';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <WebRoute />
+      <ToastContainer
+          position="top-right"
+          autoClose={4000}
+          theme="light"
+          toastClassName="font-gilroyLight"
+        />
     </BrowserRouter>
   </React.StrictMode>,
 );

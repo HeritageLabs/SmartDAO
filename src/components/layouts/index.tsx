@@ -14,8 +14,9 @@ export const AuthLayout = ({ children }: layoutProps) => (
   </div>
 );
 
-export const FeedsLayout = ({ children }: layoutProps) => (
-  <div className="bg-lightGrey text-dark">
+export const FeedsLayout = ({ children }: layoutProps) => {
+return (
+  <div className=" text-dark">
     <AuthNav />
     <div className="flex pt-16 px-12">
       <SideBar />
@@ -23,3 +24,4 @@ export const FeedsLayout = ({ children }: layoutProps) => (
     </div>
   </div>
 );
+};
