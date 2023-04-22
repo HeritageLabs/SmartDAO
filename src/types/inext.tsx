@@ -11,4 +11,21 @@ export interface IInput {
     onChange: (arg0: any) => void;
     defaultValue: string;
     value: string;
+    textTransform: string;
+    readOnly: boolean;
+    hasCancel: boolean;
+    handleClickCancel: () => void;
+}
+
+export interface ITextAreaInput {
+    type: string;
+    placeholder: string;
+    label: string;
+    disabled: boolean;
+    onChange: (arg0: any) => void;
+    defaultValue: string;
+    value: string;
+    textTransform: string;
+    readOnly: boolean;
+    hasCancel: boolean;
 }

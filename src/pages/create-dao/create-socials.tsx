@@ -1,4 +1,4 @@
-import DaoInfoForm from "../../components/forms/CreateDaoForm";
+import SocialsInfoForm from "../../components/forms/CreateDaoForm/Socials";
 import { FeedsLayout } from "../../components/layouts";
 
 const CreateDao = () => {
@@ -12,7 +12,7 @@ const CreateDao = () => {
               "rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px",
           }}
         >
-          <DaoInfoForm />
+          <SocialsInfoForm />
         </div>
       </div>
     </FeedsLayout>
