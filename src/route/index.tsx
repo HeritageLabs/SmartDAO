@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { CREATE_DAO_URL, CREATE_DAO_URL_ADD_GROUPS, CREATE_DAO_URL_PROPOSAL, CREATE_DAO_URL_SOCIALS, DAOS, FEEDS, HOME_URL, PROPOSALS } from "../utils/constants/pages";
+import { CREATE_DAO_URL, CREATE_DAO_URL_ADD_GROUPS, CREATE_DAO_URL_PROPOSAL, CREATE_DAO_URL_SOCIALS, CREATE_DAO_URL_VOTING, DAOS, FEEDS, HOME_URL, PROPOSALS } from "../utils/constants/pages";
 import AOS from "aos";
 import { UserContext } from "../UserContext";
 
@@ -12,6 +12,7 @@ const CreateDAO = React.lazy(() => import("../pages/create-dao"));
 const AddSocialInfo = React.lazy(() => import("../pages/create-dao/create-socials"));
 const AddGroups = React.lazy(() => import("../pages/create-dao/add-groups"));
 const ProposalCreation = React.lazy(() => import("../pages/create-dao/proposal-creation"));
+const VotingPermission = React.lazy(() => import("../pages/create-dao/voting-permission"));
 
 const WebRoute = () => {
   const [value, setValue] = useState(false);
@@ -30,6 +31,7 @@ const WebRoute = () => {
         <Route path={CREATE_DAO_URL_SOCIALS} element={<AddSocialInfo />} />
         <Route path={CREATE_DAO_URL_ADD_GROUPS} element={<AddGroups />} />
         <Route path={CREATE_DAO_URL_PROPOSAL} element={<ProposalCreation />} />
+        <Route path={CREATE_DAO_URL_VOTING} element={<VotingPermission />} />
       </Routes>
     </UserContext.Provider>
   );

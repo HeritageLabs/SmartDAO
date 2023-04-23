@@ -1,14 +1,14 @@
 import { ProposalCreationData } from "../../../utils/constants/data";
-import { CREATE_DAO_URL_ADD_GROUPS, CREATE_DAO_URL_VOTING } from "../../../utils/constants/pages";
+import { CREATE_DAO_URL_ADD_GROUPS, CREATE_DAO_URL_PROPOSAL } from "../../../utils/constants/pages";
 import CustomButton from "../../common/button";
 import CreateDaoHeader from "./CreateDaoheader";
 
-const ProposalCreationForm = () => {
+const VotingPermissionForm = () => {
   return (
     <div className="w-full">
       <form className="w-full">
-        <CreateDaoHeader header="Proposal Creation" currentStage="4" />
-        <p className="-mt-5 text-normal text-grey mb-8">Choose what creation rights you give DAO groups. This can be changed in settings later</p>
+        <CreateDaoHeader header="Voting Permissions" currentStage="5" />
+        <p className="-mt-5 text-normal text-grey mb-8">Choose what voting rights you give DAO groups.</p>
 
         <div className="relative overflow-x-auto mb-9">
           <table className="w-full text-sm text-left">
@@ -54,7 +54,7 @@ const ProposalCreationForm = () => {
               color="grey3"
               bg="bg-none"
               width="w-full"
-              href={CREATE_DAO_URL_ADD_GROUPS}
+              href={CREATE_DAO_URL_PROPOSAL}
             >
               Back
             </CustomButton>
@@ -63,7 +63,7 @@ const ProposalCreationForm = () => {
             <CustomButton
               bg="bg-quaternary"
               width="w-full"
-              href={CREATE_DAO_URL_VOTING}
+              href={CREATE_DAO_URL_ADD_GROUPS}
             >
               Next
             </CustomButton>
@@ -74,4 +74,4 @@ const ProposalCreationForm = () => {
   );
 };
 
-export default ProposalCreationForm;
+export default VotingPermissionForm;

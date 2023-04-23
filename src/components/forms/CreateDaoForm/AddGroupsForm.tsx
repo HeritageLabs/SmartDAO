@@ -74,7 +74,7 @@ const AddGroupsForm = () => {
           <div className="w-2/5">
             <CustomButton
               borderColor="border-grey"
-              color="gray"
+              color="grey3"
               bg="bg-none"
               width="w-full"
               href={CREATE_DAO_URL_SOCIALS}
