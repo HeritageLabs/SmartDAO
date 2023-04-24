@@ -24,9 +24,6 @@ const SocialsInfoForm = () => {
   const removeSocial = (idx: number) => {
    setSocialMediaLink(socialMediaLink.filter((_, index) => idx !== index));
   };
-
-  console.log(socialMediaLink)
-
   return (
     <div className="w-full">
       <form className="w-full">

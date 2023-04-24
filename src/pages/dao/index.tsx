@@ -1,8 +1,8 @@
 /* eslint-disable react/style-prop-object */
-import CustomButton from "../components/common/button";
-import { FeedsLayout } from "../components/layouts";
-import AllDaos from "../components/daos/allDaos";
-import { CREATE_DAO_URL } from "../utils/constants/pages";
+import CustomButton from "../../components/common/button";
+import { FeedsLayout } from "../../components/layouts";
+import AllDaos from "../../components/daos/allDaos";
+import { CREATE_DAO_URL } from "../../utils/constants/pages";
 
 const Feeds = () => (
     <FeedsLayout>

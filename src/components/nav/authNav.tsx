@@ -14,8 +14,6 @@ const AuthNav = () => {
   const { isLoggedIn, showModal, setShowModal, loginUser, logoutUser } = useContext(UserContext) as IContextType;
   const { alertToast } = useToastify();
 
-  console.log(isLoggedIn, '--> on auth');
-
   return (
     <nav
       className="flex items-center w-full justify-between bg-lightGrey fixed z-40 px-14 py-3"

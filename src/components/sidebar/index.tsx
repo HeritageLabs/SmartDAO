@@ -11,13 +11,13 @@ const SideBar = () => {
           <a href={sidebar.url} key={sidebar.title}>
             <div
               className={`flex py-2 hover:bg-[#F4FFF1] px-4 border cursor-pointer w-56 hover:border rounded-lg trans my-4 hover:text-quaternary items-center ${
-                pathname === sidebar.url
+                pathname === sidebar.url || pathname.includes(sidebar.url)
                   ? "bg-[#F4FFF1] border border-quaternary text-quaternary"
                   : "border-lightGrey"
               }`}
               key={sidebar.title}
             >
-              {pathname === sidebar.url ? sidebar.activeIcon : sidebar.icon}
+              {(pathname === sidebar.url || pathname.includes(sidebar.url)) ? sidebar.activeIcon : sidebar.icon}
               <p className="ml-4 font-gilroyMd">{sidebar.title}</p>
             </div>
           </a>

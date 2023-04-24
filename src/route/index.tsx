@@ -18,7 +18,7 @@ import Private from "./private";
 const Home = React.lazy(() => import("../pages/home"));
 const Feeds = React.lazy(() => import("../pages/feeds"));
 const Proposals = React.lazy(() => import("../pages/proposals"));
-const Daos = React.lazy(() => import("../pages/dao"));
+const Daos = React.lazy(() => import("../pages/dao/index"));
 const CreateDAO = React.lazy(() => import("../pages/create-dao"));
 const AddSocialInfo = React.lazy(
   () => import("../pages/create-dao/create-socials")
@@ -28,6 +28,7 @@ const ProposalCreation = React.lazy(
   () => import("../pages/create-dao/proposal-creation")
 );
 const CheckoutPage = React.lazy(() => import("../pages/create-dao/checkout"));
+const DaoDetails = React.lazy(() => import("../pages/dao/details"));
 
 const WebRoute = () => {
 
@@ -53,6 +54,7 @@ const WebRoute = () => {
         <Route path={CREATE_DAO_URL_ADD_GROUPS} element={<Private><AddGroups /></Private>} />
         <Route path={CREATE_DAO_URL_PROPOSAL} element={<Private><ProposalCreation /></Private>} />
         <Route path={CREATE_DAO_URL_CHECKOUT} element={<Private><CheckoutPage /></Private>} />
+        <Route path={`${DAOS}/:daoId`} element={<DaoDetails />} />
       </Routes>
   );
 };
