@@ -52,9 +52,12 @@ module.exports = {
       xxl: '64.497px',
       xxxl: '70px'
     },
-    // boxShadow: {
-    //   normal: '0 8px 32px rgba(232, 232, 232, 0.25)',
-    // },
+    boxShadow: {
+      inset: 'rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset',
+      normal: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
+      medium: 'rgba(0, 0, 0, 0.08) 0px 4px 12px',
+      extra: 'rgba(0, 0, 0, 0.1) 0px 10px 50px'
+    },
     fontFamily: {
       gilroyRegular: ['Gilroy-Regular', 'sans-serif'],
       gilroyMd: ['Gilroy-Medium', 'sans-serif'],

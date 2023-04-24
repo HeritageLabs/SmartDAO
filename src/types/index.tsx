@@ -18,6 +18,8 @@ export interface IInput {
     readOnly: boolean;
     hasCancel: boolean;
     handleClickCancel: () => void;
+    mb: string;
+    name: string;
 }
 
 export interface ITextAreaInput {

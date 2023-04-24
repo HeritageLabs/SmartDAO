@@ -13,10 +13,12 @@ const defaultProps: IInput = {
     readOnly: false,
     hasCancel: false,
     handleClickCancel: () => null,
+    mb: '6',
+    name: '',
 };
 
-const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue, value, textTransform, readOnly, hasCancel, handleClickCancel }: IInput) => (
-  <div className="mb-6">
+const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue, value, textTransform, readOnly, hasCancel, handleClickCancel, mb, name }: IInput) => (
+  <div className={`mb-${mb}`}>
     <label
       htmlFor={label}
       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -27,7 +29,8 @@ const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue,
       <input
         type={type}
         id={label}
-        className={`block w-full text-gray-900 border border-gray-300 rounded-lg rounded-lg focus:ring-quaternary focus:border-quaternary block w-full p-2.5 focus-within:border-quaternary focus-within:outline-quaternary ${textTransform}`}
+        name={name}
+        className={`block w-full text-gray-900 border border-gray-300 rounded-lg rounded-lg focus:ring-quaternary focus:border-quaternary block w-full p-2.5 focus-within:border-quaternary focus-within:outline-quaternary placeholder:text-sm ${textTransform}`}
         placeholder={placeholder}
         onChange={onChange}
         disabled={disabled}

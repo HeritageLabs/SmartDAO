@@ -1,13 +1,12 @@
 import { FeedsLayout } from "../../components/layouts";
+import DetailsNav from "./detailsNav";
 
-const DaoDetails = () => {
-    return (
-        <FeedsLayout>
-            <div className="border-b-2 border-quaternary w-fit ml-8 font-gilroyMd text-quaternary">
-                <p>Dao Details</p>
-            </div>
-        </FeedsLayout>
-    )
-};
+const DaoDetails = () => (
+    <FeedsLayout>
+        <DetailsNav>
+            <p>DAO Details</p>
+        </DetailsNav>
+    </FeedsLayout>
+  );
 
 export default DaoDetails;
