@@ -8,7 +8,7 @@ const SideBar = () => {
     <div className="border-r border-[#EEEEEE] text-normal h-screen w-1/5 fixed">
       <div className="px-4 pt-8">
         {SidebarLinks.map((sidebar) => (
-          <a href={sidebar.url}>
+          <a href={sidebar.url} key={sidebar.title}>
             <div
               className={`flex py-2 hover:bg-[#F4FFF1] px-4 border cursor-pointer w-56 hover:border rounded-lg trans my-4 hover:text-quaternary items-center ${
                 pathname === sidebar.url
@@ -26,7 +26,7 @@ const SideBar = () => {
       <div className="h-px bg-[#EEEEEE] my-4" />
       <div className="px-4">
         {Creation.map((create) => (
-          <a href={CREATE_DAO_URL}>
+          <a href={CREATE_DAO_URL} key={create.title}>
             <div
               className={`flex py-2 hover:bg-[#F4FFF1] px-4 border cursor-pointer w-56 hover:border rounded-lg trans my-4 hover:text-quaternary items-center ${
                 pathname === create.url || pathname.includes(create.url)

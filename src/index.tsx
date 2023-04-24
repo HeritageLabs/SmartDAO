@@ -8,18 +8,21 @@ import reportWebVitals from './reportWebVitals';
 import WebRoute from './route';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import ContextProvider from './UserContext/ContextProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <WebRoute />
-      <ToastContainer
-          position="top-right"
-          autoClose={4000}
-          theme="light"
-          toastClassName="font-gilroyLight"
-        />
+      <ContextProvider>
+        <WebRoute />
+        <ToastContainer
+            position="top-right"
+            autoClose={4000}
+            theme="light"
+            toastClassName="font-gilroyLight"
+          />
+      </ContextProvider>
     </BrowserRouter>
   </React.StrictMode>,
 );

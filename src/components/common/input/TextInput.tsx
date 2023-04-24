@@ -1,5 +1,5 @@
 import { CancelIcon } from "../../../assets/svgs";
-import { IInput } from "../../../types/inext";
+import { IInput } from "../../../types";
 
 const defaultProps: IInput = {
     label: '',

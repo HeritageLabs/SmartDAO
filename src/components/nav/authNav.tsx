@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import Logo from "../../assets/icons/logo-dark.svg";
 import { LogoutIcon } from "../../assets/svgs";
 import { useToastify } from "../../hooks/useToastify";
-import { IContextType } from "../../types/inext";
+import { IContextType } from "../../types";
 import { UserContext } from "../../UserContext";
 import CustomButton from "../common/button";
 import DropdownMenu from "../common/dropdownMenu";
@@ -11,9 +11,10 @@ import SearchInput from "../common/input/SearchInput";
 import ConnectWalletPopup from "../modals/connectWalletPopup";
 
 const AuthNav = () => {
-  const [showModal, setShowModal] = useState(false);
-  const { value, setValue } = useContext(UserContext) as IContextType;
+  const { isLoggedIn, showModal, setShowModal, loginUser, logoutUser } = useContext(UserContext) as IContextType;
   const { alertToast } = useToastify();
+
+  console.log(isLoggedIn, '--> on auth');
 
   return (
     <nav
@@ -26,14 +27,14 @@ const AuthNav = () => {
       <div className="flex justify-between w-2/4 items-center">
         <SearchInput />
       </div>
-      {value ? (
+      {isLoggedIn ? (
         <div className="flex items-center">
           <div className="pr-3 w-fit cursor-pointer"><DropdownMenu>
           <li>
               <a
                 href="#"
                 className="block px-6 py-4 flex items-center hover:bg-[#F4FFF1] hover:text-quaternary font-gilroyMd trans"
-                onClick={() => { setValue(false); alertToast('error', 'Disconnected successfully');  }}
+                onClick={() => { logoutUser(); alertToast('error', 'Disconnected successfully');  }}
               >
                 <div className="mr-3">{LogoutIcon}</div>
                 <p>Sign Out</p>
@@ -53,7 +54,7 @@ const AuthNav = () => {
       {showModal && (
         <ConnectWalletPopup
           setOpenModal={setShowModal}
-          handleMetamaskConnect={() => { setValue(true); setShowModal(false); alertToast('success', 'Connected successfully');  }}
+          handleMetamaskConnect={() => { loginUser(); setShowModal(false); alertToast('success', 'Connected successfully');  }}
         />
       )}
     </nav>

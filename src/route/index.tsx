@@ -1,39 +1,59 @@
-import React, { useEffect, useMemo, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { CREATE_DAO_URL, CREATE_DAO_URL_ADD_GROUPS, CREATE_DAO_URL_PROPOSAL, CREATE_DAO_URL_SOCIALS, CREATE_DAO_URL_VOTING, DAOS, FEEDS, HOME_URL, PROPOSALS } from "../utils/constants/pages";
+import {
+  CREATE_DAO_URL,
+  CREATE_DAO_URL_ADD_GROUPS,
+  CREATE_DAO_URL_CHECKOUT,
+  CREATE_DAO_URL_PROPOSAL,
+  CREATE_DAO_URL_SOCIALS,
+  DAOS,
+  FEEDS,
+  HOME_URL,
+  PROPOSALS,
+} from "../utils/constants/pages";
 import AOS from "aos";
-import { UserContext } from "../UserContext";
+import Private from "./private";
 
 const Home = React.lazy(() => import("../pages/home"));
 const Feeds = React.lazy(() => import("../pages/feeds"));
 const Proposals = React.lazy(() => import("../pages/proposals"));
 const Daos = React.lazy(() => import("../pages/dao"));
 const CreateDAO = React.lazy(() => import("../pages/create-dao"));
-const AddSocialInfo = React.lazy(() => import("../pages/create-dao/create-socials"));
+const AddSocialInfo = React.lazy(
+  () => import("../pages/create-dao/create-socials")
+);
 const AddGroups = React.lazy(() => import("../pages/create-dao/add-groups"));
-const ProposalCreation = React.lazy(() => import("../pages/create-dao/proposal-creation"));
-const VotingPermission = React.lazy(() => import("../pages/create-dao/voting-permission"));
+const ProposalCreation = React.lazy(
+  () => import("../pages/create-dao/proposal-creation")
+);
+const CheckoutPage = React.lazy(() => import("../pages/create-dao/checkout"));
 
 const WebRoute = () => {
-  const [value, setValue] = useState(false);
-  const providerValue = useMemo(() => ({value, setValue}), [value, setValue]);
+
   useEffect(() => {
     AOS.init();
   }, []);
+  
   return (
-    <UserContext.Provider value={providerValue}>
       <Routes>
         <Route index path={HOME_URL} element={<Home />} />
         <Route path={FEEDS} element={<Feeds />} />
         <Route path={PROPOSALS} element={<Proposals />} />
         <Route path={DAOS} element={<Daos />} />
-        <Route path={CREATE_DAO_URL} element={<CreateDAO />} />
-        <Route path={CREATE_DAO_URL_SOCIALS} element={<AddSocialInfo />} />
-        <Route path={CREATE_DAO_URL_ADD_GROUPS} element={<AddGroups />} />
-        <Route path={CREATE_DAO_URL_PROPOSAL} element={<ProposalCreation />} />
-        <Route path={CREATE_DAO_URL_VOTING} element={<VotingPermission />} />
+        <Route
+          path={CREATE_DAO_URL}
+          element={
+            <Private>
+              <CreateDAO />
+            </Private>
+          }
+        />
+        <Route path={CREATE_DAO_URL_SOCIALS} element={<Private><AddSocialInfo /></Private>} />
+        <Route path={CREATE_DAO_URL_ADD_GROUPS} element={<Private><AddGroups /></Private>} />
+        <Route path={CREATE_DAO_URL_PROPOSAL} element={<Private><ProposalCreation /></Private>} />
+        <Route path={CREATE_DAO_URL_CHECKOUT} element={<Private><CheckoutPage /></Private>} />
       </Routes>
-    </UserContext.Provider>
   );
 };
 

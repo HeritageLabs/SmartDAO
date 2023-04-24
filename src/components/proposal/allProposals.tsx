@@ -10,7 +10,7 @@ import { AllActiveProposal } from "./data";
 const AllProposals = () => (
   <div className="w-full px-14">
     {AllActiveProposal.map((proposer) => (
-      <div className="mb-16 py-3 cursor-pointer">
+      <div className="mb-16 py-3 cursor-pointer" key={proposer.id}>
         <div className="flex items-center">
           <div>
             <div className="border-grey rounded border p-1 w-12 h-12 cursor-pointer">

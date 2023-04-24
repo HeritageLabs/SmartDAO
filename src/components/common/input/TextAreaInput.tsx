@@ -1,4 +1,4 @@
-import { ITextAreaInput } from "../../../types/inext";
+import { ITextAreaInput } from "../../../types";
 
 const defaultProps: ITextAreaInput = {
     label: '',

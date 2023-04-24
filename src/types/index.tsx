@@ -1,6 +1,9 @@
 export interface IContextType {
-    value: boolean;
-    setValue: (arg0: boolean) => void;
+    isLoggedIn: boolean;
+    showModal: boolean;
+    loginUser: () => void;
+    logoutUser: () => void;
+    setShowModal: (arg0: boolean) => void;
 };
 
 export interface IInput {
