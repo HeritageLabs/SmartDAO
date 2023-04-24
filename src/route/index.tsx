@@ -28,7 +28,7 @@ const ProposalCreation = React.lazy(
   () => import("../pages/create-dao/proposal-creation")
 );
 const CheckoutPage = React.lazy(() => import("../pages/create-dao/checkout"));
-const DaoDetails = React.lazy(() => import("../pages/dao/details"));
+const DaoDetails = React.lazy(() => import("../pages/dao/daoDetails/details"));
 
 const WebRoute = () => {
 

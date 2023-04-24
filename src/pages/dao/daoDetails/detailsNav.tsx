@@ -1,7 +1,7 @@
 import { ReactNode, useState } from "react";
-import { AddIc, DepositIcon } from "../../assets/svgs";
-import { ExternalLink } from "../../components/common/ExternalLink.tsx";
-import TextInput from "../../components/common/input/TextInput";
+import { AddIc, DepositIcon } from "../../../assets/svgs";
+import { ExternalLink } from "../../../components/common/ExternalLink.tsx";
+import TextInput from "../../../components/common/input/TextInput";
 import DaoDetail from "./data";
 
 interface IDetailsNav {
