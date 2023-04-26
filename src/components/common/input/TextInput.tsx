@@ -15,16 +15,20 @@ const defaultProps: IInput = {
     handleClickCancel: () => null,
     mb: '6',
     name: '',
+    isCompulsory: false,
 };
 
-const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue, value, textTransform, readOnly, hasCancel, handleClickCancel, mb, name }: IInput) => (
+const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue, value, textTransform, readOnly, hasCancel, handleClickCancel, mb, name, isCompulsory }: IInput) => (
   <div className={`mb-${mb}`}>
-    <label
-      htmlFor={label}
-      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-    >
-     {label}
-    </label>
+    <div className="flex items-center">
+      <label
+        htmlFor={label}
+        className="block mb-2 text-sm font-medium text-grey"
+      >
+      {label}
+      </label>
+      {isCompulsory && (<p className="text-red ml-2">*</p>)}
+    </div>
     <div className="flex items-center">
       <input
         type={type}

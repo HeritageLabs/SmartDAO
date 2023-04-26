@@ -6,35 +6,28 @@ interface ISelect {
 };
 
 const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
+    { value: 'transfer', label: 'Propose a Transfer' },
+    { value: 'add-member', label: 'Propose to Add Member to Group' },
+    { value: 'remove-member', label: 'Propose to Remove Member to Group' },
+    { value: 'propose-poll', label: 'Propose a Poll' },
   ]
 
 const DropdownInput = ({ label }: ISelect) => (
   <div className='w-full'>
     <label
       htmlFor="underline_select"
-      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      className="block mb-2 text-sm font-medium text-grey"
     >
       {label}
     </label>
-    <Select options={options} className="w-2/5 text-lg" />
-    {/* <div className="flex items-center">
-      <select
-        id="underline_select"
-        className="block py-2.5 px-0 w-full text-dark bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer text-lg"
-      >
-        <option selected>Choose a country</option>
-        <option value="US">United States</option>
-        <option value="CA">Canada</option>
-        <option value="FR">France</option>
-        <option value="DE">Germany</option>
-      </select>
-    </div> */}
+    <Select options={options} className="w-2/5 text-sm" isSearchable    styles={{
+      option: (base) => ({
+        ...base,
+        border: `1px dotted #1F1B36`,
+        height: '100%',
+      }),
+    }} placeholder="Search proposal by name" />
   </div>
 );
-
-// DropdownInput.defaultProps = defaultProps;
 
 export default DropdownInput;

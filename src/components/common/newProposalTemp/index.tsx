@@ -1,12 +1,16 @@
+import { useState } from "react";
 import { AlertIcon, CodeIcon, DislikeIcon, LikeIcon } from "../../../assets/svgs";
-import { AllActiveProposal } from "../../proposal/data";
-import { ExternalLink } from "../ExternalLink.tsx";
+import CustomButton from "../button";
 import DropdownInput from "../input/DropdownInput";
+import TextAreaInput from "../input/TextAreaInput";
+import TextInput from "../input/TextInput";
 
-const NewProposalTemp = () => (
+const NewProposalTemp = () => {
+  const [desc, setDesc] = useState('');
+  const [amount, setAmount] = useState('');
+return (
     <div className="w-full px-14">
-    {AllActiveProposal.map((proposer) => (
-      <div className="mb-16 py-3 cursor-pointer" key={proposer.id}>
+      <div className="mb-16 py-3">
         <div className="w-full">
           <p className="text-sm text-grey justify-end flex my-1">
             {AlertIcon}
@@ -20,46 +24,38 @@ const NewProposalTemp = () => (
               </div>
               <div className="px-6 py-3 w-full">
                 <DropdownInput label="Proposal type: Transfer/Add bounty" />
-                <div className="flex justify-between w-full">
-                  {/* title of the DAO and link to the DAO */}
-                  <div>
-                    <div className="flex items-center mt-3">
-                      <h3 className="font-gilroyBold text-gl">{proposer.type}</h3>
-                      <ExternalLink url={proposer.wallet_addr} />
-                    </div>
-                  </div>
-                </div>
                 <div className="mt-4">
-                  <p className="text-sm text-grey">Proposal</p>
-                  <p className="font-gilroyBold">{proposer.proposer}</p>
+                  <p className="text-sm text-grey">Proposer</p>
+                  <p className="font-gilroyBold">c5e06085e92dcac470cc7b8126bcb926dd7d8c5562fbc84022578a2b03e5ff23</p>
                 </div>
                 {/* Description */}
                 <div className="mt-4">
-                  <p className="text-sm text-grey">Description</p>
-                  <p className="w-4/5">
-                    {proposer.desc}
-                  </p>
+                  <TextAreaInput label="Description:" placeholder="Enter the description of this proposal" onChange={(e) => setDesc(e.target.value)} value={desc} />
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex justify-between">
+                  <TextInput label="Amount" placeholder="00.0000" type="number" onChange={({ target }) => setAmount(target.value)} value={amount} />
+                  <div />
                   <div className="flex mt-6 items-center w-2/12 justify-between text-right">
-                    <div className="flex items-center">
+                    <div className="flex items-center border h-11 w-11 rounded-full border-tertiary">
                       {LikeIcon}
-                      <p className="ml-4">{proposer.likes}</p>
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center border h-11 w-11 rounded-full border-tertiary">
                       {DislikeIcon}
-                      <p className="ml-4">{proposer.dislikes}</p>
                     </div>
                   </div>
+                </div>
+
+                <div className="flex w-full my-5 justify-end">
+                  <CustomButton width="w-72" disabled={!desc || !amount}>Propose</CustomButton>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    ))}
   </div>
 );
+    };
 
 export default NewProposalTemp;

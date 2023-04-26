@@ -20,6 +20,7 @@ export interface IInput {
     handleClickCancel: () => void;
     mb: string;
     name: string;
+    isCompulsory: boolean;
 }
 
 export interface ITextAreaInput {

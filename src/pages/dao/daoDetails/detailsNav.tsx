@@ -14,7 +14,6 @@ interface IDetailsNav {
 const DetailsNav = ({children, setEnableCreateProposal}:IDetailsNav) => {
   const [deposit, setDeposit] = useState("");
   const [showAddProposal, setShowAddProposal] = useState(false);
-  // const [enableCreateProposal, setEnableCreateProposal] = useState(false);
   const wrapper = useRef(null);
   useOnClickOutside(wrapper, setShowAddProposal);
   return (

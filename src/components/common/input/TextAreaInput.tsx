@@ -15,15 +15,18 @@ const defaultProps: ITextAreaInput = {
 
 const TextAreaInput = ({ label, placeholder, onChange, disabled, defaultValue, value, textTransform, readOnly }: ITextAreaInput) => (
   <div className="mb-6">
-    <label
-      htmlFor={label}
-      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-    >
-     {label}
-    </label>
+    <div className="flex items-center">
+      <label
+        htmlFor={label}
+        className="block mb-2 text-sm font-medium text-grey"
+      >
+      {label}
+      </label>
+      <p className="text-red ml-2">*</p>
+    </div>
     <textarea
       id={label}
-      className={`block w-full p-4 text-gray-900 border border-gray-300 rounded-lg rounded-lg focus:ring-quaternary focus:border-quaternary block w-full p-2.5 focus-within:border-quaternary focus-within:outline-quaternary ${textTransform}`}
+      className={`block w-full p-4 text-dark border rounded-lg rounded-lg focus:ring-quaternary focus:border-quaternary block w-full p-2.5 focus-within:border-quaternary focus-within:outline-quaternary placeholder:text-sm text-normal ${textTransform}`}
       placeholder={placeholder}
       onChange={onChange}
       disabled={disabled}
