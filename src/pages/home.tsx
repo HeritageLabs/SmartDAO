@@ -15,7 +15,7 @@ const Home = () => (
       data-aos="zoom-out-up"
       data-aos-duration="3000"
     >
-      <div className="w-full">
+      <div className="w-full mt-5">
         <h1 className="font-gilroyMd text-xxxl w-1/2 mx-auto">
           Organizational Operating System
         </h1>
@@ -25,7 +25,7 @@ const Home = () => (
           supercharge your own community with the power of web3.
         </p>
         <div className="mt-8 w-1/2 mx-auto relative">
-          <CustomButton width="full" href={FEEDS}>Launch App</CustomButton>
+          <CustomButton width="1/2" href={FEEDS}>Launch App</CustomButton>
         </div>
       </div>
     </main>

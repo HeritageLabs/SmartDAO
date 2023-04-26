@@ -26,7 +26,7 @@ const defaultProps: buttonProps = {
 };
 
 const CustomButton = ({ children, bg, isLoading, disabled, width, href, color, handleClick, borderColor }: buttonProps) => (
-  <a href={href}>
+  <a href={href} className="flex justify-center">
     <button
       type="button"
       className={`${bg} px-4 py-3 rounded-lg hover:opacity-80 flex items-center trans disabled:opacity-50 ${width} justify-center text-${color} border ${borderColor}`}
