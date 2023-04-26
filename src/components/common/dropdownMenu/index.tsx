@@ -1,11 +1,17 @@
-import { ReactNode, useState } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { SettingsIcon } from "../../../assets/svgs";
 
 interface props {
     children: ReactNode;
+    icon: ReactElement;
 };
 
-const DropdownMenu = ({ children }: props) => {
+const initialProps: props = {
+  children: '',
+  icon: SettingsIcon,
+};
+
+const DropdownMenu = ({ children, icon }: props) => {
   const [showEl, setShowEl] = useState(false);
 
   return (
@@ -18,7 +24,7 @@ const DropdownMenu = ({ children }: props) => {
         type="button"
         className="hover:bg-[#CDFFC0] px-2 py-2 rounded-full"
       >
-        {SettingsIcon}
+        {icon}
       </button>
       <div
         id="dropdown"
@@ -36,5 +42,7 @@ const DropdownMenu = ({ children }: props) => {
     </div>
   );
 };
+
+DropdownMenu.defaultProps = initialProps
 
 export default DropdownMenu;

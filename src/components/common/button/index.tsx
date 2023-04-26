@@ -19,7 +19,7 @@ const defaultProps: buttonProps = {
   isLoading: false,
   disabled: false,
   width: "w-fit-content",
-  href: "",
+  href: "#",
   color: "white",
   handleClick: (e) => {},
   borderColor: 'border-none'

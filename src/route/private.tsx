@@ -1,10 +1,10 @@
-import { ReactNode } from "react";
+import { ReactElement  } from "react";
 import { Navigate } from "react-router-dom";
 import { FEEDS } from "../utils/constants/pages";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 interface IPrivate {
-  children: ReactNode | any;
+  children: ReactElement;
 }
 
 const Private = ({ children }: IPrivate) => {

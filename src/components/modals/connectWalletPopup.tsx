@@ -56,11 +56,16 @@ const ConnectWalletPopup = ({ setOpenModal, handleMetamaskConnect }: props) => {
               </li>
 
               <li>
-                        <a href="#" className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-[#F4FFF1] hover:bg-grey-100 group hover:shadow-md dark:bg-gray dark:hover:bg-grey dark:text-white trans">
-                            {CoinbaseLogo}
-                            <span className="flex-1 ml-3 whitespace-nowrap font-gilroyBold">Coinbase Wallet</span>
-                        </a>
-                    </li>
+                <a
+                  href="#"
+                  className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-[#F4FFF1] hover:bg-grey-100 group hover:shadow-md dark:bg-gray dark:hover:bg-grey dark:text-white trans"
+                >
+                  {CoinbaseLogo}
+                  <span className="flex-1 ml-3 whitespace-nowrap font-gilroyBold">
+                    Coinbase Wallet
+                  </span>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
