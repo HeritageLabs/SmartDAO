@@ -57,7 +57,8 @@ module.exports = {
       normal: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
       medium: 'rgba(0, 0, 0, 0.08) 0px 4px 12px',
       extra: 'rgba(0, 0, 0, 0.1) 0px 10px 50px',
-      tiny: 'rgba(0, 0, 0, 0.05) 0px 1px 2px 0px'
+      tiny: 'rgba(0, 0, 0, 0.05) 0px 1px 2px 0px',
+      card: 'rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px'
     },
     fontFamily: {
       gilroyRegular: ['Gilroy-Regular', 'sans-serif'],

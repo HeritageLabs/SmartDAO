@@ -5,15 +5,16 @@ import TextInput from "../../../components/common/input/TextInput";
 import useOnClickOutside from "../../../hooks/useOnClickOutside";
 import AddProposalModal from "./addProposal";
 import DaoDetail from "./data";
-import ProposalUpdate from "./proposalUpdate";
 
 interface IDetailsNav {
     children: ReactNode;
+    setEnableCreateProposal: (args0: boolean) => void;
 }
 
-const DetailsNav = ({children}:IDetailsNav) => {
+const DetailsNav = ({children, setEnableCreateProposal}:IDetailsNav) => {
   const [deposit, setDeposit] = useState("");
   const [showAddProposal, setShowAddProposal] = useState(false);
+  // const [enableCreateProposal, setEnableCreateProposal] = useState(false);
   const wrapper = useRef(null);
   useOnClickOutside(wrapper, setShowAddProposal);
   return (
@@ -84,8 +85,7 @@ const DetailsNav = ({children}:IDetailsNav) => {
         <div className="bg-quaternary py-6 px-3 rounded-tr-xl rounded-br-xl ml-3 cursor-pointer" ref={wrapper} onClick={() => setShowAddProposal((show) => !show)}>{AddIc}</div>
         </div>
       </div>
-      {showAddProposal && ( <AddProposalModal /> )}
-      <ProposalUpdate />
+      {showAddProposal && ( <AddProposalModal setEnableCreateProposal={setEnableCreateProposal} /> )}
       <div className="my-12">{children}</div>
     </div>
   );

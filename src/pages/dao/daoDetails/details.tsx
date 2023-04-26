@@ -1,11 +1,19 @@
+import { useState } from "react";
+import NewProposalTemp from "../../../components/common/newProposalTemp";
 import { FeedsLayout } from "../../../components/layouts";
 import { SideBar } from "./data";
 import DetailsNav from "./detailsNav";
 import FundGraph from "./fundGraph";
+import ProposalUpdate from "./proposalUpdate";
 
-const DaoDetails = () => (
+const DaoDetails = () => {
+    const [enableCreateProposal, setEnableCreateProposal] = useState(false);
+
+return (
     <FeedsLayout>
-        <DetailsNav>
+        <DetailsNav setEnableCreateProposal={setEnableCreateProposal}>
+            {enableCreateProposal && (<NewProposalTemp />)}
+            <ProposalUpdate />
             <div className="flex justify-between">
                 <div className="w-4/6 rounded-lg shadow-medium py-7 p-2">
                     <div className="flex justify-end mb-4 cursor-pointer">
@@ -31,5 +39,6 @@ const DaoDetails = () => (
         </DetailsNav>
     </FeedsLayout>
   );
+                    };
 
 export default DaoDetails;
