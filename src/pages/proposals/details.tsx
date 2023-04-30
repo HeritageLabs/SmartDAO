@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { FeedsLayout } from "../../components/layouts";
 import DetailsNav from "../dao/daoDetails/detailsNav";
-import Logo from "../../assets/icons/logo-icon.svg";
 import { AllActiveProposal } from "../../components/proposal/data";
-import { ChatIcon, CheckMark, CodeIcon, DislikeIcon, LikeIcon } from "../../assets/svgs";
+import { ChatIcon, CodeIcon, DislikeIcon, LikeIcon } from "../../assets/svgs";
 import { ExternalLink } from "../../components/common/ExternalLink.tsx";
 import ProposalUpdate from "../dao/daoDetails/proposalUpdate";
 import VoteDetails from "../../components/proposal/voteDetails";
