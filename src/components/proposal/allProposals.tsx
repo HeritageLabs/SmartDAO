@@ -31,11 +31,7 @@ const AllProposals = () => (
               Proposal ID: <span>{proposer.id}</span>
             </p>
             <div
-              className="rounded-lg h-fit"
-              style={{
-                boxShadow:
-                  "rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px",
-              }}
+              className="rounded-lg h-fit shadow-card hover:shadow-normal"
             >
               <div className="flex">
                 <div className="w-14 bg-bg flex">
