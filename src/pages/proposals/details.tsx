@@ -1,31 +1,21 @@
+import { useState } from "react";
+import { FeedsLayout } from "../../components/layouts";
+import DetailsNav from "../dao/daoDetails/detailsNav";
 import Logo from "../../assets/icons/logo-icon.svg";
-import {
-  ChatIcon,
-  CodeIcon,
-  DislikeIcon,
-  LikeIcon,
-} from "../../assets/svgs";
-import { PROPOSALS } from "../../utils/constants/pages";
-import { ExternalLink } from "../common/ExternalLink.tsx";
-import { AllActiveProposal } from "./data";
+import { AllActiveProposal } from "../../components/proposal/data";
+import { ChatIcon, CheckMark, CodeIcon, DislikeIcon, LikeIcon } from "../../assets/svgs";
+import { ExternalLink } from "../../components/common/ExternalLink.tsx";
+import ProposalUpdate from "../dao/daoDetails/proposalUpdate";
+import VoteDetails from "../../components/proposal/voteDetails";
 
-const AllProposals = () => (
-  <div className="w-full px-14">
-    {AllActiveProposal.map((proposer) => (
-      <a href={`${PROPOSALS}/${proposer.id}`}>
+const ProposalDetails = () => {
+    const [_, setEnableCreateProposal] = useState(false);
+return (
+    <FeedsLayout>
+        <DetailsNav setEnableCreateProposal={setEnableCreateProposal}>
+        <ProposalUpdate msgHeading="Change Voting Snapshot" message="The proposed changes in Voting Policy will affect the other proposals. Further updates might get rewritten if the current proposal won't get resolved before." />
+        {AllActiveProposal.slice(0, 1).map((proposer) => (
         <div className="mb-16 py-3 cursor-pointer" key={proposer.id}>
-          <div className="flex items-center">
-            <div>
-              <div className="border-grey rounded border p-1 w-12 h-12 cursor-pointer">
-                <img src={Logo} alt="logo" className="mx-auto mt-1 w-6" />
-              </div>
-            </div>
-            <div className="ml-2">
-              <p className="text-sm text-grey">DAO name</p>
-              <p className="font-gilroyBold">{proposer.name}</p>
-            </div>
-          </div>
-
           <div className="w-full">
             <p className="text-sm text-grey text-right my-1">
               Proposal ID: <span>{proposer.id}</span>
@@ -59,7 +49,7 @@ const AllProposals = () => (
                     </p>
                   </div>
                   <div className="mt-4">
-                    <p className="text-sm text-grey">Proposal</p>
+                    <p className="text-sm text-grey">Proposer</p>
                     <p className="font-gilroyBold">{proposer.proposer}</p>
                   </div>
                   {/* Description */}
@@ -69,8 +59,24 @@ const AllProposals = () => (
                       {proposer.desc}
                     </p>
                   </div>
+                  
+                  <div className="flex w-3/5 justify-between mt-14">
+                    <div className="">
+                        <p className="text-sm text-grey">Smart Contract Address</p>
+                        <p className="font-gilroyBold">core.nkys.testnet</p>
+                    </div>
+                    <div className="">
+                        <p className="text-sm text-grey">Method Name</p>
+                        <p className="font-gilroyBold">claim_treasury_smartdao</p>
+                    </div>
+                  </div>
 
-                  <div className="flex justify-end">
+                  <div className="flex justify-between items-center my-8">
+
+                    <div className="">
+                            <p className="text-sm text-grey">Deposit</p>
+                            <p className="font-gilroyBold">0 USD</p>
+                        </div>
                     <div className="flex mt-6 items-center w-3/12 justify-between text-right">
                       <div className="flex items-center w-full mr-4">
                         <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
@@ -98,9 +104,10 @@ const AllProposals = () => (
             </div>
           </div>
         </div>
-      </a>
-    ))}
-  </div>
+        ))}
+        <VoteDetails />
+    </DetailsNav>
+    </FeedsLayout>
 );
-
-export default AllProposals;
+};
+export default ProposalDetails;

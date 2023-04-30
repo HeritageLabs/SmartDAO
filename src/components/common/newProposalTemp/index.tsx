@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AlertIcon, CodeIcon, DislikeIcon, LikeIcon } from "../../../assets/svgs";
+import { AlertIcon, ChatIcon, CodeIcon, DislikeIcon, LikeIcon } from "../../../assets/svgs";
 import CustomButton from "../button";
 import DropdownInput from "../input/DropdownInput";
 import TextAreaInput from "../input/TextAreaInput";
@@ -37,11 +37,17 @@ return (
                   <TextInput label="Amount" placeholder="00.0000" type="number" onChange={({ target }) => setAmount(target.value)} value={amount} />
                   <div />
                   <div className="flex mt-6 items-center w-2/12 justify-between text-right">
-                    <div className="flex items-center border h-11 w-11 rounded-full border-tertiary">
+                    <div className="flex items-center border h-9 w-9 rounded-full border-tertiary">
                       {LikeIcon}
                     </div>
-                    <div className="flex items-center border h-11 w-11 rounded-full border-tertiary">
+                    <div className="flex items-center border h-9 w-9 rounded-full border-tertiary">
                       {DislikeIcon}
+                    </div>
+
+                    <div className="flex items-center w-full">
+                      <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
+                        {ChatIcon}
+                      </div>
                     </div>
                   </div>
                 </div>

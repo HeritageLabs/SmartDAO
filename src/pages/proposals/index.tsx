@@ -1,7 +1,7 @@
 /* eslint-disable react/style-prop-object */
-import Filters from "../components/common/filter";
-import AllProposals from "../components/proposal/allProposals";
-import { FeedsLayout } from "../components/layouts";
+import Filters from "../../components/common/filter";
+import AllProposals from "../../components/proposal/allProposals";
+import { FeedsLayout } from "../../components/layouts";
 
 const Daos = () => (
     <FeedsLayout>
