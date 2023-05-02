@@ -11,6 +11,7 @@ import {
   FEEDS,
   HOME_URL,
   PROPOSALS,
+  SELECT_TEMPLATE_URL,
 } from "../utils/constants/pages";
 import AOS from "aos";
 import Private from "./private";
@@ -19,7 +20,8 @@ const Home = React.lazy(() => import("../pages/home"));
 const Feeds = React.lazy(() => import("../pages/feeds"));
 const Proposals = React.lazy(() => import("../pages/proposals/index"));
 const Daos = React.lazy(() => import("../pages/dao/index"));
-const CreateDAO = React.lazy(() => import("../pages/create-dao"));
+const CreateDAOName = React.lazy(() => import("../pages/create-dao/dao-name"));
+const DaoTemplate = React.lazy(() => import("../pages/create-dao"));
 const AddSocialInfo = React.lazy(
   () => import("../pages/create-dao/create-socials")
 );
@@ -46,12 +48,13 @@ const WebRoute = () => {
           path={CREATE_DAO_URL}
           element={
             <Private>
-              <CreateDAO />
+              <CreateDAOName />
             </Private>
           }
         />
         <Route path={CREATE_DAO_URL_SOCIALS} element={<Private><AddSocialInfo /></Private>} />
         <Route path={CREATE_DAO_URL_ADD_GROUPS} element={<Private><AddGroups /></Private>} />
+        <Route path={SELECT_TEMPLATE_URL} element={<Private><DaoTemplate /></Private>} />
         <Route path={CREATE_DAO_URL_PROPOSAL} element={<Private><ProposalCreation /></Private>} />
         <Route path={CREATE_DAO_URL_CHECKOUT} element={<Private><CheckoutPage /></Private>} />
         <Route path={`${DAOS}/:daoId`} element={<Private><DaoDetails /></Private>} />

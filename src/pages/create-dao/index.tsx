@@ -1,22 +1,25 @@
-import DaoInfoForm from "../../components/forms/CreateDaoForm";
-import { FeedsLayout } from "../../components/layouts";
+import SelectTemplateCard from "../../components/common/Card";
+import { CreateDaoLayout } from "../../components/layouts";
+import { DaoTemplate } from "./data";
 
-const CreateDao = () => {
+const SelectTemplate = () => {
   return (
-    <FeedsLayout>
-      <div className="px-16 pb-8">
+    <CreateDaoLayout>
         <div
-          className="p-8 rounded-xl w-3/4 bg-white"
-          style={{
-            boxShadow:
-              "rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px",
-          }}
-        >
-          <DaoInfoForm />
+            className="py-12 px-8 rounded-xl w-full bg-white trans shadow-card"    
+            >
+            <div className="mb-8 text-center w-full">
+              <h1 className="text-xll font-gilroyBold">Select a template</h1>
+              <p className="w-1/2 mx-auto text-grey text-normal">This template allows you to create your organization with our pre-defined templates</p>
+            </div>
+            <div className="flex w-full flex-wrap justify-between">
+              {DaoTemplate.map((temp) => (
+                <SelectTemplateCard url={temp.url} icon={temp.icon} color={temp.color} desc={temp.desc} title={temp.title} key={temp.title} />
+              ))}
+            </div>
         </div>
-      </div>
-    </FeedsLayout>
+    </CreateDaoLayout>
   );
 };
 
-export default CreateDao;
+export default SelectTemplate;

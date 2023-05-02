@@ -27,7 +27,7 @@ const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue,
       >
       {label}
       </label>
-      {isCompulsory && (<p className="text-red ml-2">*</p>)}
+      {isCompulsory && (<p className="text-red ml-px">*</p>)}
     </div>
     <div className="flex items-center">
       <input

@@ -16,6 +16,7 @@ const CheckoutForm = () => {
           label="DAO Logo:"
           placeholder="Paste a link to your png logo"
           value={logoLink}
+          isCompulsory
           onChange={(e) => setLogoLink(e.target.value)}
         />
 

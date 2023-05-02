@@ -1,5 +1,4 @@
 import useCurrentLocation from "../../hooks/useCurrentLocation";
-import { CREATE_DAO_URL } from "../../utils/constants/pages";
 import { Creation, SidebarLinks } from "./data";
 
 const SideBar = () => {
@@ -26,7 +25,7 @@ const SideBar = () => {
       <div className="h-px bg-[#EEEEEE] my-4" />
       <div className="px-4">
         {Creation.map((create) => (
-          <a href={CREATE_DAO_URL} key={create.title}>
+          <a href={create.url} key={create.title}>
             <div
               className={`flex py-2 hover:bg-[#F4FFF1] px-4 border cursor-pointer w-56 hover:border rounded-lg trans my-4 hover:text-quaternary items-center ${
                 pathname === create.url || pathname.includes(create.url)
