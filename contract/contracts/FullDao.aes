@@ -1,0 +1,354 @@
+@compiler >= 6
+
+include "String.aes"
+include "List.aes"
+include "Pair.aes"
+
+/// @title - Fungible token with all the extensions - burn, mint, allowances
+contract DAOToken =
+
+  // This defines the state of type record encapsulating the contract's mutable state
+  record state =
+    { owner        : address      // the smart contract's owner address
+    , total_supply : int          // total token supply
+    , balances     : balances     // balances for each account
+    , meta_info    : meta_info    // token meta info (name, symbol, decimals)
+    , allowances   : allowances } // owner of account approves the transfer of an amount to another account
+
+  // This is the meta-information record type
+  record meta_info =
+    { name     : string
+    , symbol   : string
+    , decimals : int }
+
+  // This is the format of allowance record type that will be used in the state
+  record allowance_accounts = { from_account : address, for_account : address }
+
+  // This is a type alias for the balances map
+  type balances = map(address, int)
+
+  // This is a type alias for the allowances map
+  type allowances = map(allowance_accounts, int)
+
+  // Declaration and structure of datatype event
+  // and events that will be emitted on changes
+  datatype event =
+    Transfer(address, address, int)
+    | Allowance(address, address, int)
+    | Burn(address, int)
+    | Mint(address, int)
+
+  // List of supported extensions
+  entrypoint aex9_extensions() : list(string) = ["allowances", "mintable", "burnable"]
+
+  // Create a fungible token with
+  // the following `name` `symbol` and `decimals`
+  // and set the inital smart contract state
+  entrypoint init(name: string, decimals : int, symbol : string) =
+    // If the `name` lenght is less than 1 symbol abort the execution
+    require(String.length(name) >= 1, "STRING_TOO_SHORT_NAME")
+    // If the `symbol` length is less than 1 symbol abort the execution
+    require(String.length(symbol) >= 1, "STRING_TOO_SHORT_SYMBOL")
+    // If the provided value for `decimals` is negative abort the execution
+    require_non_negative_value(decimals)
+
+    let owner = Call.caller
+
+    { owner        = owner,
+      total_supply = 0,
+      balances     = {},
+      meta_info    = { name = name, symbol = symbol, decimals = decimals },
+      allowances   = {} }
+
+  // Get the token meta info
+  entrypoint meta_info() : meta_info =
+    state.meta_info
+
+  // Get the token total supply
+  entrypoint total_supply() : int =
+    state.total_supply
+
+  // Get the token owner address
+  entrypoint owner() : address =
+    state.owner
+
+  // Get the balances state
+  entrypoint balances() : balances =
+    state.balances
+
+  // Get balance for address of `owner`
+  // returns option(int)
+  // If the `owner` address haven't had any token balance
+  // in this smart contract the return value is None
+  // Otherwise Some(int) is returned with the current balance
+  entrypoint balance(account: address) : option(int) =
+    Map.lookup(account, state.balances)
+
+  // Get the allowances state
+  entrypoint allowances() : allowances =
+    state.allowances
+
+  // Get the allowance for passed `allowance_accounts` record
+  // returns option(int)
+  // This will lookup and return the allowed spendable amount
+  // from one address for another
+  // If there is no such allowance present result is None
+  // Otherwise Some(int) is returned with the allowance amount
+  entrypoint allowance(allowance_accounts : allowance_accounts) : option(int) =
+    Map.lookup(allowance_accounts, state.allowances)
+
+  // Get the allowance for caller from `from_account` address
+  // returns option(int)
+  // This will look up the allowances and return the allowed spendable amount
+  // from `from_account` for the transaction sender `Call.caller`
+  // If there is no such allowance present result is None
+  // Otherwise Some(int) is returned with the allowance amount
+  entrypoint allowance_for_caller(from_account: address) : option(int) =
+    allowance({ from_account = from_account, for_account = Call.caller })
+
+  // Send `value` amount of tokens from address `from_account` to address `to_account`
+  // The transfer_allowance method is used for a withdraw workflow, allowing contracts to send
+  // tokens on your behalf, for example to "deposit" to a contract address and/or to charge
+  // fees in sub-token contract.
+  // The execution will abort and fail if there is no allowance set up previous this call
+  stateful entrypoint transfer_allowance(from_account: address, to_account: address, value: int) =
+    let allowance_accounts = { from_account = from_account, for_account = Call.caller }
+    internal_transfer(from_account, to_account, value)
+    internal_change_allowance(allowance_accounts, -value)
+
+  // Create allowance for `for_account` to withdraw from your account `Call.caller`,
+  // multiple times, up to the `value` amount.
+  // This function will abort and fail if called again when there is allowance
+  // already set for these particular accounts pair.
+  stateful entrypoint create_allowance(for_account: address, value: int) =
+    // Check if the passed value is not negative
+    require_non_negative_value(value)
+    // Set the allowance account pair in the memory variable
+    let allowance_accounts = { from_account =  Call.caller, for_account = for_account }
+    // Check if there is no allowance already present in the state
+    // for these particular accounts pair.
+    require_allowance_not_existent(allowance_accounts)
+    // Save the allowance value for these accounts pair in the state
+    put(state{ allowances[allowance_accounts] = value })
+    // Fire Allowance event to include it in the transaction event log
+    Chain.event(Allowance(Call.caller, for_account, value))
+
+  // Allows to change the allowed spendable value for `for_account` with `value_change`
+  stateful entrypoint change_allowance(for_account: address, value_change: int) =
+    let allowance_accounts = { from_account =  Call.caller, for_account = for_account }
+    internal_change_allowance(allowance_accounts, value_change)
+
+  // Resets the allowance given `for_account` to zero.
+  stateful entrypoint reset_allowance(for_account: address) =
+    let allowance_accounts = { from_account = Call.caller, for_account = for_account }
+    internal_change_allowance(allowance_accounts, - state.allowances[allowance_accounts])
+
+  /// Transfer the balance of `value` from `Call.caller` to `to_account` account
+  stateful entrypoint transfer(to_account: address, value: int) =
+    internal_transfer(Call.caller, to_account, value)
+
+  // Destroys `value` tokens from `Call.caller`, reducing the total supply.
+  // `Burn` event with `Call.caller` address and `value`.
+  stateful entrypoint burn(account: address, value: int) =
+    require_owner()
+    require_balance(Call.caller, value)
+    require_non_negative_value(value)
+    put(state{ total_supply = state.total_supply - value, balances[Call.caller] @ b = b - value })
+    Chain.event(Burn(Call.caller, value))
+
+  // Creates `value` tokens and assigns them to `account`, increasing the total supply.
+  // Emits a `Mint` event with `account` and `value`.
+  stateful entrypoint mint(account: address, value: int) =
+    require_owner()
+    require_non_negative_value(value)
+    put(state{ total_supply = state.total_supply + value, balances[account = 0] @ b = b + value })
+    Chain.event(Mint(account, value))
+
+
+  // INTERNAL FUNCTIONS
+
+  function require_owner() =
+    require(Call.caller == state.owner, "ONLY_OWNER_CALL_ALLOWED")
+
+  function require_non_negative_value(value : int) =
+    require(value >= 0, "NON_NEGATIVE_VALUE_REQUIRED")
+
+  function require_balance(account : address, value : int) =
+    switch(balance(account))
+      Some(balance) =>
+        require(balance >= value, "ACCOUNT_INSUFFICIENT_BALANCE")
+      None => abort("BALANCE_ACCOUNT_NOT_EXISTENT")
+
+  stateful function internal_transfer(from_account: address, to_account: address, value: int) =
+    abort("This token cannot be transfer!")
+
+  function require_allowance_not_existent(allowance_accounts : allowance_accounts) =
+    switch(allowance(allowance_accounts))
+      None => None
+      Some(_) => abort("ALLOWANCE_ALREADY_EXISTENT")
+
+  function require_allowance(allowance_accounts : allowance_accounts, value : int) : int =
+    switch(allowance(allowance_accounts))
+      Some(allowance) =>
+        require_non_negative_value(allowance + value)
+        allowance
+      None => abort("ALLOWANCE_NOT_EXISTENT")
+
+  stateful function internal_change_allowance(allowance_accounts : allowance_accounts, value_change : int) =
+    let allowance = require_allowance(allowance_accounts, value_change)
+    let new_allowance = allowance + value_change
+    require_non_negative_value(new_allowance)
+    put(state{ allowances[allowance_accounts] = new_allowance })
+    Chain.event(Allowance(allowance_accounts.from_account, allowance_accounts.for_account, new_allowance))
+
+
+main contract DAO = 
+
+    record state = {
+        name: string,
+        description: string,
+        token: DAOToken,
+        votingTime: int,
+        quorum: int,
+        proposals: map(int, proposal),
+        totalProposals: int}
+
+    record proposal = {
+        id: int,
+        proposer: address,
+        proposalType: string,
+        description: string,
+        value: int,
+        target: address,
+        endTime: int,
+        votesFor: int,
+        votesAgainst: int,
+        isExecuted: bool}
+
+    record info = {
+        name: string,
+        description: string,
+        quorum: int,
+        votingTime: int,
+        members: list(address),
+        proposals: int,
+        activeProposals: int}
+
+    stateful entrypoint init(name: string, description: string, tokenSymbol: string, creator: address, intialMembers: list(address)): state = 
+        let _token: DAOToken = Chain.create(name, 18, tokenSymbol)
+        _token.mint(creator, 1 * 10 ^ 18)
+        List.map((a) => _token.mint(a, 1 * 10 ^ 18), intialMembers)
+        {name = name,
+            description = description,
+            token = _token,
+            votingTime = 604800000,
+            quorum = 0,
+            proposals = {},
+            totalProposals = 0}
+
+    public entrypoint getInfo(): info = 
+        {name = state.name,
+            description = state.description,
+            quorum = state.quorum,
+            votingTime = state.votingTime,
+            members = _getDAOMembers(),
+            proposals = Map.size(state.proposals),
+            activeProposals = List.length(List.filter((x) => Pair.snd(x).endTime > Chain.timestamp, Map.to_list(state.proposals)))}
+
+    public entrypoint getProposals(): list(proposal) = 
+        List.map((x) => Pair.snd(x), Map.to_list(state.proposals))
+
+    public entrypoint getActiveProposals(): list(proposal) = 
+        List.map((x) => Pair.snd(x), Map.to_list(state.proposals))
+
+    public entrypoint getProposal(id: int): proposal = 
+        switch(Map.lookup(id, state.proposals))
+            None => abort("Invalid proposal id")
+            Some(p) =>
+                p
+
+
+    public entrypoint isMember(account: address): bool =
+        switch(state.token.balance(account))
+            None => false
+            Some(b) =>
+                if(b > 0)
+                    true
+                else
+                    false
+
+    public stateful entrypoint createProposal(_proposalType: string, _description: string, _value: int, _target: address) = 
+        require(Contract.balance >= _value, "insufficient fund")
+        let _proposalId : int = state.totalProposals
+        let _newProposal : proposal = {id = _proposalId,
+            proposer = Call.caller,
+            proposalType = _proposalType,
+            description = _description,
+            value = _value,
+            target= _target,
+            endTime = Chain.timestamp + state.votingTime,
+            votesFor = 0,
+            votesAgainst = 0,
+            isExecuted = false}
+        put(state{proposals[_proposalId] = _newProposal})
+        put(state{totalProposals @ tp = tp + 1})
+        _proposalId
+
+    public stateful entrypoint voteFor(_proposalId: int) = 
+        require(_proposalId < state.totalProposals, "Invalid proposal id")
+        let _updatedProposal = state.proposals[_proposalId]
+        require(Chain.timestamp < _updatedProposal.endTime, "Proposal has ended!")
+        _updatedProposal{votesFor @ v = v + 1}
+        put(state{proposals[_proposalId] = _updatedProposal})
+
+    public stateful entrypoint votesAgainst(_proposalId: int) = 
+        require(_proposalId < state.totalProposals, "Invalid proposal id")
+        let _updatedProposal = state.proposals[_proposalId]
+        require(Chain.timestamp < _updatedProposal.endTime, "Proposal has ended!")
+        _updatedProposal{votesAgainst @ v = v + 1}
+        put(state{proposals[_proposalId] = _updatedProposal})
+
+    public stateful entrypoint executeProposal(_proposalId: int) = 
+        require(_proposalId < state.totalProposals, "Invalid proposal id")
+        let _proposal = state.proposals[_proposalId]
+        require(Chain.timestamp > _proposal.endTime, "Proposal has not ended!")
+        require(_checkQuorum(_proposalId), "Quorum was not reached")
+        _proposal{isExecuted = true}
+        if(_proposal.proposalType == "add")
+            _addMember(_proposal.target)
+        elif(_proposal.proposalType == "remove")
+            _removeMember(_proposal.target)
+        elif(_proposal.proposalType == "quorum")
+            _setQuorum(_proposal.value)
+        elif(_proposal.proposalType == "transfer")
+            Chain.spend(_proposal.target, _proposal.value)
+        put(state{proposals[_proposalId] = _proposal})
+
+    // Internal functions
+    
+    stateful function _setQuorum(_quorum: int) = 
+        put(state{quorum = _quorum})
+
+    stateful function _setVotingTime(_votingTime: int) = 
+        put(state{votingTime = _votingTime})
+
+    function _addMember(_member: address) = 
+        state.token.mint(_member, 1 * 10 ^ 18)
+
+    stateful function _removeMember(_member: address) = 
+        state.token.burn(_member, 1 * 10 ^ 18)
+
+
+
+    stateful function _checkQuorum(_proposalId: int): bool = 
+        let _proposal = state.proposals[_proposalId]
+        let _totalVotes = _proposal.votesFor + _proposal.votesAgainst
+        let _percentageVoted = _totalVotes * 100 / List.length(_getDAOMembers())
+        if (_percentageVoted > state.quorum)
+            true
+        else
+            false
+    
+    function _getDAOMembers(): list(address) = 
+        let _members = Map.from_list(List.filter((x) => Pair.snd(x) == 0, Map.to_list(state.token.balances())))
+        List.map((x) => Pair.fst(x), Map.to_list(_members))
