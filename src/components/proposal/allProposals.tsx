@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { UserContext } from "../../UserContext";
 import Logo from "../../assets/icons/logo-icon.svg";
 import {
   ChatIcon,
@@ -5,15 +7,28 @@ import {
   DislikeIcon,
   LikeIcon,
 } from "../../assets/svgs";
+import { IContextType } from "../../types";
 import { PROPOSALS } from "../../utils/constants/pages";
 import { ExternalLink } from "../common/ExternalLink.tsx";
 import { AllActiveProposal } from "./data";
+import { useNavigate } from "react-router-dom";
 
-const AllProposals = () => (
+const AllProposals = () => {
+  const navigate = useNavigate();
+  const { isLoggedIn, loginUser } = useContext(UserContext) as IContextType;
+
+  const handleClick = (id: number) => {
+    if (!isLoggedIn) {
+      loginUser();
+      navigate(`${PROPOSALS}/${id}`);
+    }
+    navigate(`${PROPOSALS}/${id}`);
+  }
+
+return (
   <div className="w-full px-14">
     {AllActiveProposal.map((proposer) => (
-      <a href={`${PROPOSALS}/${proposer.id}`}>
-        <div className="mb-16 py-3 cursor-pointer" key={proposer.id}>
+        <div className="mb-16 py-3 cursor-pointer" key={proposer.id} onClick={() => handleClick(proposer.id)}>
           <div className="flex items-center">
             <div>
               <div className="border-grey rounded border p-1 w-12 h-12 cursor-pointer">
@@ -94,9 +109,9 @@ const AllProposals = () => (
             </div>
           </div>
         </div>
-      </a>
     ))}
   </div>
 );
+    };
 
 export default AllProposals;
