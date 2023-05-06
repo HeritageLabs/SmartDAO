@@ -1,0 +1,158 @@
+@compiler >= 6
+
+include "String.aes"
+include "List.aes"
+include "Pair.aes"
+
+include "./Token.aes"
+
+contract DAO = 
+
+    record state = {
+        name: string,
+        description: string,
+        token: DAOToken,
+        votingTime: int,
+        quorum: int,
+        proposals: map(int, proposal),
+        totalProposals: int}
+
+    record proposal = {
+        id: int,
+        proposer: address,
+        proposalType: string,
+        description: string,
+        value: int,
+        target: address,
+        endTime: int,
+        votesFor: int,
+        votesAgainst: int,
+        isExecuted: bool}
+
+    record info = {
+        name: string,
+        description: string,
+        quorum: int,
+        votingTime: int,
+        members: list(address),
+        proposals: int,
+        activeProposals: int}
+
+    stateful entrypoint init(name: string, description: string, tokenSymbol: string, creator: address, intialMembers: list(address)): state = 
+        let _token: DAOToken = Chain.create(name, 18, tokenSymbol)
+        _token.mint(creator, 1 * 10 ^ 18)
+        List.map((a) => _token.mint(a, 1 * 10 ^ 18), intialMembers)
+        {name = name,
+            description = description,
+            token = _token,
+            votingTime = 604800000,
+            quorum = 0,
+            proposals = {},
+            totalProposals = 0}
+
+    public entrypoint getInfo(): info = 
+        {name = state.name,
+            description = state.description,
+            quorum = state.quorum,
+            votingTime = state.votingTime,
+            members = _getDAOMembers(),
+            proposals = Map.size(state.proposals),
+            activeProposals = List.length(List.filter((x) => Pair.snd(x).endTime > Chain.timestamp, Map.to_list(state.proposals)))}
+
+    public entrypoint getProposals(): list(proposal) = 
+        List.map((x) => Pair.snd(x), Map.to_list(state.proposals))
+
+    public entrypoint getActiveProposals(): list(proposal) = 
+        List.map((x) => Pair.snd(x), Map.to_list(state.proposals))
+
+    public entrypoint getProposal(id: int): proposal = 
+        switch(Map.lookup(id, state.proposals))
+            None => abort("Invalid proposal id")
+            Some(p) =>
+                p
+
+
+    public entrypoint isMember(account: address): bool =
+        switch(state.token.balance(account))
+            None => false
+            Some(b) =>
+                if(b > 0)
+                    true
+                else
+                    false
+
+    public stateful entrypoint createProposal(_proposalType: string, _description: string, _value: int, _target: address) = 
+        require(Contract.balance >= _value, "insufficient fund")
+        let _proposalId : int = state.totalProposals
+        let _newProposal : proposal = {id = _proposalId,
+            proposer = Call.caller,
+            proposalType = _proposalType,
+            description = _description,
+            value = _value,
+            target= _target,
+            endTime = Chain.timestamp + state.votingTime,
+            votesFor = 0,
+            votesAgainst = 0,
+            isExecuted = false}
+        put(state{proposals[_proposalId] = _newProposal})
+        put(state{totalProposals @ tp = tp + 1})
+        _proposalId
+
+    public stateful entrypoint voteFor(_proposalId: int) = 
+        require(_proposalId < state.totalProposals, "Invalid proposal id")
+        let _updatedProposal = state.proposals[_proposalId]
+        require(Chain.timestamp < _updatedProposal.endTime, "Proposal has ended!")
+        _updatedProposal{votesFor @ v = v + 1}
+        put(state{proposals[_proposalId] = _updatedProposal})
+
+    public stateful entrypoint votesAgainst(_proposalId: int) = 
+        require(_proposalId < state.totalProposals, "Invalid proposal id")
+        let _updatedProposal = state.proposals[_proposalId]
+        require(Chain.timestamp < _updatedProposal.endTime, "Proposal has ended!")
+        _updatedProposal{votesAgainst @ v = v + 1}
+        put(state{proposals[_proposalId] = _updatedProposal})
+
+    public stateful entrypoint executeProposal(_proposalId: int) = 
+        require(_proposalId < state.totalProposals, "Invalid proposal id")
+        let _proposal = state.proposals[_proposalId]
+        require(Chain.timestamp > _proposal.endTime, "Proposal has not ended!")
+        require(_checkQuorum(_proposalId), "Quorum was not reached")
+        _proposal{isExecuted = true}
+        if(_proposal.proposalType == "add")
+            _addMember(_proposal.target)
+        elif(_proposal.proposalType == "remove")
+            _removeMember(_proposal.target)
+        elif(_proposal.proposalType == "quorum")
+            _setQuorum(_proposal.value)
+        elif(_proposal.proposalType == "transfer")
+            Chain.spend(_proposal.target, _proposal.value)
+        put(state{proposals[_proposalId] = _proposal})
+
+    // Internal functions
+    
+    stateful function _setQuorum(_quorum: int) = 
+        put(state{quorum = _quorum})
+
+    stateful function _setVotingTime(_votingTime: int) = 
+        put(state{votingTime = _votingTime})
+
+    function _addMember(_member: address) = 
+        state.token.mint(_member, 1 * 10 ^ 18)
+
+    stateful function _removeMember(_member: address) = 
+        state.token.burn(_member, 1 * 10 ^ 18)
+
+
+
+    stateful function _checkQuorum(_proposalId: int): bool = 
+        let _proposal = state.proposals[_proposalId]
+        let _totalVotes = _proposal.votesFor + _proposal.votesAgainst
+        let _percentageVoted = _totalVotes * 100 / List.length(_getDAOMembers())
+        if (_percentageVoted > state.quorum)
+            true
+        else
+            false
+    
+    function _getDAOMembers(): list(address) = 
+        let _members = Map.from_list(List.filter((x) => Pair.snd(x) == 0, Map.to_list(state.token.balances())))
+        List.map((x) => Pair.fst(x), Map.to_list(_members))

@@ -1,0 +1,32 @@
+@compiler >= 6
+
+include "String.aes"
+include "List.aes"
+include "Pair.aes"
+
+include "Token.aes"
+include "DAO.aes"
+
+contract SmartDao = 
+    record state = {
+        daos: map(int, DAO),
+        totalDaos: int}
+
+    stateful entrypoint init() = 
+        {daos = {},
+            totalDaos = 0}
+
+    public stateful entrypoint createDAO(_name: string, _description: string, _tokenSymbol: string, _initialMembers: list(address)):  int = 
+        let _newDAO: DAO = Chain.create(_name, _description, _tokenSymbol, Call.caller, _initialMembers): DAO
+        let _newDaoId = state.totalDaos
+        put(state{daos[_newDaoId] = _newDAO})
+        put(state{totalDaos @ t = t + 1})
+        _newDaoId
+    
+
+    public entrypoint getDAOS() =
+        let _daoList = Map.to_list(state.daos)
+        List.map((x) => Pair.snd(x).getInfo(), _daoList)
+
+    public entrypoint getDAO(_daoId: int) = 
+        state.daos[_daoId].getInfo()
