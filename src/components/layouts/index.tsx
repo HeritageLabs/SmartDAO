@@ -20,7 +20,7 @@ export const FeedsLayout = ({ children }: layoutProps) => (
     <AuthNav />
     <div className="flex pt-16 px-12 w-full">
       <SideBar />
-      <div className="w-full ml-72 mt-16 oveflow-scroll flex justify-between">
+      <div className="w-full ml-72 mt-16 oveflow-scroll">
         {children}
       </div>
     </div>
