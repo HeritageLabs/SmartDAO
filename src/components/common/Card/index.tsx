@@ -1,5 +1,7 @@
 import { ReactElement } from "react";
 import CustomButton from "../button";
+import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../../../hooks/useLocalStorage";
 
 type ICard = {
   color: string;
@@ -9,19 +11,30 @@ type ICard = {
   url: string;
 };
 
-const SelectTemplateCard = ({ ...prop }: ICard) => (
-  <div className="shadow-card border border-lightBlue rounded-lg w-[280px] p-4 mr-2 hover:shadow-extra trans cursor-pointer mt-6">
-    <div className={`py-5 bg-${prop.color} rounded-lg`}>{prop.icon}</div>
-    <div className="my-5">
-      <p className="font-gilroyBold text-lg">{prop.title}</p>
-      <p className="text-sm my-2">{prop.desc}</p>
+
+const SelectTemplateCard = ({ ...prop }: ICard) => {
+  const { setLocalStorage } = useLocalStorage();
+  const navigate = useNavigate();
+
+  const proceed = () => {
+    setLocalStorage("dao", JSON.stringify({ type: "membership" }));
+    navigate('/create-new-dao/name')
+  }
+
+  return (
+    <div className="shadow-card border border-lightBlue rounded-lg w-[280px] p-4 mr-2 hover:shadow-extra trans cursor-pointer mt-6">
+      <div className={`py-5 bg-${prop.color} rounded-lg`}>{prop.icon}</div>
+      <div className="my-5">
+        <p className="font-gilroyBold text-lg">{prop.title}</p>
+        <p className="text-sm my-2">{prop.desc}</p>
+      </div>
+      <div className="w-full my-2">
+        <CustomButton width="w-full" handleClick={() => proceed()} bg={`bg-${prop.color}`}>
+          Proceed
+        </CustomButton>
+      </div>
     </div>
-    <div className="w-full my-2">
-      <CustomButton width="w-full" href={prop.url} bg={`bg-${prop.color}`}>
-        Proceed
-      </CustomButton>
-    </div>
-  </div>
-);
+  )
+};
 
 export default SelectTemplateCard;

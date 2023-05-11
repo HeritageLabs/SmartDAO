@@ -537,7 +537,7 @@
                     "stateful": true
                 }
             ],
-            "kind": "contract_main",
+            "kind": "contract_child",
             "name": "DAO",
             "payable": false,
             "state": {
@@ -667,6 +667,95 @@
                     "vars": []
                 }
             ]
+        }
+    },
+    {
+        "contract": {
+            "functions": [
+                {
+                    "arguments": [],
+                    "name": "init",
+                    "payable": false,
+                    "returns": "SmartDao.state",
+                    "stateful": true
+                },
+                {
+                    "arguments": [
+                        {
+                            "name": "_name",
+                            "type": "string"
+                        },
+                        {
+                            "name": "_description",
+                            "type": "string"
+                        },
+                        {
+                            "name": "_tokenSymbol",
+                            "type": "string"
+                        },
+                        {
+                            "name": "_initialMembers",
+                            "type": {
+                                "list": [
+                                    "address"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "_startingBalance",
+                            "type": "int"
+                        }
+                    ],
+                    "name": "createDAO",
+                    "payable": false,
+                    "returns": "DAO",
+                    "stateful": true
+                },
+                {
+                    "arguments": [],
+                    "name": "getDAOS",
+                    "payable": false,
+                    "returns": {
+                        "list": [
+                            "DAO.info"
+                        ]
+                    },
+                    "stateful": false
+                },
+                {
+                    "arguments": [
+                        {
+                            "name": "_daoId",
+                            "type": "string"
+                        }
+                    ],
+                    "name": "getDAO",
+                    "payable": false,
+                    "returns": "DAO.info",
+                    "stateful": false
+                }
+            ],
+            "kind": "contract_main",
+            "name": "SmartDao",
+            "payable": false,
+            "state": {
+                "record": [
+                    {
+                        "name": "daos",
+                        "type": {
+                            "map": [
+                                "string",
+                                "DAO"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "totalDaos",
+                        "type": "int"
+                    }
+                ]
+            },
+            "typedefs": []
         }
     }
 ]

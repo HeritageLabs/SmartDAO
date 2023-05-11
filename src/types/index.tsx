@@ -4,6 +4,12 @@ export interface IContextType {
     loginUser: () => void;
     logoutUser: () => void;
     setShowModal: (arg0: boolean) => void;
+    account: IAccount;
+};
+
+export interface IAccount {
+    address: string;
+    balance: number;
 };
 
 export interface IInput {
