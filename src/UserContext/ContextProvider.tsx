@@ -18,12 +18,24 @@ const ContextProvider = ({ children }: IContextProvider) => {
   const [showModal, setShowModal] = useState(false);
   const { getLocalStorage, setLocalStorage, clearStorage } = useLocalStorage();
 
-  const loginUser = () => {
+  const loginUser = async () => {
+    const client = await login();
+    console.log({ client })
+    setAeSdk(client);
+    setIsLoggedIn(true);
+    const address = Object.keys(client!._accounts!.current)[0];
+    const balance = (await client!.getBalance(`ak_${address.slice(3)}`));
+    setAccount({
+      address,
+      balance: parseFloat(balance) / 1e18
+    });
     setLocalStorage({ key: 'isLoggedIn', value: true});
-    setIsLoggedIn(true)
+    setIsLoggedIn(true);
   };
-  const logoutUser = () => {
+
+  const logoutUser = async () => {
     clearStorage()
+    await aeSdk.disconnectWallet();
     setIsLoggedIn(false);
   }
 
@@ -36,7 +48,6 @@ const ContextProvider = ({ children }: IContextProvider) => {
   }
 
   useEffect(() => {
-    setIsLoggedIn(getLocalStorage());
     init();
   }, []);
 

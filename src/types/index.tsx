@@ -1,3 +1,8 @@
+export interface IAccount {
+    address: string;
+    balance: number;
+};
+
 export interface IContextType {
     isLoggedIn: boolean;
     showModal: boolean;
@@ -5,11 +10,6 @@ export interface IContextType {
     logoutUser: () => void;
     setShowModal: (arg0: boolean) => void;
     account: IAccount;
-};
-
-export interface IAccount {
-    address: string;
-    balance: number;
 };
 
 export interface IInput {
