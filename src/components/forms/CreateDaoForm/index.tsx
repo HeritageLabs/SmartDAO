@@ -18,7 +18,7 @@ const DaoInfoForm = () => {
     const [daoLegalDoc, setDaoLegalDoc] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoLegalDoc : '');
 
     useEffect(() => {
-        setDaoAddress(`${daoName}.smartdaov2.testnet`)
+        setDaoAddress(`https://smart-dao.vercel.app/${daoName}`)
     }, [daoName]);
 
     const handleSubmit = (e: any) => {
@@ -33,7 +33,7 @@ const DaoInfoForm = () => {
             <form className="w-full">
                 <CreateDaoHeader header="DAO name and purpose" hasStage currentStage="1" />
                 <TextInput label="DAO name:" placeholder="Enter DAO name" onChange={(e) => setDaoName(e.target.value)} value={daoName} isCompulsory />
-                <TextInput label="DAO Address (auto filled):" placeholder="Enter DAO name" value={daoAddress} onChange={(e) => setDaoAddress(e.target.value)} textTransform="lowercase" readOnly isCompulsory />
+                <TextInput label="DAO Address (auto filled):" placeholder="Enter DAO name" value={daoAddress} onChange={(e) => setDaoAddress(`smart-dao.vercel.app/${e.target.value}`)} textTransform="lowercase" readOnly isCompulsory />
                 <TextAreaInput label="Purpose:" placeholder="Enter the purpose of the DAO" onChange={(e) => setDaoPurpose(e.target.value)} value={daoPurpose} />
 
                 <CreateDaoHeader header="KYC" optional="(Optional)" currentStage="1" />
@@ -42,16 +42,16 @@ const DaoInfoForm = () => {
                 <TextInput label="Please paste a link to a relevant document as proof of legal status" placeholder="Paste a document link" onChange={(e) => setDaoLegalDoc(e.target.value)} value={daoLegalDoc} />
 
                 <div className="flex justify-between w-full">
-                <div className="w-2/5">
-                    <CustomButton
-                        borderColor="border-grey"
-                        color="grey3"
-                        bg="bg-none"
-                        width="w-full"
-                        href={SELECT_TEMPLATE_URL}
-                    >
-                        Back
-                    </CustomButton>
+                    <div className="w-2/5">
+                        <CustomButton
+                            borderColor="border-grey"
+                            color="grey3"
+                            bg="bg-none"
+                            width="w-full"
+                            href={SELECT_TEMPLATE_URL}
+                        >
+                            Back
+                        </CustomButton>
                     </div>
                                         <div className="w-2/5">
                         <CustomButton bg="bg-quaternary" width="w-full"  disabled={!daoName || !daoAddress || !daoPurpose} handleClick={handleSubmit}>Next</CustomButton>
@@ -62,4 +62,3 @@ const DaoInfoForm = () => {
     )
 };
 export default DaoInfoForm;
-// href={CREATE_DAO_URL_SOCIALS}

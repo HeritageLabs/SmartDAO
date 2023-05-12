@@ -228,11 +228,14 @@ contract DAO =
         endTime: int,
         votesFor: int,
         votesAgainst: int,
-        isExecuted: bool}
+        isExecuted: bool,
+        hasVoted: map(address, bool)}
 
     record info = {
         name: string,
         description: string,
+        contractAddress: DAO,
+        token: DAOToken,
         quorum: int,
         votingTime: int,
         members: list(address),
@@ -247,13 +250,15 @@ contract DAO =
             description = description,
             token = _token,
             votingTime = 604800000,
-            quorum = 0,
+            quorum = 50,
             proposals = {},
             totalProposals = 0}
 
     public entrypoint getInfo(): info = 
         {name = state.name,
             description = state.description,
+            contractAddress = Address.to_contract(Contract.address): DAO, 
+            token = state.token,
             quorum = state.quorum,
             votingTime = state.votingTime,
             members = _getDAOMembers(),
@@ -284,6 +289,7 @@ contract DAO =
 
     public stateful entrypoint createProposal(_proposalType: string, _description: string, _value: int, _target: address) = 
         require(Contract.balance >= _value, "insufficient fund")
+        require(isMember(Call.caller), "You're not a member of this DAO")
         let _proposalId : int = state.totalProposals
         let _newProposal : proposal = {id = _proposalId,
             proposer = Call.caller,
@@ -294,26 +300,34 @@ contract DAO =
             endTime = Chain.timestamp + state.votingTime,
             votesFor = 0,
             votesAgainst = 0,
-            isExecuted = false}
+            isExecuted = false,
+            hasVoted = {}}
         put(state{proposals[_proposalId] = _newProposal})
         put(state{totalProposals @ tp = tp + 1})
         _proposalId
 
-    public stateful entrypoint voteFor(_proposalId: int) = 
+    public stateful entrypoint voteFor(_proposalId: int): int = 
+        require(isMember(Call.caller), "You're not a member of this DAO")
         require(_proposalId < state.totalProposals, "Invalid proposal id")
-        let _updatedProposal = state.proposals[_proposalId]
-        require(Chain.timestamp < _updatedProposal.endTime, "Proposal has ended!")
-        _updatedProposal{votesFor @ v = v + 1}
-        put(state{proposals[_proposalId] = _updatedProposal})
+        let hasVoted = Map.lookup_default(Call.caller, state.proposals[_proposalId].hasVoted, false)
+        require(hasVoted == false, "You've already voted!")
+        require(Chain.timestamp < state.proposals[_proposalId].endTime, "Proposal has ended!")
+        
+        put(state{proposals[_proposalId] = state.proposals[_proposalId]{votesFor @ v = v + 1}})
+        // put(state{proposals[_proposalId] = state.proposals[_proposalId]{votesFor @ v = v + 1}})
+        state.proposals[_proposalId].votesFor
 
-    public stateful entrypoint votesAgainst(_proposalId: int) = 
+    public stateful entrypoint voteAgainst(_proposalId: int): int = 
+        require(isMember(Call.caller), "You're not a member of this DAO")
         require(_proposalId < state.totalProposals, "Invalid proposal id")
-        let _updatedProposal = state.proposals[_proposalId]
-        require(Chain.timestamp < _updatedProposal.endTime, "Proposal has ended!")
-        _updatedProposal{votesAgainst @ v = v + 1}
-        put(state{proposals[_proposalId] = _updatedProposal})
+        let hasVoted = Map.lookup_default(Call.caller, state.proposals[_proposalId].hasVoted, false)
+        require(hasVoted == false, "You've already voted!")
+        require(Chain.timestamp < state.proposals[_proposalId].endTime, "Proposal has ended!")
+        put(state{proposals[_proposalId] = state.proposals[_proposalId]{votesAgainst @ v = v + 1}})
+        state.proposals[_proposalId].votesAgainst
 
     public stateful entrypoint executeProposal(_proposalId: int) = 
+        require(isMember(Call.caller), "You're not a member of this DAO")
         require(_proposalId < state.totalProposals, "Invalid proposal id")
         let _proposal = state.proposals[_proposalId]
         require(Chain.timestamp > _proposal.endTime, "Proposal has not ended!")
@@ -325,6 +339,8 @@ contract DAO =
             _removeMember(_proposal.target)
         elif(_proposal.proposalType == "quorum")
             _setQuorum(_proposal.value)
+        elif(_proposal.proposalType == "voteTime")
+            _setVotingTime(_proposal.value)
         elif(_proposal.proposalType == "transfer")
             Chain.spend(_proposal.target, _proposal.value)
         put(state{proposals[_proposalId] = _proposal})
@@ -355,33 +371,35 @@ contract DAO =
             false
     
     function _getDAOMembers(): list(address) = 
-        let _members = Map.from_list(List.filter((x) => Pair.snd(x) == 0, Map.to_list(state.token.balances())))
+        let _members = Map.from_list(List.filter((x) => Pair.snd(x) > 0, Map.to_list(state.token.balances())))
         List.map((x) => Pair.fst(x), Map.to_list(_members))
 
 
 
 
-main contract Cluster = 
+main contract SmartDao = 
     record state = {
-        daos: map(int, DAO),
+        daos: map(string, DAO),
         totalDaos: int}
 
     stateful entrypoint init() = 
         {daos = {},
             totalDaos = 0}
 
-    public stateful entrypoint createDAO(_name: string, _description: string, _tokenSymbol: string, _initialMembers: list(address)):  int = 
-        let _newDAO: DAO = Chain.create(_name, _description, _tokenSymbol, Call.caller, _initialMembers): DAO
+    public payable stateful entrypoint createDAO(_name: string, _description: string, _tokenSymbol: string, _initialMembers: list(address), _startingBalance: int):  DAO = 
+        require(Call.value >= _startingBalance, "Attach starting balance!")
+        let _newDAO: DAO = Chain.create(value = _startingBalance, _name, _description, _tokenSymbol, Call.caller, _initialMembers): DAO
+        require(Map.member(_name, state.daos) == false, "DAO name already taken")
         let _newDaoId = state.totalDaos
-        put(state{daos[_newDaoId] = _newDAO})
+        put(state{daos[_name] = _newDAO})
         put(state{totalDaos @ t = t + 1})
-        _newDaoId
+        _newDAO
     
 
-    public entrypoint getDAOS() =
+    public entrypoint getDAOs() =
         let _daoList = Map.to_list(state.daos)
         List.map((x) => Pair.snd(x).getInfo(), _daoList)
 
-    public entrypoint getDAO(_daoId: int) = 
+    public entrypoint getDAO(_daoId: string) = 
         state.daos[_daoId].getInfo()
 

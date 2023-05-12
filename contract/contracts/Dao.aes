@@ -32,6 +32,7 @@ contract DAO =
     record info = {
         name: string,
         description: string,
+        token: DAOToken,
         quorum: int,
         votingTime: int,
         members: list(address),
@@ -46,13 +47,14 @@ contract DAO =
             description = description,
             token = _token,
             votingTime = 604800000,
-            quorum = 0,
+            quorum = 50,
             proposals = {},
             totalProposals = 0}
 
     public entrypoint getInfo(): info = 
         {name = state.name,
             description = state.description,
+            token = state.token,
             quorum = state.quorum,
             votingTime = state.votingTime,
             members = _getDAOMembers(),
@@ -105,7 +107,7 @@ contract DAO =
         _updatedProposal{votesFor @ v = v + 1}
         put(state{proposals[_proposalId] = _updatedProposal})
 
-    public stateful entrypoint votesAgainst(_proposalId: int) = 
+    public stateful entrypoint voteAgainst(_proposalId: int) = 
         require(_proposalId < state.totalProposals, "Invalid proposal id")
         let _updatedProposal = state.proposals[_proposalId]
         require(Chain.timestamp < _updatedProposal.endTime, "Proposal has ended!")
@@ -154,5 +156,5 @@ contract DAO =
             false
     
     function _getDAOMembers(): list(address) = 
-        let _members = Map.from_list(List.filter((x) => Pair.snd(x) == 0, Map.to_list(state.token.balances())))
+        let _members = Map.from_list(List.filter((x) => Pair.snd(x) > 0, Map.to_list(state.token.balances())))
         List.map((x) => Pair.fst(x), Map.to_list(_members))
