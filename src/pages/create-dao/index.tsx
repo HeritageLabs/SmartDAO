@@ -14,7 +14,7 @@ const SelectTemplate = () => {
             </div>
             <div className="flex w-full flex-wrap justify-between">
               {DaoTemplate.map((temp) => (
-                <SelectTemplateCard url={temp.url} icon={temp.icon} color={temp.color} desc={temp.desc} title={temp.title} key={temp.title} />
+                <SelectTemplateCard url={temp.url} icon={temp.icon} color={temp.color} desc={temp.desc} title={temp.title} key={temp.title} disable={temp.disable} />
               ))}
             </div>
         </div>

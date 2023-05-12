@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { useState } from "react";
 import { AddIcon } from "../../../assets/svgs";
 import {
@@ -7,6 +10,8 @@ import {
 import CustomButton from "../../common/button";
 import TextInput from "../../common/input/TextInput";
 import CreateDaoHeader from "./CreateDaoheader";
+import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../../../hooks/useLocalStorage";
 
 const initialState = {
   wallet: "",
@@ -15,8 +20,11 @@ const initialState = {
 };
 
 const AddGroupsForm = () => {
+  const navigate = useNavigate();
+  const { setLocalStorage, getLocalStorage } = useLocalStorage();
   const [groupName, setGroupName] = useState<string>("Council");
-  const [newMemberWallet, setNewMemberWallet] = useState([initialState]);
+  const [newMemberWallet, setNewMemberWallet] = useState(getLocalStorage().dao_group ? getLocalStorage().dao_group.member_wallet : [initialState]);
+
 
   const handleOnChange = (value: string, id: number) => {
     const prevValue = [...newMemberWallet];
@@ -29,6 +37,12 @@ const AddGroupsForm = () => {
   const removeNewMember = (idx: number) => {
    setNewMemberWallet(newMemberWallet.filter((_, index) => idx !== index));
   };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setLocalStorage({ key: 'dao_group', value: { group_name: groupName, member_wallet: newMemberWallet } });
+    navigate(CREATE_DAO_URL_PROPOSAL);
+};
 
   return (
     <div className="w-full">
@@ -86,7 +100,7 @@ const AddGroupsForm = () => {
             <CustomButton
               bg="bg-quaternary"
               width="w-full"
-              href={CREATE_DAO_URL_PROPOSAL}
+              handleClick={handleSubmit}
             >
               Next
             </CustomButton>

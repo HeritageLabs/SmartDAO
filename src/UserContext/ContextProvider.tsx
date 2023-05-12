@@ -10,20 +10,20 @@ interface IContextProvider {
 const ContextProvider = ({ children }: IContextProvider) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const { getLocalStorage, setLocalStorage, removeItem } = useLocalStorage();
+  const { getLocalStorage, setLocalStorage, clearStorage } = useLocalStorage();
 
   const loginUser = () => {
-    setLocalStorage('isLoggedIn', true);
+    setLocalStorage({ key: 'isLoggedIn', value: true});
     setIsLoggedIn(true)
   };
   const logoutUser = () => {
-    removeItem('isLoggedIn');
+    clearStorage()
     setIsLoggedIn(false);
   }
 
   useEffect(() => {
-    setIsLoggedIn(getLocalStorage('isLoggedIn'));
-  }, [getLocalStorage('isLoggedIn')]);
+    setIsLoggedIn(getLocalStorage());
+  }, []);
 
     const providerValue = useMemo(
       () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser }),

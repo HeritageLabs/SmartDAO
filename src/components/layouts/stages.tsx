@@ -2,7 +2,7 @@ import { DaoCreationStage, IDaoCreationStage } from "../../pages/create-dao/data
 import useCurrentLocation from "../../hooks/useCurrentLocation";
 
 const Stages = () => {
-    const { pathname } = useCurrentLocation()
+    const { pathname } = useCurrentLocation();
 return (
     <div className="fixed">
         <p className="mb-6">Where you are currently,</p>

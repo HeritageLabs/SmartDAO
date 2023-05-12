@@ -4,16 +4,30 @@ import CustomButton from "../../common/button";
 import TextAreaInput from "../../common/input/TextAreaInput";
 import TextInput from "../../common/input/TextInput";
 import CreateDaoHeader from "./CreateDaoheader";
+import useLocalStorage from "../../../hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
 
 const DaoInfoForm = () => {
-    const [daoName, setDaoName] = useState<string>('');
+    const navigate = useNavigate();
+    const { setLocalStorage, getLocalStorage } = useLocalStorage();
+
+    const [daoName, setDaoName] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoName : '');
     const [daoAddress, setDaoAddress] = useState<string>(`${daoName}.smartdaov2.testnet`);
-    const [daoPurpose, setDaoPurpose] = useState<string>('');
-    const [daoLegalStatus, setDaoLegalStatus] = useState<string>('');
-    const [daoLegalDoc, setDaoLegalDoc] = useState<string>('');
+    const [daoPurpose, setDaoPurpose] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoPurpose : '');
+    const [daoLegalStatus, setDaoLegalStatus] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoLegalStatus : '');
+    const [daoLegalDoc, setDaoLegalDoc] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoLegalDoc : '');
+
     useEffect(() => {
         setDaoAddress(`${daoName}.smartdaov2.testnet`)
     }, [daoName]);
+
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        const data = { daoName, daoAddress, daoPurpose, daoLegalStatus, daoLegalDoc };
+        setLocalStorage({ key: 'dao_info', value: data });
+        navigate(CREATE_DAO_URL_SOCIALS);
+    };
+    
     return (
         <div className="w-full">
             <form className="w-full">
@@ -40,7 +54,7 @@ const DaoInfoForm = () => {
                     </CustomButton>
                     </div>
                                         <div className="w-2/5">
-                        <CustomButton bg="bg-quaternary" width="w-full" href={CREATE_DAO_URL_SOCIALS} disabled={!daoName || !daoAddress || !daoPurpose}>Next</CustomButton>
+                        <CustomButton bg="bg-quaternary" width="w-full"  disabled={!daoName || !daoAddress || !daoPurpose} handleClick={handleSubmit}>Next</CustomButton>
                     </div>
                 </div>
             </form>
@@ -48,3 +62,4 @@ const DaoInfoForm = () => {
     )
 };
 export default DaoInfoForm;
+// href={CREATE_DAO_URL_SOCIALS}

@@ -1,11 +1,24 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
 import { CREATE_DAO_URL_PROPOSAL } from "../../../utils/constants/pages";
 import CustomButton from "../../common/button";
 import TextInput from "../../common/input/TextInput";
 import CreateDaoHeader from "./CreateDaoheader";
+import useLocalStorage from "../../../hooks/useLocalStorage";
+import { removeKeys } from "../../../utils/helpers";
 
 const CheckoutForm = () => {
-  const [logoLink, setLogoLink] = useState('');
+  const { setLocalStorage, getLocalStorage, removeItem } = useLocalStorage();
+  const [logoLink, setLogoLink] = useState(getLocalStorage().dao_logo ||  '');
+
+  useEffect(() => {
+    setLocalStorage({ key: 'dao_logo', value: logoLink });
+  }, [logoLink]);
+
+  const handleCheckout = () => {
+    removeKeys(removeItem);
+  };
+
   return (
     <div className="w-full">
       <form className="w-full">
@@ -55,6 +68,7 @@ const CheckoutForm = () => {
             <CustomButton
               bg="bg-quaternary"
               width="w-full"
+              handleClick={handleCheckout}
               // href={CREATE_DAO_URL_CHECKOUT}
             >
               Checkout

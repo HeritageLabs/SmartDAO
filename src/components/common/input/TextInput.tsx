@@ -16,9 +16,10 @@ const defaultProps: IInput = {
     mb: '6',
     name: '',
     isCompulsory: false,
+    error: ''
 };
 
-const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue, value, textTransform, readOnly, hasCancel, handleClickCancel, mb, name, isCompulsory }: IInput) => (
+const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue, value, textTransform, readOnly, hasCancel, handleClickCancel, mb, name, isCompulsory, error }: IInput) => (
   <div className={`mb-${mb}`}>
     <div className="flex items-center">
       <label
@@ -34,7 +35,7 @@ const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue,
         type={type}
         id={label}
         name={name}
-        className={`block w-full text-gray-900 border border-gray-300 rounded-lg rounded-lg focus:ring-quaternary focus:border-quaternary block w-full p-2.5 focus-within:border-quaternary focus-within:outline-quaternary placeholder:text-sm ${textTransform}`}
+        className={`block w-full text-gray-900 border border-${error ? 'red' : 'gray-300'} rounded-lg rounded-lg focus:ring-quaternary focus:border-quaternary block w-full p-2.5 focus-within:border-quaternary focus-within:outline-quaternary placeholder:text-sm ${textTransform}`}
         placeholder={placeholder}
         onChange={onChange}
         disabled={disabled}
@@ -46,6 +47,7 @@ const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue,
         <div className="border border-grey rounded-full h-10 w-10 ml-4 items-center flex hover:text-red cursor-pointer trans hover:border-red" onClick={handleClickCancel}>{CancelIcon}</div>
       )}
     </div>
+    <p className={`text-red text-sm mt-2 text-right ${error ? 'visible' : 'invisible'}`}>{error}</p>
   </div>
 );
 

@@ -18,19 +18,19 @@ export const DAOBuilds = [
 
 export const ProposalCreationData = [
     {
-        thIcon: ChangeIcon,
-        th: 'Change DAO config',
+        valueIcon: ChangeIcon,
+        value: 'Change DAO config',
     },
     {
-        thIcon: TransferIcon,
-        th: 'Transfer',
+        valueIcon: TransferIcon,
+        value: 'Transfer',
     },
     {
-        thIcon: AddMembers,
-        th: 'Add members',
+        valueIcon: AddMembers,
+        value: 'Add members',
     },
     {
-        thIcon: RemoveMembers,
-        th: 'Remove members',
+        valueIcon: RemoveMembers,
+        value: 'Remove members',
     }
 ]

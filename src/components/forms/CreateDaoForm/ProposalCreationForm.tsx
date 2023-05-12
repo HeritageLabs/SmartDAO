@@ -1,9 +1,49 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { useState } from "react";
 import { ProposalCreationData } from "../../../utils/constants/data";
 import { CREATE_DAO_URL_ADD_GROUPS, CREATE_DAO_URL_CHECKOUT } from "../../../utils/constants/pages";
 import CustomButton from "../../common/button";
 import CreateDaoHeader from "./CreateDaoheader";
+import useLocalStorage from "../../../hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
+
+interface IProposalCreation {
+  value: string;
+}
 
 const ProposalCreationForm = () => {
+  const navigate = useNavigate();
+  const { setLocalStorage, getLocalStorage } = useLocalStorage();
+
+  const [proposalRight, setProposalRight] = useState<IProposalCreation[]>(getLocalStorage().dao_right || []);
+  const [votingPermission, setVotingPermission] = useState<IProposalCreation[]>(getLocalStorage().voting_permission || []);
+
+  const handleProposalChange = (value: string) => {
+    if (proposalRight.includes(value)) {
+      const removeRight = proposalRight.filter((val) => val !== value);
+      setProposalRight(removeRight)
+    } else {
+      setProposalRight([...proposalRight, value]);
+    }
+  };
+  const handleVotingPermissionChange = (value: string) => {
+    if (votingPermission.includes(value)) {
+      const removePermission = votingPermission.filter((val) => val !== value);
+      setVotingPermission(removePermission)
+    } else {
+      setVotingPermission([...votingPermission, value]);
+    }
+  };
+  
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setLocalStorage({ key: 'dao_right', value: proposalRight });
+    setLocalStorage({ key: 'voting_permission', value: votingPermission });
+    navigate(CREATE_DAO_URL_CHECKOUT);
+  };
+
   return (
     <div className="w-full">
       <form className="w-full">
@@ -27,19 +67,19 @@ const ProposalCreationForm = () => {
             </thead>
             <tbody>
               {ProposalCreationData.map((create) => (                
-                <tr className="bg-light" key={create.th}>
+                <tr className="bg-light" key={create.value}>
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium flex"
                   >
-                    <div className="mr-1">{create.thIcon}</div>
-                    {create.th}
+                    <div className="mr-1">{create.valueIcon}</div>
+                    {create.value}
                   </th>
                   <td className="px-6 py-4">
-                    <input type="checkbox" />
+                    <input type="checkbox" onChange={() => handleProposalChange(create.value)} defaultChecked={proposalRight[0]} />
                   </td>
                   <td className="px-6 py-4">
-                    <input type="checkbox" disabled />
+                    <input type="checkbox" disabled defaultChecked />
                   </td>
                 </tr>
               ))}
@@ -67,19 +107,19 @@ const ProposalCreationForm = () => {
             </thead>
             <tbody>
               {ProposalCreationData.map((create) => (                
-                <tr className="bg-light" key={create.th}>
+                <tr className="bg-light" key={create.value}>
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium flex"
                   >
-                    <div className="mr-1">{create.thIcon}</div>
-                    {create.th}
+                    <div className="mr-1">{create.valueIcon}</div>
+                    {create.value}
                   </th>
                   <td className="px-6 py-4">
-                    <input type="checkbox" />
+                    <input type="checkbox" value={create.value} onChange={() => handleVotingPermissionChange(create.value)} defaultChecked={votingPermission[0]} />
                   </td>
                   <td className="px-6 py-4">
-                    <input type="checkbox" disabled />
+                    <input type="checkbox" disabled defaultChecked />
                   </td>
                 </tr>
               ))}
@@ -103,7 +143,7 @@ const ProposalCreationForm = () => {
             <CustomButton
               bg="bg-quaternary"
               width="w-full"
-              href={CREATE_DAO_URL_CHECKOUT}
+              handleClick={handleSubmit}
             >
               Next
             </CustomButton>

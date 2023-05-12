@@ -9,7 +9,7 @@ interface IPrivate {
 
 const Private = ({ children }: IPrivate) => {
   const { getLocalStorage } = useLocalStorage();
-  const isLoggedIn = getLocalStorage('isLoggedIn');
+  const isLoggedIn = getLocalStorage();
 
   if (!isLoggedIn) {
     return <Navigate to={FEEDS} replace />;

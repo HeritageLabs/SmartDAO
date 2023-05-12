@@ -9,7 +9,7 @@ interface buttonProps {
   width: string;
   href: string;
   color: string;
-  handleClick: (arg0: any) => void;
+  handleClick: (arg0: any) => any;
   borderColor: string;
 }
 

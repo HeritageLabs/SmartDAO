@@ -1,9 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import { useState } from "react";
 import { AddIcon } from "../../../assets/svgs";
 import { CREATE_DAO_URL, CREATE_DAO_URL_ADD_GROUPS } from "../../../utils/constants/pages";
 import CustomButton from "../../common/button";
 import TextInput from "../../common/input/TextInput";
 import CreateDaoHeader from "./CreateDaoheader";
+import useLocalStorage from "../../../hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   link: "",
@@ -11,7 +17,10 @@ const initialState = {
 };
 
 const SocialsInfoForm = () => {
-  const [socialMediaLink, setSocialMediaLink] = useState([initialState]);
+  const navigate = useNavigate();
+  const { setLocalStorage, getLocalStorage } = useLocalStorage();
+
+  const [socialMediaLink, setSocialMediaLink] = useState(getLocalStorage().dao_socials || [initialState]);
 
   const handleOnChange = (value: string, id: number) => {
     const prevValue = [...socialMediaLink];
@@ -24,6 +33,13 @@ const SocialsInfoForm = () => {
   const removeSocial = (idx: number) => {
    setSocialMediaLink(socialMediaLink.filter((_, index) => idx !== index));
   };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setLocalStorage({ key: 'dao_socials', value: socialMediaLink });
+    navigate(CREATE_DAO_URL_ADD_GROUPS);
+};
+
   return (
     <div className="w-full">
       <form className="w-full">
@@ -70,7 +86,7 @@ const SocialsInfoForm = () => {
             <CustomButton
               bg="bg-quaternary"
               width="w-full"
-              href={CREATE_DAO_URL_ADD_GROUPS}
+              handleClick={handleSubmit}
             >
               Next
             </CustomButton>
