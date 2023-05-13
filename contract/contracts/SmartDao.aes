@@ -16,9 +16,9 @@ contract SmartDao =
         {daos = {},
             totalDaos = 0}
 
-    public payable stateful entrypoint createDAO(_name: string, _description: string, _tokenSymbol: string, _initialMembers: list(address), _startingBalance: int):  DAO = 
+    public payable stateful entrypoint createDAO(_name: string, _description: string, _tokenSymbol: string, image: string, socials: list(string), _initialMembers: list(address), _startingBalance: int):  DAO = 
         require(Call.value >= _startingBalance, "Attach starting balance!")
-        let _newDAO: DAO = Chain.create(value = _startingBalance, _name, _description, _tokenSymbol, Call.caller, _initialMembers): DAO
+        let _newDAO: DAO = Chain.create(value = _startingBalance, _name, _description, _tokenSymbol, image, socials, Call.caller, _initialMembers): DAO
         require(Map.member(_name, state.daos) == false, "DAO name already taken")
         let _newDaoId = state.totalDaos
         put(state{daos[_name] = _newDAO})

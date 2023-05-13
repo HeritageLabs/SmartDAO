@@ -26,12 +26,11 @@ const SECRET_KEY = 'eba8786a506fd20e8b00f117e6d6598fd0943ff3d0bd926aea5e1c35802c
     const smartdao = await contract.$deploy([])
     console.log("SmartDao deployed to", smartdao.address)
     console.log("Creating a dao...");
-    const myDao = (await contract.createDAO("Hexdee DAO", "My personal DAO", "HXD", [], 100, { amount: 100 })).decodedResult;
+    const myDao = (await contract.createDAO("Hexdee DAO", "My personal DAO", "HXD", "https://twitter.com/i_am_hexdee", ["https://tse3.mm.bing.net/th?id=OIP.NtaJNxfrjFBLd5fNGM0-sgHaI5"], [], 100, { amount: 100 })).decodedResult;
     console.log({ myDao });
     console.log((await contract.getDAO("Hexdee DAO")).decodedResult);
     const daos = (await contract.getDAOs()).decodedResult;
     console.log({ daos });
-
 
     //DAO
     const daoContract = await aeSdk.initializeContract({ sourceCode: DAO });

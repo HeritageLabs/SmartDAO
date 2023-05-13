@@ -213,6 +213,8 @@ contract DAO =
         name: string,
         description: string,
         token: DAOToken,
+        image: string, 
+        socials: list(string),
         votingTime: int,
         quorum: int,
         proposals: map(int, proposal),
@@ -235,21 +237,27 @@ contract DAO =
         name: string,
         description: string,
         contractAddress: DAO,
+        depositAddress: address,
         token: DAOToken,
+        image: string,
+        socials: list(string),
+        balance: int,
         quorum: int,
         votingTime: int,
         members: list(address),
         proposals: int,
         activeProposals: int}
 
-    stateful entrypoint init(name: string, description: string, tokenSymbol: string, creator: address, intialMembers: list(address)): state = 
-        let _token: DAOToken = Chain.create(name, 18, tokenSymbol)
-        _token.mint(creator, 1 * 10 ^ 18)
-        List.map((a) => _token.mint(a, 1 * 10 ^ 18), intialMembers)
-        {name = name,
-            description = description,
+    stateful entrypoint init(_name: string, _description: string, _tokenSymbol: string, _image: string, _socials: list(string), _creator: address, _intialMembers: list(address)): state = 
+        let _token: DAOToken = Chain.create(_name, 18, _tokenSymbol)
+        _token.mint(_creator, 1 * 10 ^ 18)
+        List.map((a) => _token.mint(a, 1 * 10 ^ 18), _intialMembers)
+        {name = _name,
+            description = _description,
             token = _token,
-            votingTime = 604800000,
+            image = _image,
+            socials = _socials,
+            votingTime = 10800000,
             quorum = 50,
             proposals = {},
             totalProposals = 0}
@@ -257,8 +265,12 @@ contract DAO =
     public entrypoint getInfo(): info = 
         {name = state.name,
             description = state.description,
-            contractAddress = Address.to_contract(Contract.address): DAO, 
+            contractAddress = Address.to_contract(Contract.address): DAO,
+            depositAddress = Contract.address,
             token = state.token,
+            image = state.image,
+            socials = state.socials,
+            balance = Contract.balance,
             quorum = state.quorum,
             votingTime = state.votingTime,
             members = _getDAOMembers(),
@@ -314,7 +326,6 @@ contract DAO =
         require(Chain.timestamp < state.proposals[_proposalId].endTime, "Proposal has ended!")
         
         put(state{proposals[_proposalId] = state.proposals[_proposalId]{votesFor @ v = v + 1}})
-        // put(state{proposals[_proposalId] = state.proposals[_proposalId]{votesFor @ v = v + 1}})
         state.proposals[_proposalId].votesFor
 
     public stateful entrypoint voteAgainst(_proposalId: int): int = 
@@ -386,9 +397,9 @@ main contract SmartDao =
         {daos = {},
             totalDaos = 0}
 
-    public payable stateful entrypoint createDAO(_name: string, _description: string, _tokenSymbol: string, _initialMembers: list(address), _startingBalance: int):  DAO = 
+    public payable stateful entrypoint createDAO(_name: string, _description: string, _tokenSymbol: string, _image: string, _socials: list(string), _initialMembers: list(address), _startingBalance: int):  DAO = 
         require(Call.value >= _startingBalance, "Attach starting balance!")
-        let _newDAO: DAO = Chain.create(value = _startingBalance, _name, _description, _tokenSymbol, Call.caller, _initialMembers): DAO
+        let _newDAO: DAO = Chain.create(value = _startingBalance, _name, _description, _tokenSymbol, _image, _socials, Call.caller, _initialMembers): DAO
         require(Map.member(_name, state.daos) == false, "DAO name already taken")
         let _newDaoId = state.totalDaos
         put(state{daos[_name] = _newDAO})
