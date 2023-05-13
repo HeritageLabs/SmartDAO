@@ -16,7 +16,7 @@ const ContextProvider = ({ children }: IContextProvider) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [account, setAccount] = useState<IAccount>({ address: "", balance: 0 });
   const [showModal, setShowModal] = useState(false);
-  const { getLocalStorage, setLocalStorage, clearStorage } = useLocalStorage();
+  const { setLocalStorage, clearStorage } = useLocalStorage();
 
   console.log(account);
 
@@ -35,6 +35,7 @@ const ContextProvider = ({ children }: IContextProvider) => {
     setLocalStorage({ key: 'address', value: address });
     setLocalStorage({ key: 'balance', value: parseFloat(balance) / 1e18 });
     setIsLoggedIn(true);
+    setShowModal(false);
   };
 
   const logoutUser = async () => {

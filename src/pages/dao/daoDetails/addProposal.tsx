@@ -28,7 +28,7 @@ return (
           <div className="flex justify-end w-2/12">{ArrForward}</div>
         </div>
       </a>
-      <div className="bg-[#F4FFF1] rounded-md px-2 py-4 flex items-center w-full mt-2 cursor-pointer hover:bg-[#CCFBAE] shadow-tiny trans" onClick={() => getLocalStorage().isLoggedIn ? props.setEnableCreateProposal(true) : setShowModal(true)}>
+      <div className="bg-[#F4FFF1] rounded-md px-2 py-4 flex items-center w-full mt-2 cursor-pointer hover:bg-[#CCFBAE] shadow-tiny trans" onClick={() => getLocalStorage() ? props.setEnableCreateProposal(true) : setShowModal(true)}>
         <div className="flex items-center w-2/12">
           {ProposalWriteIcon}
           <div className="h-6 w-px bg-quaternary ml-2" />

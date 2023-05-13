@@ -15,8 +15,6 @@ const AuthNav = () => {
   const { showModal, setShowModal, loginUser, logoutUser } = useContext(UserContext) as IContextType;
   const { alertToast } = useToastify();
   const { getLocalStorage } = useLocalStorage();
-
-  console.log(getLocalStorage());
   return (
     <nav
       className="flex items-center w-full justify-between bg-lightGrey fixed z-40 px-14 py-3"
