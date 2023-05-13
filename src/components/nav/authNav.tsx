@@ -28,7 +28,7 @@ const AuthNav = () => {
       <div className="flex justify-between w-2/4 items-center">
         <SearchInput />
       </div>
-      {getLocalStorage().isLoggedIn ? (
+      {getLocalStorage() ? (
         <div className="flex items-center">
           <div className="pr-3 w-fit cursor-pointer"><DropdownMenu>
             <li>
