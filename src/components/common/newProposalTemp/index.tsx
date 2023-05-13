@@ -4,11 +4,13 @@ import CustomButton from "../button";
 import DropdownInput from "../input/DropdownInput";
 import TextAreaInput from "../input/TextAreaInput";
 import TextInput from "../input/TextInput";
+import useLocalStorage from "../../../hooks/useLocalStorage";
 
 const NewProposalTemp = () => {
   const [desc, setDesc] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [proposalType, setProposalType] = useState<string>('');
+  const { getLocalStorage } = useLocalStorage();
 
   const handlePropose = () => {
     const data = { desc, amount, proposalType };
@@ -33,7 +35,7 @@ return (
                 <DropdownInput label="Proposal type: Transfer/Add bounty" handleOnchange={({ value }) => setProposalType(value)} />
                 <div className="mt-4">
                   <p className="text-sm text-grey">Proposer</p>
-                  <p className="font-gilroyBold">c5e06085e92dcac470cc7b8126bcb926dd7d8c5562fbc84022578a2b03e5ff23</p>
+                  <p className="font-gilroyBold">{getLocalStorage().address || ''}</p>
                 </div>
                 {/* Description */}
                 <div className="mt-4">
@@ -41,7 +43,7 @@ return (
                 </div>
 
                 <div className="flex justify-between">
-                  <TextInput label="Amount" placeholder="00.0000" type="number" onChange={({ target }) => setAmount(target.value)} value={amount} />
+                  <TextInput label="Amount" isCompulsory placeholder="00.0000" type="number" onChange={({ target }) => setAmount(target.value)} value={amount} />
                   <div />
                     <div className="flex mt-6 items-center justify-between text-right">
                       <div className="flex items-center border h-10 w-16 rounded-full border-tertiary">

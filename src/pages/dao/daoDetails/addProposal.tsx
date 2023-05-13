@@ -3,13 +3,15 @@ import { useContext } from "react";
 import { UserContext } from "../../../UserContext";
 import { IContextType } from "../../../types";
 import { ArrForward, DraftIcon, ProposalWriteIcon } from "../../../assets/svgs";
+import useLocalStorage from "../../../hooks/useLocalStorage";
 
 interface IProps {
   setEnableCreateProposal: (arg0: boolean) => void;
 }
 
 const AddProposalModal = ({ ...props }: IProps) => {
-  const { isLoggedIn, setShowModal } = useContext(UserContext) as IContextType;
+  const { setShowModal } = useContext(UserContext) as IContextType;
+  const { getLocalStorage } = useLocalStorage();
 return (
   <div className="flex justify-end my-4 absolute right-20">
     <div className="w-80 bg-white rounded-lg p-2 shadow-medium">
@@ -26,7 +28,7 @@ return (
           <div className="flex justify-end w-2/12">{ArrForward}</div>
         </div>
       </a>
-      <div className="bg-[#F4FFF1] rounded-md px-2 py-4 flex items-center w-full mt-2 cursor-pointer hover:bg-[#CCFBAE] shadow-tiny trans" onClick={() => isLoggedIn ? props.setEnableCreateProposal(true) : setShowModal(true)}>
+      <div className="bg-[#F4FFF1] rounded-md px-2 py-4 flex items-center w-full mt-2 cursor-pointer hover:bg-[#CCFBAE] shadow-tiny trans" onClick={() => getLocalStorage().isLoggedIn ? props.setEnableCreateProposal(true) : setShowModal(true)}>
         <div className="flex items-center w-2/12">
           {ProposalWriteIcon}
           <div className="h-6 w-px bg-quaternary ml-2" />

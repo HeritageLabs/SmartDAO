@@ -18,6 +18,8 @@ const ContextProvider = ({ children }: IContextProvider) => {
   const [showModal, setShowModal] = useState(false);
   const { getLocalStorage, setLocalStorage, clearStorage } = useLocalStorage();
 
+  console.log(account);
+
   const loginUser = async () => {
     const client = await login();
     console.log({ client })
@@ -30,6 +32,8 @@ const ContextProvider = ({ children }: IContextProvider) => {
       balance: parseFloat(balance) / 1e18
     });
     setLocalStorage({ key: 'isLoggedIn', value: true});
+    setLocalStorage({ key: 'address', value: address });
+    setLocalStorage({ key: 'balance', value: parseFloat(balance) / 1e18 });
     setIsLoggedIn(true);
   };
 
@@ -47,9 +51,9 @@ const ContextProvider = ({ children }: IContextProvider) => {
     }
   }
 
-  useEffect(() => {
-    init();
-  }, []);
+  // useEffect(() => {
+  //   init();
+  // }, []);
 
   interface IDAO {
     name: string,
