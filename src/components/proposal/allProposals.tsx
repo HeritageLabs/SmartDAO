@@ -12,13 +12,15 @@ import { PROPOSALS } from "../../utils/constants/pages";
 import { ExternalLink } from "../common/ExternalLink.tsx";
 import { AllActiveProposal } from "./data";
 import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 const AllProposals = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, loginUser } = useContext(UserContext) as IContextType;
+  const { loginUser } = useContext(UserContext) as IContextType;
+  const { getLocalStorage } = useLocalStorage();
 
   const handleClick = (id: number) => {
-    if (!isLoggedIn) {
+    if (!getLocalStorage()) {
       loginUser();
       navigate(`${PROPOSALS}/${id}`);
     }

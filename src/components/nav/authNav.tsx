@@ -9,13 +9,12 @@ import CustomButton from "../common/button";
 import DropdownMenu from "../common/dropdownMenu";
 import SearchInput from "../common/input/SearchInput";
 import ConnectWalletPopup from "../modals/connectWalletPopup";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 const AuthNav = () => {
-  const { isLoggedIn, showModal, setShowModal, loginUser, logoutUser, account } = useContext(UserContext) as IContextType;
+  const { showModal, setShowModal, loginUser, logoutUser } = useContext(UserContext) as IContextType;
   const { alertToast } = useToastify();
-
-  console.log(isLoggedIn);
-
+  const { getLocalStorage } = useLocalStorage();
   return (
     <nav
       className="flex items-center w-full justify-between bg-lightGrey fixed z-40 px-14 py-3"
@@ -27,7 +26,7 @@ const AuthNav = () => {
       <div className="flex justify-between w-2/4 items-center">
         <SearchInput />
       </div>
-      {isLoggedIn ? (
+      {getLocalStorage() ? (
         <div className="flex items-center">
           <div className="pr-3 w-fit cursor-pointer"><DropdownMenu>
             <li>
@@ -42,7 +41,7 @@ const AuthNav = () => {
             </li>
           </DropdownMenu></div>
           <CustomButton width="w-44" bg="bg-light" color="bg-black" handleClick={(e) => e.preventDefault()}>
-            <p className="text-ellipsis whitespace-nowrap overflow-hidden">{account.address}</p>
+            <p className="text-ellipsis whitespace-nowrap overflow-hidden">{getLocalStorage().address}</p>
           </CustomButton>
         </div>
       ) : (

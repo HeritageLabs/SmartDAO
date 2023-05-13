@@ -6,12 +6,14 @@ import { ChatIcon, CodeIcon, DislikeIcon, LikeIcon } from "../../assets/svgs";
 import { ExternalLink } from "../../components/common/ExternalLink.tsx";
 import ProposalUpdate from "../dao/daoDetails/proposalUpdate";
 import VoteDetails from "../../components/proposal/voteDetails";
+import NewProposalTemp from "../../components/common/newProposalTemp";
 
 const ProposalDetails = () => {
-    const [_, setEnableCreateProposal] = useState(false);
+    const [enableCreateProposal, setEnableCreateProposal] = useState(false);
 return (
     <FeedsLayout>
         <DetailsNav setEnableCreateProposal={setEnableCreateProposal}>
+        {enableCreateProposal && <NewProposalTemp />}
         <ProposalUpdate msgHeading="Change Voting Snapshot" message="The proposed changes in Voting Policy will affect the other proposals. Further updates might get rewritten if the current proposal won't get resolved before." />
         {AllActiveProposal.slice(0, 1).map((proposer) => (
         <div className="mb-16 py-3 cursor-pointer" key={proposer.id}>
