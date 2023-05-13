@@ -1,22 +1,41 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CREATE_DAO_URL_PROPOSAL } from "../../../utils/constants/pages";
 import CustomButton from "../../common/button";
 import TextInput from "../../common/input/TextInput";
 import CreateDaoHeader from "./CreateDaoheader";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 import { removeKeys } from "../../../utils/helpers";
+import { UserContext } from "../../../UserContext";
+import { IContextType } from "../../../types";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutForm = () => {
+  const navigate = useNavigate();
   const { setLocalStorage, getLocalStorage, removeItem } = useLocalStorage();
-  const [logoLink, setLogoLink] = useState(getLocalStorage().dao_logo ||  '');
+  const [logoLink, setLogoLink] = useState(getLocalStorage().dao_logo || '');
+  const { createDAO } = useContext(UserContext) as IContextType;
 
   useEffect(() => {
     setLocalStorage({ key: 'dao_logo', value: logoLink });
   }, [logoLink]);
 
-  const handleCheckout = () => {
-    removeKeys(removeItem);
+  const handleCheckout = async () => {
+    const daoInfo = getLocalStorage().dao_info;
+    const daoGroup = getLocalStorage().dao_group;
+    const daoLogo = getLocalStorage().dao_logo;
+    const daoSocials = [getLocalStorage().dao_socials[0].link];
+    const dao = { name: daoInfo.daoName, description: daoInfo.daoPurpose, tokenSymbol: daoInfo.daoTokenSymbol, image: daoLogo, socials: daoSocials, initialMembers: daoGroup.member_wallet.map((m: any) => m.wallet), startingBalance: 2 };
+    console.log(dao);
+    try {
+      await createDAO(dao);
+      removeKeys(removeItem);
+      navigate("/daos")
+      window.alert("DAO successfully created!")
+    } catch (error: any) {
+      console.log({ error });
+      window.alert(error.message);
+    }
   };
 
   return (
@@ -42,13 +61,13 @@ const CheckoutForm = () => {
           </div>
           <div className="flex">
             <div className="">
-              <p className="text-grey text-sm">Cost</p>
-              <p className="mt-1">6 FIGO</p>
+              <p className="text-grey text-sm">Inital DAO balance</p>
+              <p className="mt-1">2 AE</p>
             </div>
-            <div className="ml-8">
+            {/* <div className="ml-8">
               <p className="text-grey text-sm">TGas</p>
               <p className="mt-1">300</p>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -69,7 +88,7 @@ const CheckoutForm = () => {
               bg="bg-quaternary"
               width="w-full"
               handleClick={handleCheckout}
-              // href={CREATE_DAO_URL_CHECKOUT}
+            // href={CREATE_DAO_URL_CHECKOUT}
             >
               Checkout
             </CustomButton>

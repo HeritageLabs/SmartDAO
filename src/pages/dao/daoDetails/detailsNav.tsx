@@ -7,11 +7,11 @@ import AddProposalModal from "./addProposal";
 import DaoDetail from "./data";
 
 interface IDetailsNav {
-    children: ReactNode;
-    setEnableCreateProposal: (args0: boolean) => void;
+  children: ReactNode;
+  setEnableCreateProposal: (args0: boolean) => void;
 }
 
-const DetailsNav = ({children, setEnableCreateProposal}:IDetailsNav) => {
+const DetailsNav = ({ children, setEnableCreateProposal }: IDetailsNav) => {
   const [deposit, setDeposit] = useState("");
   const [showAddProposal, setShowAddProposal] = useState(false);
   const wrapper = useRef(null);
@@ -34,7 +34,7 @@ const DetailsNav = ({children, setEnableCreateProposal}:IDetailsNav) => {
           </div>
           <div className="text-center">
             <p className="text-grey text-sm">Dao Version</p>
-            <p className="font-gilroyBold">1.2</p>
+            <p className="font-gilroyBold">1.0</p>
           </div>
         </div>
         <form className="flex items-center" noValidate>
@@ -80,11 +80,11 @@ const DetailsNav = ({children, setEnableCreateProposal}:IDetailsNav) => {
               </div>
             </a>
           ))}
-          
-        <div className="bg-quaternary py-6 px-3 rounded-tr-xl rounded-br-xl ml-3 cursor-pointer" ref={wrapper} onClick={() => setShowAddProposal((show) => !show)}>{AddIc}</div>
+
+          <div className="bg-quaternary py-6 px-3 rounded-tr-xl rounded-br-xl ml-3 cursor-pointer" ref={wrapper} onClick={() => setShowAddProposal((show) => !show)}>{AddIc}</div>
         </div>
       </div>
-      {showAddProposal && ( <AddProposalModal setEnableCreateProposal={setEnableCreateProposal} /> )}
+      {showAddProposal && (<AddProposalModal setEnableCreateProposal={setEnableCreateProposal} />)}
       <div className="my-12">{children}</div>
     </div>
   );

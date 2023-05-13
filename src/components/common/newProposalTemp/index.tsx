@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AlertIcon, ChatIcon, CodeIcon, DislikeIcon, LikeIcon } from "../../../assets/svgs";
 import CustomButton from "../button";
 import DropdownInput from "../input/DropdownInput";
 import TextAreaInput from "../input/TextAreaInput";
 import TextInput from "../input/TextInput";
+import { UserContext } from "../../../UserContext";
+import { IContextType } from "../../../types";
 
 const NewProposalTemp = () => {
   const [desc, setDesc] = useState('');
   const [amount, setAmount] = useState('');
-return (
+  const { account } = useContext(UserContext) as IContextType;
+
+  return (
     <div className="w-full px-14">
       <div className="mb-16 py-3">
         <div className="w-full">
@@ -26,7 +30,7 @@ return (
                 <DropdownInput label="Proposal type: Transfer/Add bounty" />
                 <div className="mt-4">
                   <p className="text-sm text-grey">Proposer</p>
-                  <p className="font-gilroyBold">c5e06085e92dcac470cc7b8126bcb926dd7d8c5562fbc84022578a2b03e5ff23</p>
+                  <p className="font-gilroyBold">{account.address}</p>
                 </div>
                 {/* Description */}
                 <div className="mt-4">
@@ -60,8 +64,8 @@ return (
           </div>
         </div>
       </div>
-  </div>
-);
-    };
+    </div>
+  );
+};
 
 export default NewProposalTemp;

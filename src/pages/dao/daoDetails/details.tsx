@@ -1,13 +1,30 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import NewProposalTemp from "../../../components/common/newProposalTemp";
 import { FeedsLayout } from "../../../components/layouts";
 import { SideBar } from "./data";
 import DetailsNav from "./detailsNav";
 import FundGraph from "./fundGraph";
 import ProposalUpdate from "./proposalUpdate";
+import { useNavigate, useParams } from "react-router-dom";
+import { UserContext } from "../../../UserContext";
+import { IContextType } from "../../../types";
 
 const DaoDetails = () => {
+  // const navigate = useNavigate();
+  const { daoId } = useParams();
+  const [dao, setDao] = useState<any>();
   const [enableCreateProposal, setEnableCreateProposal] = useState(false);
+  const { getDAO, aeSdk } = useContext(UserContext) as IContextType;
+
+  useEffect(() => {
+    getDAO(daoId).then((res: any) => {
+      setDao(res);
+      console.log({ res });
+      SideBar[0].value = Number(res.balance).toString() + "AE";
+      SideBar[1].value = Number(res.activeProposals).toString();
+      SideBar[2].value = Number(res.proposals).toString();
+    })
+  }, [aeSdk]);
 
   return (
     <FeedsLayout>

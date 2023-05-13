@@ -16,6 +16,7 @@ const DaoInfoForm = () => {
     const [daoPurpose, setDaoPurpose] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoPurpose : '');
     const [daoLegalStatus, setDaoLegalStatus] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoLegalStatus : '');
     const [daoLegalDoc, setDaoLegalDoc] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoLegalDoc : '');
+    const [daoTokenSymbol, setDaoTokenSymbol] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoTokenSymbol : '');
 
     useEffect(() => {
         setDaoAddress(`https://smart-dao.vercel.app/${daoName}`)
@@ -23,11 +24,11 @@ const DaoInfoForm = () => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        const data = { daoName, daoAddress, daoPurpose, daoLegalStatus, daoLegalDoc };
+        const data = { daoName, daoAddress, daoPurpose, daoTokenSymbol, daoLegalStatus, daoLegalDoc };
         setLocalStorage({ key: 'dao_info', value: data });
         navigate(CREATE_DAO_URL_SOCIALS);
     };
-    
+
     return (
         <div className="w-full">
             <form className="w-full">
@@ -35,6 +36,7 @@ const DaoInfoForm = () => {
                 <TextInput label="DAO name:" placeholder="Enter DAO name" onChange={(e) => setDaoName(e.target.value)} value={daoName} isCompulsory />
                 <TextInput label="DAO Address (auto filled):" placeholder="Enter DAO name" value={daoAddress} onChange={(e) => setDaoAddress(`smart-dao.vercel.app/${e.target.value}`)} textTransform="lowercase" readOnly isCompulsory />
                 <TextAreaInput label="Purpose:" placeholder="Enter the purpose of the DAO" onChange={(e) => setDaoPurpose(e.target.value)} value={daoPurpose} />
+                <TextInput label="Membership token symbol:" placeholder="Enter a symbol for your DAO token" onChange={(e) => setDaoTokenSymbol(e.target.value)} value={daoTokenSymbol} textTransform="uppercase" />
 
                 <CreateDaoHeader header="KYC" optional="(Optional)" currentStage="1" />
 
@@ -53,8 +55,8 @@ const DaoInfoForm = () => {
                             Back
                         </CustomButton>
                     </div>
-                                        <div className="w-2/5">
-                        <CustomButton bg="bg-quaternary" width="w-full"  disabled={!daoName || !daoAddress || !daoPurpose} handleClick={handleSubmit}>Next</CustomButton>
+                    <div className="w-2/5">
+                        <CustomButton bg="bg-quaternary" width="w-full" disabled={!daoName || !daoAddress || !daoPurpose} handleClick={handleSubmit}>Next</CustomButton>
                     </div>
                 </div>
             </form>

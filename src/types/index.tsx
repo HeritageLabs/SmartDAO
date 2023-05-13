@@ -10,7 +10,28 @@ export interface IContextType {
     logoutUser: () => void;
     setShowModal: (arg0: boolean) => void;
     account: IAccount;
+    createDAO: (dao: IDAO) => void;
+    getDAOs: () => any;
+    getDAO: (daoId: any) => any;
+    aeSdk: any
 };
+
+export interface IDAO {
+    name: string;
+    description: string;
+    tokenSymbol: string;
+    image: string;
+    socials: any;
+    initialMembers: [string];
+    startingBalance: number
+}
+
+export interface IProposal {
+    proposalType: string;
+    description: string;
+    value: number;
+    target: string
+}
 
 export interface IInput {
     type: string;

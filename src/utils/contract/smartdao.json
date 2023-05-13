@@ -388,23 +388,35 @@
                 {
                     "arguments": [
                         {
-                            "name": "name",
+                            "name": "_name",
                             "type": "string"
                         },
                         {
-                            "name": "description",
+                            "name": "_description",
                             "type": "string"
                         },
                         {
-                            "name": "tokenSymbol",
+                            "name": "_tokenSymbol",
                             "type": "string"
                         },
                         {
-                            "name": "creator",
+                            "name": "_image",
+                            "type": "string"
+                        },
+                        {
+                            "name": "_socials",
+                            "type": {
+                                "list": [
+                                    "string"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "_creator",
                             "type": "address"
                         },
                         {
-                            "name": "intialMembers",
+                            "name": "_intialMembers",
                             "type": {
                                 "list": [
                                     "address"
@@ -503,9 +515,7 @@
                     ],
                     "name": "voteFor",
                     "payable": false,
-                    "returns": {
-                        "tuple": []
-                    },
+                    "returns": "int",
                     "stateful": true
                 },
                 {
@@ -515,11 +525,9 @@
                             "type": "int"
                         }
                     ],
-                    "name": "votesAgainst",
+                    "name": "voteAgainst",
                     "payable": false,
-                    "returns": {
-                        "tuple": []
-                    },
+                    "returns": "int",
                     "stateful": true
                 },
                 {
@@ -553,6 +561,18 @@
                     {
                         "name": "token",
                         "type": "DAOToken"
+                    },
+                    {
+                        "name": "image",
+                        "type": "string"
+                    },
+                    {
+                        "name": "socials",
+                        "type": {
+                            "list": [
+                                "string"
+                            ]
+                        }
                     },
                     {
                         "name": "votingTime",
@@ -621,6 +641,15 @@
                             {
                                 "name": "isExecuted",
                                 "type": "bool"
+                            },
+                            {
+                                "name": "hasVoted",
+                                "type": {
+                                    "map": [
+                                        "address",
+                                        "bool"
+                                    ]
+                                }
                             }
                         ]
                     },
@@ -637,6 +666,34 @@
                             {
                                 "name": "description",
                                 "type": "string"
+                            },
+                            {
+                                "name": "contractAddress",
+                                "type": "DAO"
+                            },
+                            {
+                                "name": "depositAddress",
+                                "type": "address"
+                            },
+                            {
+                                "name": "token",
+                                "type": "DAOToken"
+                            },
+                            {
+                                "name": "image",
+                                "type": "string"
+                            },
+                            {
+                                "name": "socials",
+                                "type": {
+                                    "list": [
+                                        "string"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "balance",
+                                "type": "int"
                             },
                             {
                                 "name": "quorum",
@@ -694,6 +751,18 @@
                             "type": "string"
                         },
                         {
+                            "name": "_image",
+                            "type": "string"
+                        },
+                        {
+                            "name": "_socials",
+                            "type": {
+                                "list": [
+                                    "string"
+                                ]
+                            }
+                        },
+                        {
                             "name": "_initialMembers",
                             "type": {
                                 "list": [
@@ -707,13 +776,13 @@
                         }
                     ],
                     "name": "createDAO",
-                    "payable": false,
+                    "payable": true,
                     "returns": "DAO",
                     "stateful": true
                 },
                 {
                     "arguments": [],
-                    "name": "getDAOS",
+                    "name": "getDAOs",
                     "payable": false,
                     "returns": {
                         "list": [
