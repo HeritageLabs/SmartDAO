@@ -12,7 +12,7 @@ const Feeds = () => (
         <h1>All DAOs</h1>
         <CustomButton bg="bg-bg" href={CREATE_DAO_URL}>Create new DAO</CustomButton>
       </div>
-        <div className="mt-8 ml-8">
+        <div className="mt-8">
           <AllDaos />
         </div>
     </FeedsLayout>

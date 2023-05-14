@@ -11,9 +11,9 @@ const defaultProps: PageLoaderProp = {
 
 const PageLoader = ({ loaderText }: PageLoaderProp) => {
   return (
-    <div className="flex justify-center items-center w-screen h-screen bg-white">
+    <div className="flex justify-center items-center h-screen bg-white">
       <div className="flex flex-col gap-[5px] items-center">
-        <div>
+        <div className="-mt-8">
           <img src={Loading} width="70px" alt="gear spinning icon" />
         </div>
         <span className="font-bold text-[22px] text-white">

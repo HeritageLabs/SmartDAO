@@ -38,6 +38,7 @@ const ContextProvider = ({ children }: IContextProvider) => {
     setLocalStorage({ key: 'balance', value: parseFloat(balance) / 1e18 });
     setIsLoggedIn(true);
     setShowModal(false);
+    // setLocalStorage({ key: 'client',  })
   };
 
   const logoutUser = async () => {
