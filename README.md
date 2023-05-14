@@ -15,6 +15,7 @@ SmartDAO aims to solve these problems by creating a decentralized platform that 
 * Reputation based voting system
 * Use of quadratic funding
 * Incentives for participation
+* Commenting on proposals
 * Seamless interoperability with other blockchain protocols
 * Innovative bridging mechanism
 * Token sale
