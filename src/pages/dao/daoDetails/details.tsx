@@ -35,7 +35,6 @@ const DaoDetails = () => {
         })
   }, [aeSdk]);
 
-  console.log(dao);
   return isLoading ? (
     <PageLoader />
   ) : (

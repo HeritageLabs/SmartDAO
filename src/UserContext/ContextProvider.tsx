@@ -18,13 +18,9 @@ const ContextProvider = ({ children }: IContextProvider) => {
   const [showModal, setShowModal] = useState(false);
   const { setLocalStorage, clearStorage } = useLocalStorage();
 
-  console.log(account);
-
   const loginUser = async () => {
     const client = await login();
-    console.log({ client })
     setAeSdk(client);
-    console.log({ aeSdk })
     setIsLoggedIn(true);
     const address = Object.keys(client!._accounts!.current)[0];
     const balance = (await client!.getBalance(`ak_${address.slice(3)}`));
@@ -61,9 +57,7 @@ const ContextProvider = ({ children }: IContextProvider) => {
 
   const createDAO = async (dao: IDAO) => {
     const contract = await aeSdk.initializeContract({ aci: smartdaoACI, address: smartdaoAddress });
-    console.log({ contract })
     const res = await contract.createDAO(dao.name.toLowerCase(), dao.description, dao.tokenSymbol, dao.image, dao.socials, dao.initialMembers, dao.startingBalance * 1e18, { amount: dao.startingBalance * 1e18 });
-    console.log({ res });
   }
 
   async function getDAO(id: string) {
@@ -74,7 +68,6 @@ const ContextProvider = ({ children }: IContextProvider) => {
   }
 
   async function getDAOs() {
-    console.log({ aeSdk })
     const contract = await aeSdk.initializeContract({ aci: smartdaoACI, address: smartdaoAddress })
     const res = await contract.getDAOs();
     const daos = res.decodedResult;
@@ -83,7 +76,6 @@ const ContextProvider = ({ children }: IContextProvider) => {
 
   async function createProposal(DAOAddress: string, proposal: IProposal) {
     const contract = await aeSdk.initializeContract({ aci: daoACI, address: DAOAddress });
-    console.log({ proposal })
     const res = await contract.createProposal(proposal.proposalType, proposal.description, proposal.value, proposal.target);
   }
 

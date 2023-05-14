@@ -40,7 +40,6 @@ const AllProposals = () => {
         })
         propps.push(...daoProposals);
       }
-      console.log({ propps })
       setProposals(propps);
     } catch (error) {
       console.log({ error })

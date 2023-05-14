@@ -11,7 +11,6 @@ const AllDaos = () => {
 
   const getAllDAOs = async () => {
     getDAOs().then((res: any) => {
-      console.log(res);
       for (let i = 0; i < res.length; i++) {
         let dao = res[i];
         for (let key in dao) {

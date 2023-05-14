@@ -24,7 +24,6 @@ const NewProposalTemp = ({ dao }: { dao: string }) => {
       window.alert("Proposal created successfully");
       window.location.reload();
     } catch (error: any) {
-      console.log({ error });
       window.alert(error.message)
     }
   };

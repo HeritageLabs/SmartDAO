@@ -26,14 +26,12 @@ const CheckoutForm = () => {
     const daoLogo = getLocalStorage().dao_logo;
     const daoSocials = [getLocalStorage().dao_socials[0].link];
     const dao = { name: daoInfo.daoName, description: daoInfo.daoPurpose, tokenSymbol: daoInfo.daoTokenSymbol, image: daoLogo, socials: daoSocials, initialMembers: daoGroup.member_wallet.map((m: any) => m.wallet), startingBalance: 2 };
-    console.log(dao);
     try {
       await createDAO(dao);
       removeKeys(removeItem);
       navigate("/daos")
       window.alert("DAO successfully created!")
     } catch (error: any) {
-      console.log({ error });
       window.alert(error.message);
     }
   };
