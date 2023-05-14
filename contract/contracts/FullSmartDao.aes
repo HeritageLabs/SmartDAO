@@ -325,7 +325,7 @@ contract DAO =
         let hasVoted = Map.lookup_default(Call.caller, state.proposals[_proposalId].hasVoted, false)
         require(hasVoted == false, "You've already voted!")
         require(Chain.timestamp < state.proposals[_proposalId].endTime, "Proposal has ended!")
-        
+        put(state{proposals[_proposalId].hasVoted[Call.caller] = true})
         put(state{proposals[_proposalId] = state.proposals[_proposalId]{votesFor @ v = v + 1}})
         state.proposals[_proposalId].votesFor
 
@@ -335,6 +335,7 @@ contract DAO =
         let hasVoted = Map.lookup_default(Call.caller, state.proposals[_proposalId].hasVoted, false)
         require(hasVoted == false, "You've already voted!")
         require(Chain.timestamp < state.proposals[_proposalId].endTime, "Proposal has ended!")
+                put(state{proposals[_proposalId].hasVoted[Call.caller] = true})
         put(state{proposals[_proposalId] = state.proposals[_proposalId]{votesAgainst @ v = v + 1}})
         state.proposals[_proposalId].votesAgainst
 
@@ -344,6 +345,7 @@ contract DAO =
         let _proposal = state.proposals[_proposalId]
         require(Chain.timestamp > _proposal.endTime, "Proposal has not ended!")
         require(_checkQuorum(_proposalId), "Quorum was not reached")
+        require(_proposal.votesFor > _proposal.votesAgainst, "Proposal failed")
         _proposal{isExecuted = true}
         if(_proposal.proposalType == "add")
             _addMember(_proposal.target)

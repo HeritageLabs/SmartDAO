@@ -295,8 +295,9 @@ main contract DAO =
                     false
 
     public stateful entrypoint createProposal(_proposalType: string, _description: string, _value: int, _target: address) = 
-        require(Contract.balance >= _value, "insufficient fund")
         require(isMember(Call.caller), "You're not a member of this DAO")
+        if(_proposalType == "transfer")
+          require(Contract.balance >= _value, "insufficient fund")
         let _proposalId : int = state.totalProposals
         let _newProposal : proposal = {id = _proposalId,
             proposer = Call.caller,
@@ -319,7 +320,7 @@ main contract DAO =
         let hasVoted = Map.lookup_default(Call.caller, state.proposals[_proposalId].hasVoted, false)
         require(hasVoted == false, "You've already voted!")
         require(Chain.timestamp < state.proposals[_proposalId].endTime, "Proposal has ended!")
-        
+        put(state{proposals[_proposalId].hasVoted[Call.caller] = true})
         put(state{proposals[_proposalId] = state.proposals[_proposalId]{votesFor @ v = v + 1}})
         state.proposals[_proposalId].votesFor
 
@@ -329,6 +330,7 @@ main contract DAO =
         let hasVoted = Map.lookup_default(Call.caller, state.proposals[_proposalId].hasVoted, false)
         require(hasVoted == false, "You've already voted!")
         require(Chain.timestamp < state.proposals[_proposalId].endTime, "Proposal has ended!")
+                put(state{proposals[_proposalId].hasVoted[Call.caller] = true})
         put(state{proposals[_proposalId] = state.proposals[_proposalId]{votesAgainst @ v = v + 1}})
         state.proposals[_proposalId].votesAgainst
 
@@ -338,6 +340,7 @@ main contract DAO =
         let _proposal = state.proposals[_proposalId]
         require(Chain.timestamp > _proposal.endTime, "Proposal has not ended!")
         require(_checkQuorum(_proposalId), "Quorum was not reached")
+        require(_proposal.votesFor > _proposal.votesAgainst, "Proposal failed")
         _proposal{isExecuted = true}
         if(_proposal.proposalType == "add")
             _addMember(_proposal.target)
