@@ -45,12 +45,6 @@ const SECRET_KEY = 'eba8786a506fd20e8b00f117e6d6598fd0943ff3d0bd926aea5e1c35802c
     await daoInstance.voteFor(proposalId);
     console.log((await daoInstance.getProposal(proposalId)).decodedResult);
 
-    await daoInstance.voteFor(proposalId);
-    console.log((await daoInstance.getProposal(proposalId)).decodedResult);
-
-    await daoInstance.voteFor(proposalId);
-    console.log((await daoInstance.getProposal(proposalId)).decodedResult);
-
     // Token
     // const tokenContract = await aeSdk.initializeContract({ sourceCode: Token });
     // const tokenAci = await tokenContract._aci
