@@ -21,6 +21,8 @@ export interface IContextType {
     getProposal: (DAOAddress: string, proposalId: number) => Promise<any>;
     getProposals: (DAOAddress: string) => Promise<any>;
     getActiveProposals: (DAOAddress: string) => Promise<any>;
+    searchValue: string;
+    handleSearch: (args: string) => void;
 
 };
 

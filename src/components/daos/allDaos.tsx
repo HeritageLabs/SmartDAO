@@ -7,7 +7,8 @@ import PageLoader from "../PageLoader";
 
 const AllDaos = () => {
   const [daos, setDaos] = useState<any>();
-  const { getDAOs, aeSdk } = useContext(UserContext) as IContextType;
+  const [allDaos, setAllDaos] = useState<any>();
+  const { getDAOs, aeSdk, searchValue } = useContext(UserContext) as IContextType;
 
   const getAllDAOs = async () => {
     getDAOs().then((res: any) => {
@@ -19,6 +20,7 @@ const AllDaos = () => {
           }
         }
       }
+      setAllDaos(res)
       setDaos(res);
     });
   };
@@ -27,6 +29,16 @@ const AllDaos = () => {
       getAllDAOs();
     }
   }, [aeSdk]);
+
+  useEffect(() => {
+    if (searchValue) {
+      const filterDao = allDaos.filter((dao: any) => dao.name === searchValue);
+      setDaos(filterDao);
+    } else {
+      setDaos(allDaos);
+    }
+  }, [searchValue]);
+
   return (
     <div>
       {daos ? (

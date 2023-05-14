@@ -17,6 +17,12 @@ const ContextProvider = ({ children }: IContextProvider) => {
   const [account, setAccount] = useState<IAccount>({ address: "", balance: 0 });
   const [showModal, setShowModal] = useState(false);
   const { setLocalStorage, clearStorage } = useLocalStorage();
+  const [searchValue, setSearchValue] = useState<string>('');
+
+
+  const handleSearch = (value: string) => {
+      setSearchValue(value)
+  }
 
   const loginUser = async () => {
     const client = await login();
@@ -119,8 +125,8 @@ const ContextProvider = ({ children }: IContextProvider) => {
 
 
   const providerValue = useMemo(
-    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals }),
-    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals]
+    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue }),
+    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue]
   );
 
   return (
