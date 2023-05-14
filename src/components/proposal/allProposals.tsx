@@ -14,9 +14,13 @@ import { AllActiveProposal } from "./data";
 import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import PageLoader from "../PageLoader";
+import { useToastify } from "../../hooks/useToastify";
+import { voteForProposal } from "../../utils/contract/smartdao";
+import CustomButton from "../common/button";
 
 const AllProposals = () => {
   const [proposals, setProposals] = useState<any>();
+  const { alertToast } = useToastify();
   const navigate = useNavigate();
   const { loginUser, aeSdk, getDAOs, getProposals } = useContext(UserContext) as IContextType;
   const { getLocalStorage } = useLocalStorage();
@@ -43,6 +47,16 @@ const AllProposals = () => {
       setProposals(propps);
     } catch (error) {
       console.log({ error })
+    }
+  };
+
+  const handleVoteProposal = async (address: any, id: any) => {
+    try {
+      await voteForProposal(address, id)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    } catch (error) {
+      alertToast('error', { error });
     }
   }
 
@@ -110,9 +124,9 @@ const AllProposals = () => {
                        </div>
    
                        <div className="flex justify-end">
-                         <div className="flex mt-6 items-center w-3/12 justify-between text-right">
+                         <div className="flex mt-6 items-center w-4/12 justify-between text-right">
                            <div className="flex items-center w-full mr-4">
-                             <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
+                             <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans cursor-pointer" onClick={() => handleVoteProposal(proposer.target, Number(proposer.id))}>
                                {LikeIcon}
                              </div>
                              <p className="ml-2">{proposer.likes || 0}</p>
@@ -126,6 +140,7 @@ const AllProposals = () => {
                            </div>
    
                            <div className="flex items-center w-full">
+                            <CustomButton handleClick={() => console.log('exceute')}>Exceute</CustomButton>
                              {/* <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
                                {ChatIcon}
                              </div> */}

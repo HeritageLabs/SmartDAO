@@ -80,8 +80,9 @@ const ContextProvider = ({ children }: IContextProvider) => {
   }
 
   async function voteForProposal(DAOAddress: string, proposalId: number) {
-    const contract = await aeSdk.initializeContract({ aci: daoACI, address: DAOAddress });
-    const res = await contract.voteFor(proposalId);
+    console.log(aeSdk);
+    // const contract = await aeSdk.initializeContract({ aci: daoACI, address: DAOAddress });
+    // const res = await contract.voteFor(proposalId);
   }
 
   async function voteAgainstProposal(DAOAddress: string, proposalId: number) {
