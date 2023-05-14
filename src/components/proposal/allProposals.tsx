@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../UserContext";
 import Logo from "../../assets/icons/logo-icon.svg";
 import {
@@ -15,22 +15,46 @@ import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 const AllProposals = () => {
+  const [proposals, setProposals] = useState<any>();
   const navigate = useNavigate();
-  const { loginUser } = useContext(UserContext) as IContextType;
+  const { loginUser, aeSdk, getDAOs, getProposals } = useContext(UserContext) as IContextType;
   const { getLocalStorage } = useLocalStorage();
 
   const handleClick = (id: number) => {
-    if (!getLocalStorage()) {
-      loginUser();
-      navigate(`${PROPOSALS}/${id}`);
-    }
-    navigate(`${PROPOSALS}/${id}`);
+    // if (!getLocalStorage()) {
+    //   loginUser();
+    //   navigate(`${PROPOSALS}/${id}`);
+    // }
+    // navigate(`${PROPOSALS}/${id}`);
   }
 
-return (
-  <div className="w-full px-14">
-    {AllActiveProposal.map((proposer) => (
-        <div className="mb-16 py-3 cursor-pointer" key={proposer.id} onClick={() => handleClick(proposer.id)}>
+  const getAllProposals = async () => {
+    try {
+      const daos = await getDAOs();
+      const propps = [];
+      for (let i = 0; i < daos.length; i++) {
+        let daoProposals = await getProposals(daos[i].contractAddress)
+        daoProposals.map((p: any) => {
+          p.dao = daos[i].name;
+        })
+        propps.push(...daoProposals);
+      }
+      console.log({ propps })
+      setProposals(propps);
+    } catch (error) {
+      console.log({ error })
+    }
+  }
+
+  useEffect(() => {
+    getAllProposals();
+  }, [aeSdk])
+
+  return (
+    <div className="w-full px-14">
+      {proposals && proposals.map((proposer: any) => (
+        // <div className="mb-16 py-3 cursor-pointer" key={Number(proposer.id)} onClick={() => handleClick(Number(proposer.id))}>
+        <div className="mb-16 py-3" key={Number(proposer.id)}>
           <div className="flex items-center">
             <div>
               <div className="border-grey rounded border p-1 w-12 h-12 cursor-pointer">
@@ -39,13 +63,13 @@ return (
             </div>
             <div className="ml-2">
               <p className="text-sm text-grey">DAO name</p>
-              <p className="font-gilroyBold">{proposer.name}</p>
+              <p className="font-gilroyBold">{proposer.dao}</p>
             </div>
           </div>
 
           <div className="w-full">
             <p className="text-sm text-grey text-right my-1">
-              Proposal ID: <span>{proposer.id}</span>
+              Proposal ID: <span>{Number(proposer.id)}</span>
             </p>
             <div
               className="rounded-lg h-fit shadow-card hover:shadow-normal"
@@ -62,14 +86,14 @@ return (
                         Proposal Type: <span>{proposer.type}</span>
                       </p>
                       <div className="flex items-center mt-3">
-                        <h3 className="font-gilroyBold text-gl">{proposer.type}</h3>
-                        <ExternalLink url={proposer.wallet_addr} />
+                        <h3 className="font-gilroyBold text-gl">{proposer.proposalType[0].toUpperCase() + proposer.proposalType.slice(1)}</h3>
+                        {/* <ExternalLink url={window.location.origin + "daos/" + proposer.dao} /> */}
                       </div>
                     </div>
-                    <p className="text-success font-gilroyMd">
+                    {/* <p className="text-success font-gilroyMd">
                       Approved at:{" "}
                       <span className="text-grey">{proposer.appr_date}</span>
-                    </p>
+                    </p> */}
                   </div>
                   <div className="mt-4">
                     <p className="text-sm text-grey">Proposal</p>
@@ -79,7 +103,7 @@ return (
                   <div className="mt-4">
                     <p className="text-sm text-grey">Description</p>
                     <p className="w-4/5">
-                      {proposer.desc}
+                      {proposer.description}
                     </p>
                   </div>
 
@@ -111,9 +135,9 @@ return (
             </div>
           </div>
         </div>
-    ))}
-  </div>
-);
-    };
+      ))}
+    </div>
+  );
+};
 
 export default AllProposals;

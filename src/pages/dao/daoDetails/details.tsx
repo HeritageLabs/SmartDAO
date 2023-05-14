@@ -10,26 +10,33 @@ import { UserContext } from "../../../UserContext";
 import { IContextType } from "../../../types";
 
 const DaoDetails = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { daoId } = useParams();
   const [dao, setDao] = useState<any>();
   const [enableCreateProposal, setEnableCreateProposal] = useState(false);
   const { getDAO, aeSdk } = useContext(UserContext) as IContextType;
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getDAO(daoId).then((res: any) => {
-      setDao(res);
-      console.log({ res });
-      SideBar[0].value = Number(res.balance).toString() + "AE";
-      SideBar[1].value = Number(res.activeProposals).toString();
-      SideBar[2].value = Number(res.proposals).toString();
-    })
+    (daoId &&
+      getDAO(daoId).then((res: any) => {
+        setDao(res);
+        SideBar[0].value = (Number(res.balance) / 1e18).toFixed(2) + "AE";
+        SideBar[1].value = Number(res.activeProposals).toString();
+        SideBar[2].value = Number(res.proposals).toString();
+        setIsLoading(false)
+      }).catch((error) => {
+        console.log({ error })
+        if (error.name == "NodeInvocationError")
+          navigate("/daos")
+      })
+    )
   }, [aeSdk]);
 
-  return (
+  return isLoading ? <></> : (
     <FeedsLayout>
-      <DetailsNav setEnableCreateProposal={setEnableCreateProposal}>
-        {enableCreateProposal && <NewProposalTemp />}
+      <DetailsNav setEnableCreateProposal={setEnableCreateProposal} dao={dao}>
+        {enableCreateProposal && <NewProposalTemp dao={dao.contractAddress} />}
         <ProposalUpdate />
         <div className="flex justify-between">
           <div className="w-4/6 rounded-lg shadow-medium py-7 p-2">

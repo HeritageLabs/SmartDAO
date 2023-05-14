@@ -52,7 +52,7 @@ const AllDaos = () => {
                             <div className="flex px-3 my-11 justify-between">
                                 <div className="text-center">
                                     <p className="text-sm text-grey">DAO funds</p>
-                                    <p className="font-gilroyBold text-lg">{dao.balance} AE</p>
+                                    <p className="font-gilroyBold text-lg">{(dao.balance / 1e18).toFixed(2)} AE</p>
                                 </div>
                                 <div className="text-center">
                                     <p className="text-sm text-grey">Memeber/Groups</p>

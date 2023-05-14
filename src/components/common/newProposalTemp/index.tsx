@@ -5,20 +5,28 @@ import DropdownInput from "../input/DropdownInput";
 import TextAreaInput from "../input/TextAreaInput";
 import TextInput from "../input/TextInput";
 import { UserContext } from "../../../UserContext";
-import { IContextType } from "../../../types";
+import { IContextType, IProposal } from "../../../types";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 
 
-const NewProposalTemp = () => {
+const NewProposalTemp = ({ dao }: { dao: string }) => {
   const [desc, setDesc] = useState<string>('');
-  const [amount, setAmount] = useState<string>('');
+  const [target, setTarget] = useState<string>('');
+  const [value, setValue] = useState<string>('');
   const [proposalType, setProposalType] = useState<string>('');
   const { getLocalStorage } = useLocalStorage();
-  const { account } = useContext(UserContext) as IContextType;
+  const { account, createProposal } = useContext(UserContext) as IContextType;
 
-  const handlePropose = () => {
-    const data = { desc, amount, proposalType };
-    console.log(data);
+  const handlePropose = async () => {
+    const proposal: IProposal = { proposalType, description: desc, target, value: Number(value) * 1e18 };
+    try {
+      await createProposal(dao, proposal);
+      window.alert("Proposal created successfully");
+      window.location.reload();
+    } catch (error: any) {
+      console.log({ error });
+      window.alert(error.message)
+    }
   };
 
   return (
@@ -45,9 +53,12 @@ const NewProposalTemp = () => {
                 < div className="mt-4" >
                   <TextAreaInput label="Description:" placeholder="Enter the description of this proposal" onChange={(e) => setDesc(e.target.value)} value={desc} />
                 </div >
+                < div className="mt-4" >
+                  <TextInput label="Target:" placeholder="Enter the target address" onChange={(e) => setTarget(e.target.value)} value={target} />
+                </div >
 
                 <div className="flex justify-between">
-                  <TextInput label="Amount" isCompulsory placeholder="00.0000" type="number" onChange={({ target }) => setAmount(target.value)} value={amount} />
+                  <TextInput label="Amount" isCompulsory placeholder="00.0000" type="number" onChange={({ target }) => setValue(target.value)} value={value} />
                   <div />
                   <div className="flex mt-6 items-center justify-between text-right">
                     <div className="flex items-center border h-10 w-16 rounded-full border-tertiary">
@@ -66,7 +77,7 @@ const NewProposalTemp = () => {
                 </div>
 
                 <div className="flex w-full my-5 justify-end">
-                  <CustomButton width="w-72" disabled={!desc || !amount || !proposalType} handleClick={handlePropose}>Propose</CustomButton>
+                  <CustomButton width="w-72" disabled={!desc || !value || !proposalType} handleClick={handlePropose}>Propose</CustomButton>
                 </div>
               </div >
             </div >

@@ -61,7 +61,7 @@ const ContextProvider = ({ children }: IContextProvider) => {
   const createDAO = async (dao: IDAO) => {
     const contract = await aeSdk.initializeContract({ aci: smartdaoACI, address: smartdaoAddress });
     console.log({ contract })
-    const res = await contract.createDAO(dao.name.toLowerCase(), dao.description, dao.tokenSymbol, dao.image, dao.socials, dao.initialMembers, dao.startingBalance, { amount: dao.startingBalance * 1e18 });
+    const res = await contract.createDAO(dao.name.toLowerCase(), dao.description, dao.tokenSymbol, dao.image, dao.socials, dao.initialMembers, dao.startingBalance * 1e18, { amount: dao.startingBalance * 1e18 });
     console.log({ res });
   }
 
@@ -82,6 +82,7 @@ const ContextProvider = ({ children }: IContextProvider) => {
 
   async function createProposal(DAOAddress: string, proposal: IProposal) {
     const contract = await aeSdk.initializeContract({ aci: daoACI, address: DAOAddress });
+    console.log({ proposal })
     const res = await contract.createProposal(proposal.proposalType, proposal.description, proposal.value, proposal.target);
   }
 
@@ -124,8 +125,8 @@ const ContextProvider = ({ children }: IContextProvider) => {
 
 
   const providerValue = useMemo(
-    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO }),
-    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO]
+    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals }),
+    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals]
   );
 
   return (

@@ -11,9 +11,17 @@ export interface IContextType {
     setShowModal: (arg0: boolean) => void;
     account: IAccount;
     createDAO: (dao: IDAO) => void;
-    getDAOs: () => any;
-    getDAO: (daoId: any) => any;
-    aeSdk: any
+    getDAOs: () => Promise<any>;
+    aeSdk: any;
+    getDAO: (id: string) => Promise<any>;
+    createProposal: (DAOAddress: string, proposal: IProposal) => void;
+    voteForProposal: (DAOAddress: string, proposalId: number) => void;
+    voteAgainstProposal: (DAOAddress: string, proposalId: number) => void;
+    executeProposal: (DAOAddress: string, proposalId: number) => void;
+    getProposal: (DAOAddress: string, proposalId: number) => Promise<any>;
+    getProposals: (DAOAddress: string) => Promise<any>;
+    getActiveProposals: (DAOAddress: string) => Promise<any>;
+
 };
 
 export interface IDAO {

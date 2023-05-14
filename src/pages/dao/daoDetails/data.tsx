@@ -13,31 +13,31 @@ const DaoDetail: IDaoDetail[] = [
     icon: WriteIcon,
     name: 'Proposals',
     id: 1,
-    url: "#"
+    url: ""
   },
   {
     icon: FundsIcon,
     name: 'Funds',
     id: 2,
-    url: "#"
+    url: ""
   },
   {
     icon: MembersIcon,
     name: 'Members',
     id: 3,
-    url: "#"
+    url: ""
   },
   {
     icon: SettingsIc,
     name: 'Settings',
     id: 4,
-    url: "#"
+    url: ""
   },
   {
     icon: PoolsIcon,
     name: 'Pools',
     id: 5,
-    url: "#"
+    url: ""
   },
 ];
 

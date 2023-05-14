@@ -9,9 +9,10 @@ import DaoDetail from "./data";
 interface IDetailsNav {
   children: ReactNode;
   setEnableCreateProposal: (args0: boolean) => void;
+  dao: any;
 }
 
-const DetailsNav = ({ children, setEnableCreateProposal }: IDetailsNav) => {
+const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => {
   const [deposit, setDeposit] = useState("");
   const [showAddProposal, setShowAddProposal] = useState(false);
   const wrapper = useRef(null);
@@ -24,13 +25,13 @@ const DetailsNav = ({ children, setEnableCreateProposal }: IDetailsNav) => {
           <div className="h-32 w-32 rounded-2xl items-center flex justify-center shadow-normal bg-white">
             <img
               width={80}
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/2560px-Coca-Cola_logo.svg.png"
+              src={dao.image}
               alt="logo"
             />
           </div>
           <div className="text-center">
             <p className="text-grey text-sm">Members</p>
-            <p className="font-gilroyBold">1</p>
+            <p className="font-gilroyBold">{dao.members.length || 0}</p>
           </div>
           <div className="text-center">
             <p className="text-grey text-sm">Dao Version</p>
@@ -56,16 +57,16 @@ const DetailsNav = ({ children, setEnableCreateProposal }: IDetailsNav) => {
           <div className="h-14 w-14 rounded-lg flex items-center justify-center shadow-inset border border-lightGrey">
             <img
               width={40}
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/2560px-Coca-Cola_logo.svg.png"
+              src={dao.image}
               alt="logo"
             />
           </div>
           <div className="ml-4">
             <div className="flex items-center">
-              <h2 className="font-gilroyBold text-md">Carsmart</h2>
+              <h2 className="font-gilroyBold text-md">{dao.name[0].toUpperCase() + dao.name.slice(1)}</h2>
               <ExternalLink url="" />
             </div>
-            <p className="text-grey text-sm mt-px">carsmart.spruge.net</p>
+            <p className="text-grey text-sm mt-px">{dao.socials[0]}</p>
           </div>
         </div>
         <div className="flex w-2/5 justify-between items-center">

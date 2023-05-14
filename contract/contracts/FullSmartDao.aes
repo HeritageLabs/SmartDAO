@@ -300,8 +300,9 @@ contract DAO =
                     false
 
     public stateful entrypoint createProposal(_proposalType: string, _description: string, _value: int, _target: address) = 
-        require(Contract.balance >= _value, "insufficient fund")
         require(isMember(Call.caller), "You're not a member of this DAO")
+        if(_proposalType == "transfer")
+          require(Contract.balance >= _value, "insufficient fund")
         let _proposalId : int = state.totalProposals
         let _newProposal : proposal = {id = _proposalId,
             proposer = Call.caller,

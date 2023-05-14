@@ -9,89 +9,90 @@ import VoteDetails from "../../components/proposal/voteDetails";
 import NewProposalTemp from "../../components/common/newProposalTemp";
 
 const ProposalDetails = () => {
-    const [enableCreateProposal, setEnableCreateProposal] = useState(false);
-return (
+  const [enableCreateProposal, setEnableCreateProposal] = useState(false);
+  return (
     <FeedsLayout>
-        <DetailsNav setEnableCreateProposal={setEnableCreateProposal}>
-        {enableCreateProposal && <NewProposalTemp />}
+      <DetailsNav setEnableCreateProposal={setEnableCreateProposal} dao={{}}>
+        {enableCreateProposal && <NewProposalTemp dao="" />}
         <ProposalUpdate msgHeading="Change Voting Snapshot" message="The proposed changes in Voting Policy will affect the other proposals. Further updates might get rewritten if the current proposal won't get resolved before." />
         {AllActiveProposal.slice(0, 1).map((proposer) => (
-        <div className="mb-16 py-3 cursor-pointer" key={proposer.id}>
-          <div className="w-full">
-            <p className="text-sm text-grey text-right my-1">
-              Proposal ID: <span>{proposer.id}</span>
-            </p>
-            <div
-              className="rounded-lg h-fit shadow-card hover:shadow-normal"
-            >
-              <div className="flex">
-                <div className="w-14 bg-bg flex">
-                  <div className="mx-auto mt-4">{CodeIcon}</div>
-                </div>
-                <div className="px-6 py-3 w-full">
-                  <div className="flex justify-between w-full">
-                    {/* title of the DAO and link to the DAO */}
-                    <div>
-                      <p className="text-sm text-grey text-left my-1">
-                        Proposal Type: <span>{proposer.type}</span>
-                      </p>
-                      <div className="flex items-center mt-3">
-                        <h3 className="font-gilroyBold text-gl">{proposer.type}</h3>
-                        <ExternalLink url={proposer.wallet_addr} />
+          <div className="mb-16 py-3 cursor-pointer" key={proposer.id}>
+            <div className="w-full">
+              <p className="text-sm text-grey text-right my-1">
+                Proposal ID: <span>{proposer.id}</span>
+              </p>
+              <div
+                className="rounded-lg h-fit shadow-card hover:shadow-normal"
+              >
+                <div className="flex">
+                  <div className="w-14 bg-bg flex">
+                    <div className="mx-auto mt-4">{CodeIcon}</div>
+                  </div>
+                  <div className="px-6 py-3 w-full">
+                    <div className="flex justify-between w-full">
+                      {/* title of the DAO and link to the DAO */}
+                      <div>
+                        <p className="text-sm text-grey text-left my-1">
+                          Proposal Type: <span>{proposer.type}</span>
+                        </p>
+                        <div className="flex items-center mt-3">
+                          <h3 className="font-gilroyBold text-gl">{proposer.type}</h3>
+                          <ExternalLink url={proposer.wallet_addr} />
+                        </div>
                       </div>
+                      <p className="text-success font-gilroyMd">
+                        Approved at:{" "}
+                        <span className="text-grey">{proposer.appr_date}</span>
+                      </p>
                     </div>
-                    <p className="text-success font-gilroyMd">
-                      Approved at:{" "}
-                      <span className="text-grey">{proposer.appr_date}</span>
-                    </p>
-                  </div>
-                  <div className="mt-4">
-                    <p className="text-sm text-grey">Proposer</p>
-                    <p className="font-gilroyBold">{proposer.proposer}</p>
-                  </div>
-                  {/* Description */}
-                  <div className="mt-4">
-                    <p className="text-sm text-grey">Description</p>
-                    <p className="w-4/5">
-                      {proposer.desc}
-                    </p>
-                  </div>
-                  
-                  <div className="flex w-3/5 justify-between mt-14">
-                    <div className="">
+                    <div className="mt-4">
+                      <p className="text-sm text-grey">Proposer</p>
+                      <p className="font-gilroyBold">{proposer.proposer}</p>
+                    </div>
+                    {/* Description */}
+                    <div className="mt-4">
+                      <p className="text-sm text-grey">Description</p>
+                      <p className="w-4/5">
+                        {proposer.desc}
+                      </p>
+                    </div>
+
+                    <div className="flex w-3/5 justify-between mt-14">
+                      <div className="">
                         <p className="text-sm text-grey">Smart Contract Address</p>
                         <p className="font-gilroyBold">core.nkys.testnet</p>
-                    </div>
-                    <div className="">
+                      </div>
+                      <div className="">
                         <p className="text-sm text-grey">Method Name</p>
                         <p className="font-gilroyBold">claim_treasury_smartdao</p>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex justify-between items-center my-8">
+                    <div className="flex justify-between items-center my-8">
 
-                    <div className="">
-                            <p className="text-sm text-grey">Deposit</p>
-                            <p className="font-gilroyBold">0 USD</p>
-                        </div>
-                    <div className="flex mt-6 items-center w-3/12 justify-between text-right">
-                      <div className="flex items-center w-full mr-4">
-                        <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
-                          {LikeIcon}
-                        </div>
-                        <p className="ml-2">{proposer.likes}</p>
+                      <div className="">
+                        <p className="text-sm text-grey">Deposit</p>
+                        <p className="font-gilroyBold">0 USD</p>
                       </div>
-
-                      <div className="flex items-center w-full mr-4">
-                        <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
-                          {DislikeIcon}
+                      <div className="flex mt-6 items-center w-3/12 justify-between text-right">
+                        <div className="flex items-center w-full mr-4">
+                          <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
+                            {LikeIcon}
+                          </div>
+                          <p className="ml-2">{proposer.likes}</p>
                         </div>
-                        <p className="ml-2">{proposer.dislikes}</p>
-                      </div>
 
-                      <div className="flex items-center w-full">
-                        <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
-                          {ChatIcon}
+                        <div className="flex items-center w-full mr-4">
+                          <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
+                            {DislikeIcon}
+                          </div>
+                          <p className="ml-2">{proposer.dislikes}</p>
+                        </div>
+
+                        <div className="flex items-center w-full">
+                          <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
+                            {ChatIcon}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -100,11 +101,10 @@ return (
               </div>
             </div>
           </div>
-        </div>
         ))}
         <VoteDetails />
-    </DetailsNav>
+      </DetailsNav>
     </FeedsLayout>
-);
+  );
 };
 export default ProposalDetails;
