@@ -115,20 +115,20 @@ const AllProposals = () => {
                              <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
                                {LikeIcon}
                              </div>
-                             <p className="ml-2">{proposer.likes}</p>
+                             <p className="ml-2">{proposer.likes || 0}</p>
                            </div>
    
                            <div className="flex items-center w-full mr-4">
                              <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
                                {DislikeIcon}
                              </div>
-                             <p className="ml-2">{proposer.dislikes}</p>
+                             <p className="ml-2">{proposer.dislikes || 0}</p>
                            </div>
    
                            <div className="flex items-center w-full">
-                             <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
+                             {/* <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
                                {ChatIcon}
-                             </div>
+                             </div> */}
                            </div>
                          </div>
                        </div>
