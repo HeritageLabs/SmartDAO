@@ -2,7 +2,11 @@ import { SearchIcon } from "../../../assets/svgs";
 import useCurrentLocation from "../../../hooks/useCurrentLocation";
 import { DAOS } from "../../../utils/constants/pages";
 
-const SearchInput = () => {
+interface ISearchInput {
+  handleChange: (args: any) => void;
+}
+
+const SearchInput = ({ handleChange }: ISearchInput) => {
   const { pathname } = useCurrentLocation();
 return (
   <form className="flex items-center w-full">
@@ -17,12 +21,12 @@ return (
         type="text"
         id="search"
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-quaternary focus:border-quaternary block w-full pl-10 p-2.5 focus-within:border-quaternary focus-within:outline-quaternary"
-        placeholder={`Search by ${pathname === DAOS ? 'DAO name' : 'proposal title'}`}
+        placeholder={`Search by ${pathname === DAOS ? 'DAO name' : 'proposal title or address'}`}
         required
+        onChange={handleChange}
       />
     </div>
-    <button
-      type="submit"
+    {/* <button
       className="p-2.5 ml-2 text-sm font-medium text-white bg-quaternary rounded-lg border border-quaternary-700 hover:bg-quaternary focus:ring-4 focus:outline-none focus:ring-quaternary-300 dark:bg-quaternary-600 dark:hover:bg-quaternary dark:focus:ring-quaternary"
     >
       <svg
@@ -40,7 +44,7 @@ return (
         ></path>
       </svg>
       <span className="sr-only">Search</span>
-    </button>
+    </button> */}
   </form>
 );
 };

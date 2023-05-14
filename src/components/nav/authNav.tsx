@@ -10,9 +10,10 @@ import DropdownMenu from "../common/dropdownMenu";
 import SearchInput from "../common/input/SearchInput";
 import ConnectWalletPopup from "../modals/connectWalletPopup";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import { useSearchValue } from "../../hooks/useSearchValue";
 
 const AuthNav = () => {
-  const { showModal, setShowModal, loginUser, logoutUser } = useContext(UserContext) as IContextType;
+  const { showModal, setShowModal, loginUser, logoutUser, handleSearch } = useContext(UserContext) as IContextType;
   const { alertToast } = useToastify();
   const { getLocalStorage } = useLocalStorage();
   return (
@@ -24,7 +25,7 @@ const AuthNav = () => {
         <img src={Logo} alt="logo" className="w-40" />
       </a>
       <div className="flex justify-between w-2/4 items-center">
-        <SearchInput />
+        <SearchInput handleChange={({ target }) => handleSearch(target.value)} />
       </div>
       {getLocalStorage() ? (
         <div className="flex items-center">

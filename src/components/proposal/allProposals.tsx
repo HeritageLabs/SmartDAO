@@ -21,7 +21,8 @@ const AllProposals = ({ dao }: { dao: any }) => {
   const [proposals, setProposals] = useState<any>();
   const { alertToast } = useToastify();
   const navigate = useNavigate();
-  const { loginUser, aeSdk, getDAOs, getProposals, voteForProposal, voteAgainstProposal, executeProposal } = useContext(UserContext) as IContextType;
+  const { searchValue, aeSdk, getDAOs, getProposals, voteForProposal, voteAgainstProposal, executeProposal } = useContext(UserContext) as IContextType;
+  const [allProposals, setAllProposals] = useState<any>();
   const { getLocalStorage } = useLocalStorage();
 
   const handleClick = (id: number) => {
@@ -46,6 +47,7 @@ const AllProposals = ({ dao }: { dao: any }) => {
         console.log(Date.now())
       }
       setProposals(propps);
+      setAllProposals(propps);
     } catch (error) {
       console.log({ error })
     }
@@ -104,7 +106,20 @@ const AllProposals = ({ dao }: { dao: any }) => {
 
   useEffect(() => {
     getAllProposals();
-  }, [aeSdk])
+  }, [aeSdk]);
+
+
+  useEffect(() => {
+    if (searchValue) {
+      const filterProposal = allProposals.filter((proposal: any) => proposal.dao === searchValue || proposal.target === searchValue || proposal.proposer === searchValue);
+      console.log(filterProposal);
+      setProposals(filterProposal);
+    } else {
+      setProposals(allProposals);
+    }
+  }, [searchValue])
+
+  console.log(allProposals);
 
   return (
     <div>
