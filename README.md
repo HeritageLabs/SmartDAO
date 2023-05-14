@@ -10,7 +10,7 @@ Current centralized decision-making systems lack transparency, are susceptible t
 
 SmartDAO aims to solve these problems by creating a decentralized platform that leverages blockchain technology to provide transparency, trust, and inclusivity.
 
-### `features | Roadmap`
+### `features -> Roadmap`
 
 * Reputation based voting system
 * Use of quadratic funding
