@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../../../UserContext";
 import { IContextType } from "../../../types";
 import PageLoader from "../../../components/PageLoader";
+import AllProposals from "../../../components/proposal/allProposals";
 
 const DaoDetails = () => {
   const navigate = useNavigate();
@@ -80,6 +81,7 @@ const DaoDetails = () => {
               ))}
             </div>
           </div>
+          <AllProposals dao={dao} />
         </DetailsNav>
       ) : (
         <PageLoader />

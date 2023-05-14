@@ -1,10 +1,12 @@
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useContext, useRef, useState } from "react";
 import { AddIc, DepositIcon } from "../../../assets/svgs";
 import { ExternalLink } from "../../../components/common/ExternalLink.tsx";
 import TextInput from "../../../components/common/input/TextInput";
 import useOnClickOutside from "../../../hooks/useOnClickOutside";
 import AddProposalModal from "./addProposal";
 import DaoDetail from "./data";
+import { UserContext } from "../../../UserContext";
+import { IContextType } from "../../../types";
 
 interface IDetailsNav {
   children: ReactNode;
@@ -17,6 +19,20 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
   const [showAddProposal, setShowAddProposal] = useState(false);
   const wrapper = useRef(null);
   useOnClickOutside(wrapper, setShowAddProposal);
+  const { aeSdk } = useContext(UserContext) as IContextType;
+
+  async function handleDeposit() {
+    try {
+      await aeSdk.spend(Number(deposit) * 1e18, dao.depositAddress);
+      window.alert("Donation successful")
+      setDeposit("");
+      window.location.reload();
+    } catch (error: any) {
+      window.alert(error.message)
+      console.log({ error })
+    }
+  }
+
   return (
     <div className="px-8">
       <div className="bg-lightGrey h-28 -mt-14 -ml-8 -mr-20 z-10" />
@@ -46,7 +62,7 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
             value={deposit}
             onChange={({ target }) => setDeposit(target.value)}
           />
-          <div className="h-9 w-9 mt-2 bg-[#F8F8F8] text-[#8C8F95] flex items-center rounded-lg -ml-10 cursor-pointer hover:bg-[#F4FFF1] trans">
+          <div className="h-9 w-9 mt-2 bg-[#F8F8F8] text-[#8C8F95] flex items-center rounded-lg -ml-10 cursor-pointer hover:bg-[#F4FFF1] trans" onClick={() => handleDeposit()}>
             {DepositIcon}
           </div>
         </form>
