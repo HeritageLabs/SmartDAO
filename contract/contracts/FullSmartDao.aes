@@ -335,7 +335,7 @@ contract DAO =
         let hasVoted = Map.lookup_default(Call.caller, state.proposals[_proposalId].hasVoted, false)
         require(hasVoted == false, "You've already voted!")
         require(Chain.timestamp < state.proposals[_proposalId].endTime, "Proposal has ended!")
-                put(state{proposals[_proposalId].hasVoted[Call.caller] = true})
+        put(state{proposals[_proposalId].hasVoted[Call.caller] = true})
         put(state{proposals[_proposalId] = state.proposals[_proposalId]{votesAgainst @ v = v + 1}})
         state.proposals[_proposalId].votesAgainst
 
@@ -346,7 +346,6 @@ contract DAO =
         require(Chain.timestamp > _proposal.endTime, "Proposal has not ended!")
         require(_checkQuorum(_proposalId), "Quorum was not reached")
         require(_proposal.votesFor > _proposal.votesAgainst, "Proposal failed")
-        _proposal{isExecuted = true}
         if(_proposal.proposalType == "add")
             _addMember(_proposal.target)
         elif(_proposal.proposalType == "remove")
@@ -357,7 +356,10 @@ contract DAO =
             _setVotingTime(_proposal.value)
         elif(_proposal.proposalType == "transfer")
             Chain.spend(_proposal.target, _proposal.value)
-        put(state{proposals[_proposalId] = _proposal})
+        put(state{proposals[_proposalId].isExecuted = true})
+
+    public stateful payable entrypoint donate() = 
+        Contract.balance
 
     // Internal functions
     
