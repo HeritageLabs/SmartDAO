@@ -344,6 +344,7 @@ contract DAO =
         require(_proposalId < state.totalProposals, "Invalid proposal id")
         let _proposal = state.proposals[_proposalId]
         require(Chain.timestamp > _proposal.endTime, "Proposal has not ended!")
+        require(_proposal.isExecuted == false, "Proposal is already executed!")
         require(_checkQuorum(_proposalId), "Quorum was not reached")
         require(_proposal.votesFor > _proposal.votesAgainst, "Proposal failed")
         if(_proposal.proposalType == "add")
