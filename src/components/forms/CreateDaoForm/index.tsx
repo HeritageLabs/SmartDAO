@@ -50,7 +50,7 @@ const DaoInfoForm = () => {
                             color="grey3"
                             bg="bg-none"
                             width="w-full"
-                            href={SELECT_TEMPLATE_URL}
+                        // href={SELECT_TEMPLATE_URL}
                         >
                             Back
                         </CustomButton>

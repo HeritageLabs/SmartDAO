@@ -2,7 +2,7 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { UserContext } from ".";
 import useLocalStorage from "../hooks/useLocalStorage";
-import { login, smartdaoAddress } from "../utils/contract/smartdao.js";
+import { login, smartdaoAddress, aeSdk as client } from "../utils/contract/smartdao.js";
 import smartdaoACI from "../utils/contract/smartdao.json";
 import daoACI from "../utils/contract/dao.json";
 import { IAccount, IDAO, IProposal } from "../types";
@@ -12,11 +12,11 @@ interface IContextProvider {
 }
 
 const ContextProvider = ({ children }: IContextProvider) => {
-  const [aeSdk, setAeSdk]: any = useState();
+  const [aeSdk, setAeSdk]: any = useState(client);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [account, setAccount] = useState<IAccount>({ address: "", balance: 0 });
   const [showModal, setShowModal] = useState(false);
-  const { setLocalStorage, clearStorage } = useLocalStorage();
+  const { setLocalStorage, clearStorage, removeItem } = useLocalStorage();
   const [searchValue, setSearchValue] = useState<string>('');
 
 
@@ -35,12 +35,11 @@ const ContextProvider = ({ children }: IContextProvider) => {
       balance: parseFloat(balance) / 1e18
     });
 
-    setLocalStorage({ key: 'isLoggedIn', value: true });
-    setLocalStorage({ key: 'address', value: address });
-    setLocalStorage({ key: 'balance', value: parseFloat(balance) / 1e18 });
+    // setLocalStorage({ key: 'isLoggedIn', value: true });
+    // setLocalStorage({ key: 'address', value: address });
+    // setLocalStorage({ key: 'balance', value: parseFloat(balance) / 1e18 });
     setIsLoggedIn(true);
     setShowModal(false);
-    // setLocalStorage({ key: 'client',  })
   };
 
   const logoutUser = async () => {
@@ -48,18 +47,6 @@ const ContextProvider = ({ children }: IContextProvider) => {
     await aeSdk.disconnectWallet();
     setIsLoggedIn(false);
   }
-
-  const init = async () => {
-    try {
-      await loginUser();
-    } catch (error) {
-      console.log({ error })
-    }
-  }
-
-  useEffect(() => {
-    init();
-  }, []);
 
   const createDAO = async (dao: IDAO) => {
     const contract = await aeSdk.initializeContract({ aci: smartdaoACI, address: smartdaoAddress });

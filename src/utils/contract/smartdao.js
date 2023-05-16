@@ -9,7 +9,7 @@ const COMPILER_URL = 'https://compiler.aepps.com';
 const node = new Node('https://testnet.aeternity.io')
 
 
-const aeSdk = new AeSdkAepp({
+export const aeSdk = new AeSdkAepp({
     nodes: [{ name: 'testnet', instance: node }],
     onCompiler: COMPILER_URL,
     onNetworkChange: async ({ networkId }) => console.log("Network changed, new network id: ", networkId),
@@ -38,6 +38,7 @@ export const scanForWallets = async () => {
         const stopScan = walletDetector(scannerConnection, handleWallets)
     })
 };
+
 
 export const login = async () => {
     try {
