@@ -122,11 +122,16 @@ const ContextProvider = ({ children }: IContextProvider) => {
     return proposals;
   }
 
+  async function donate(DAOAddress: string, amount: number) {
+    const contract = await aeSdk.initializeContract({ aci: daoACI, address: DAOAddress })
+    const res = await contract.donate({ amount });
+  }
+
 
 
   const providerValue = useMemo(
-    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue }),
-    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue]
+    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue, donate }),
+    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue, donate]
   );
 
   return (

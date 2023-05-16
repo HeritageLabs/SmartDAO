@@ -2,7 +2,7 @@ import { AeSdkAepp, Node, BrowserWindowMessageConnection, walletDetector } from 
 import smartdaoACI from './smartdao.json';
 import daoACI from "./dao.json";
 
-export const smartdaoAddress = "ct_2kzYfkreceHq41PjcdxZsxrG7eUpMbuhUNJhZTMFJeEdqfehqh";
+export const smartdaoAddress = "ct_JkJEkXw82t1boPmb9ogNhxn3L2dHL9yALGEnu2D9fNKmaVsAu"
 // const SECRET_KEY = 'eba8786a506fd20e8b00f117e6d6598fd0943ff3d0bd926aea5e1c35802ce36a54584dc898d97866e538fb8a6bfa26db4ea60d69c87c68949b4531078aab2ea2';
 
 const COMPILER_URL = 'https://compiler.aepps.com';

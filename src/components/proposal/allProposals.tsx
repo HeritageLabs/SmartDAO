@@ -43,9 +43,8 @@ const AllProposals = ({ dao }: { dao: any }) => {
           p.dao = daos[i];
         })
         propps.push(...daoProposals);
-        console.log(Number(propps[0].endTime) > Date.now())
-        console.log(Date.now())
       }
+      propps.sort((proposal1, proposal2) => Number(proposal2.endTime - proposal1.endTime))
       setProposals(propps);
       setAllProposals(propps);
     } catch (error) {
@@ -56,12 +55,12 @@ const AllProposals = ({ dao }: { dao: any }) => {
   const handleVoteForProposal = async (address: any, id: any) => {
     console.log({ aeSdk });
     try {
-      await voteForProposal(address, id)
+      await voteForProposal(address, id);
+      window.alert("Successfully voted for proposal!")
     } catch (error: any) {
       console.log({ error })
       window.alert(error.message);
       alertToast('error', { error });
-      window.location.reload();
     }
   }
 
@@ -69,23 +68,23 @@ const AllProposals = ({ dao }: { dao: any }) => {
     console.log({ aeSdk });
     try {
       await executeProposal(address, id);
+      window.alert("Proposal successfully executed!")
     } catch (error: any) {
       console.log({ error })
       window.alert(error.message);
       alertToast('error', { error });
-      window.location.reload()
     }
   }
 
   const handleVoteAgainstProposal = async (address: any, id: any) => {
     console.log({ aeSdk });
     try {
-      await voteAgainstProposal(address, id)
+      await voteAgainstProposal(address, id);
+      window.alert("Successfully voted against proposal!");
     } catch (error: any) {
       console.log({ error })
       window.alert(error.message);
       alertToast('error', { error });
-      window.location.reload()
     }
   }
 
@@ -167,7 +166,7 @@ const AllProposals = ({ dao }: { dao: any }) => {
                               {/* <ExternalLink url={window.location.origin + "daos/" + proposer.dao} /> */}
                             </div>
                           </div>
-                          <p className="text-success font-gilroyMd">
+                          <p className={`${proposal.votesFor > proposal.votesAgainst ? "text-success" : "text-red"} font-gilroyMd`}>
                             {Number(proposal.endTime) > Date.now() ? "Ending: " : "Ended at: "} {new Date(Number(proposal.endTime)).toLocaleString("en-GB", { dateStyle: "short", timeStyle: "short" })}
                             <span className="text-grey">{proposal.appr_date}</span>
                           </p>
@@ -213,12 +212,12 @@ const AllProposals = ({ dao }: { dao: any }) => {
                               <p className="ml-2">{Number(proposal.votesAgainst) || 0}</p>
                             </div>}
 
-                            <div className="flex items-center w-full">
+                            {!proposal.isExecuted && <div className="flex items-center w-full">
                               <CustomButton handleClick={() => handleExecuteProposal(proposal.dao.contractAddress, proposal.id)}>Exceute</CustomButton>
                               {/* <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
                                {ChatIcon}
                              </div> */}
-                            </div>
+                            </div>}
                           </div>
                         </div>
                       </div>

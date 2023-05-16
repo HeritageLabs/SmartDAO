@@ -23,7 +23,7 @@ export interface IContextType {
     getActiveProposals: (DAOAddress: string) => Promise<any>;
     searchValue: string;
     handleSearch: (args: string) => void;
-
+    donate: (DAOAddress: string, amount: number) => void;
 };
 
 export interface IDAO {

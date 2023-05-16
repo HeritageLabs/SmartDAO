@@ -19,11 +19,11 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
   const [showAddProposal, setShowAddProposal] = useState(false);
   const wrapper = useRef(null);
   useOnClickOutside(wrapper, setShowAddProposal);
-  const { aeSdk } = useContext(UserContext) as IContextType;
+  const { donate, aeSdk } = useContext(UserContext) as IContextType;
 
   async function handleDeposit() {
     try {
-      await aeSdk.spend(Number(deposit) * 1e18, dao.depositAddress);
+      await donate(dao.contractAddress, Number(deposit) * 1e18);
       window.alert("Donation successful")
       setDeposit("");
       window.location.reload();
@@ -48,6 +48,14 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
           <div className="text-center">
             <p className="text-grey text-sm">Members</p>
             <p className="font-gilroyBold">{dao.members.length || 0}</p>
+          </div>
+          <div className="text-center">
+            <p className="text-grey text-sm">Quorum</p>
+            <p className="font-gilroyBold">{Number(dao.quorum)}%</p>
+          </div>
+          <div className="text-center">
+            <p className="text-grey text-sm">Voting time</p>
+            <p className="font-gilroyBold">{Number(dao.votingTime) / 3600000}h</p>
           </div>
           <div className="text-center">
             <p className="text-grey text-sm">Dao Version</p>
@@ -80,7 +88,7 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
           <div className="ml-4">
             <div className="flex items-center">
               <h2 className="font-gilroyBold text-md">{dao.name[0].toUpperCase() + dao.name.slice(1)}</h2>
-              <ExternalLink url="" />
+              <ExternalLink url={dao.socials[0]} />
             </div>
             <p className="text-grey text-sm mt-px">{dao.socials[0]}</p>
           </div>

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AlertIcon, ChatIcon, CodeIcon, DislikeIcon, LikeIcon } from "../../../assets/svgs";
 import CustomButton from "../button";
 import DropdownInput from "../input/DropdownInput";
@@ -16,6 +16,25 @@ const NewProposalTemp = ({ dao }: { dao: string }) => {
   const [proposalType, setProposalType] = useState<string>('');
   const { getLocalStorage } = useLocalStorage();
   const { account, createProposal } = useContext(UserContext) as IContextType;
+  const [showTarget, setShowTarget] = useState(true);
+  const [showValue, setShowValue] = useState(true);
+
+  useEffect(() => {
+    if (hasTarget(proposalType)) {
+      setShowTarget(true);
+      setTarget("");
+    } else {
+      setShowTarget(false);
+      setTarget(account.address)
+    }
+    if (hasValue(proposalType)) {
+      setShowValue(true);
+      setValue("");
+    } else {
+      setShowValue(false);
+      setValue("0");
+    }
+  }, [proposalType])
 
   const handlePropose = async () => {
     const proposal: IProposal = { proposalType, description: desc, target, value: Number(value) * 1e18 };
@@ -27,6 +46,20 @@ const NewProposalTemp = ({ dao }: { dao: string }) => {
       window.alert(error.message)
     }
   };
+
+  function hasTarget(proposalType: string) {
+    if (proposalType == "voteTime" || proposalType == "quorum") {
+      return false;
+    }
+    return true;
+  }
+
+  function hasValue(proposalType: string) {
+    if (proposalType == "quorum" || proposalType == "voteTime" || proposalType == "transfer") {
+      return true;
+    }
+    return false;
+  }
 
   return (
     <div className="w-full px-14">
@@ -52,12 +85,12 @@ const NewProposalTemp = ({ dao }: { dao: string }) => {
                 < div className="mt-4" >
                   <TextAreaInput label="Description:" placeholder="Enter the description of this proposal" onChange={(e) => setDesc(e.target.value)} value={desc} />
                 </div >
-                < div className="mt-4" >
+                {showTarget && < div className="mt-4" >
                   <TextInput label="Target:" placeholder="Enter the target address" onChange={(e) => setTarget(e.target.value)} value={target} />
-                </div >
+                </div >}
 
                 <div className="flex justify-between">
-                  <TextInput label="Amount" isCompulsory placeholder="00.0000" type="number" onChange={({ target }) => setValue(target.value)} value={value} />
+                  {showValue && <TextInput label="Value" isCompulsory placeholder="0" type="number" onChange={({ target }) => setValue(target.value)} value={value} />}
                   <div />
                   <div className="flex mt-6 items-center justify-between text-right">
                     <div className="flex items-center border h-10 w-16 rounded-full border-tertiary">

@@ -543,6 +543,13 @@
                         "tuple": []
                     },
                     "stateful": true
+                },
+                {
+                    "arguments": [],
+                    "name": "donate",
+                    "payable": true,
+                    "returns": "int",
+                    "stateful": true
                 }
             ],
             "kind": "contract_main",
