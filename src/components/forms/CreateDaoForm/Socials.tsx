@@ -31,14 +31,14 @@ const SocialsInfoForm = () => {
     setSocialMediaLink([...socialMediaLink, { ...initialState, link: '', id: Date.now() }]);
   };
   const removeSocial = (idx: number) => {
-   setSocialMediaLink(socialMediaLink.filter((_, index) => idx !== index));
+    setSocialMediaLink(socialMediaLink.filter((_, index) => idx !== index));
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setLocalStorage({ key: 'dao_socials', value: socialMediaLink });
     navigate(CREATE_DAO_URL_ADD_GROUPS);
-};
+  };
 
   return (
     <div className="w-full">
@@ -77,7 +77,7 @@ const SocialsInfoForm = () => {
               color="grey3"
               bg="bg-none"
               width="w-full"
-              href={CREATE_DAO_URL}
+              handleClick={() => navigate(CREATE_DAO_URL)}
             >
               Back
             </CustomButton>

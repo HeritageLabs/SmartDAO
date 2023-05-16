@@ -46,6 +46,8 @@ const ContextProvider = ({ children }: IContextProvider) => {
     clearStorage()
     await aeSdk.disconnectWallet();
     setIsLoggedIn(false);
+    setAccount({ address: "", balance: 0 });
+    window.location.reload();
   }
 
   const createDAO = async (dao: IDAO) => {

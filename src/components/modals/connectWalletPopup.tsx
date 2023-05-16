@@ -6,7 +6,7 @@ interface props {
   handleMetamaskConnect: () => void;
 }
 
-const ConnectWalletPopup = ({ setOpenModal, handleMetamaskConnect }: props) => {
+const ConnectWalletPopup = ({ setOpenModal, handleMetamaskConnect: handleSuperHeroConnect }: props) => {
   return (
     <>
       <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -43,11 +43,11 @@ const ConnectWalletPopup = ({ setOpenModal, handleMetamaskConnect }: props) => {
                 <a
                   href="#"
                   className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-[#F4FFF1] hover:bg-grey-100 group hover:shadow-md dark:bg-gray dark:hover:bg-grey dark:text-white trans"
-                  onClick={handleMetamaskConnect}
+                  onClick={handleSuperHeroConnect}
                 >
-                  {MetamaskLogo}
+                  {/* {MetamaskLogo} */}
                   <span className="flex-1 ml-3 whitespace-nowrap font-gilroyBold">
-                    MetaMask
+                    Superhero Wallet
                   </span>
                   <span className="inline-flex items-center justify-center px-2 py-0.5 ml-3 text-sm font-medium text-white bg-quaternary rounded">
                     Popular
@@ -55,7 +55,7 @@ const ConnectWalletPopup = ({ setOpenModal, handleMetamaskConnect }: props) => {
                 </a>
               </li>
 
-              <li>
+              {/* <li>
                 <a
                   href="#"
                   className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-[#F4FFF1] hover:bg-grey-100 group hover:shadow-md dark:bg-gray dark:hover:bg-grey dark:text-white trans"
@@ -65,7 +65,7 @@ const ConnectWalletPopup = ({ setOpenModal, handleMetamaskConnect }: props) => {
                     Coinbase Wallet
                   </span>
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

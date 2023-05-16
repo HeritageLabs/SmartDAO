@@ -76,7 +76,7 @@ const CheckoutForm = () => {
               color="grey3"
               bg="bg-none"
               width="w-full"
-              href={CREATE_DAO_URL_PROPOSAL}
+              handleClick={() => navigate(CREATE_DAO_URL_PROPOSAL)}
             >
               Back
             </CustomButton>

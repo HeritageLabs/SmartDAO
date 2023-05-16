@@ -37,7 +37,7 @@ const NewProposalTemp = ({ dao }: { dao: string }) => {
   }, [proposalType])
 
   const handlePropose = async () => {
-    const proposal: IProposal = { proposalType, description: desc, target, value: Number(value) * 1e18 };
+    const proposal: IProposal = { proposalType, description: desc, target, value: proposalType == "transfer" ? Number(value) * 1e18 : Number(value) };
     try {
       await createProposal(dao, proposal);
       window.alert("Proposal created successfully");

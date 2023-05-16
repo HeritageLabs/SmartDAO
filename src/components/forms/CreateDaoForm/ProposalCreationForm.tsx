@@ -36,7 +36,7 @@ const ProposalCreationForm = () => {
       setVotingPermission([...votingPermission, value]);
     }
   };
-  
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setLocalStorage({ key: 'dao_right', value: proposalRight });
@@ -55,7 +55,7 @@ const ProposalCreationForm = () => {
             <thead className="text-xs font-gilroyBold bg-[#F4FFF1]">
               <tr>
                 <th scope="col" className="px-6 py-3">
-                  
+
                 </th>
                 <th scope="col" className="px-6 py-3">
                   All
@@ -66,7 +66,7 @@ const ProposalCreationForm = () => {
               </tr>
             </thead>
             <tbody>
-              {ProposalCreationData.map((create) => (                
+              {ProposalCreationData.map((create) => (
                 <tr className="bg-light" key={create.value}>
                   <th
                     scope="row"
@@ -95,7 +95,7 @@ const ProposalCreationForm = () => {
             <thead className="text-xs font-gilroyBold bg-[#F4FFF1]">
               <tr>
                 <th scope="col" className="px-6 py-3">
-                  
+
                 </th>
                 <th scope="col" className="px-6 py-3">
                   All
@@ -106,7 +106,7 @@ const ProposalCreationForm = () => {
               </tr>
             </thead>
             <tbody>
-              {ProposalCreationData.map((create) => (                
+              {ProposalCreationData.map((create) => (
                 <tr className="bg-light" key={create.value}>
                   <th
                     scope="row"
@@ -134,7 +134,7 @@ const ProposalCreationForm = () => {
               color="grey3"
               bg="bg-none"
               width="w-full"
-              href={CREATE_DAO_URL_ADD_GROUPS}
+              handleClick={() => navigate(CREATE_DAO_URL_ADD_GROUPS)}
             >
               Back
             </CustomButton>

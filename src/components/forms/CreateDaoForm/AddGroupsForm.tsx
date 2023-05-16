@@ -35,14 +35,14 @@ const AddGroupsForm = () => {
     setNewMemberWallet([...newMemberWallet, { ...initialState, wallet: '', dao: 'Council', id: Date.now() }]);
   };
   const removeNewMember = (idx: number) => {
-   setNewMemberWallet(newMemberWallet.filter((_, index) => idx !== index));
+    setNewMemberWallet(newMemberWallet.filter((_, index) => idx !== index));
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setLocalStorage({ key: 'dao_group', value: { group_name: groupName, member_wallet: newMemberWallet } });
     navigate(CREATE_DAO_URL_PROPOSAL);
-};
+  };
 
   return (
     <div className="w-full">
@@ -91,7 +91,7 @@ const AddGroupsForm = () => {
               color="grey3"
               bg="bg-none"
               width="w-full"
-              href={CREATE_DAO_URL_SOCIALS}
+              handleClick={() => navigate(CREATE_DAO_URL_SOCIALS)}
             >
               Back
             </CustomButton>
