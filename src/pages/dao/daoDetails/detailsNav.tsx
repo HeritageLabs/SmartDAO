@@ -7,6 +7,7 @@ import AddProposalModal from "./addProposal";
 import DaoDetail from "./data";
 import { UserContext } from "../../../UserContext";
 import { IContextType } from "../../../types";
+import { useNavigate } from "react-router-dom";
 
 interface IDetailsNav {
   children: ReactNode;
@@ -20,6 +21,7 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
   const wrapper = useRef(null);
   useOnClickOutside(wrapper, setShowAddProposal);
   const { donate, aeSdk } = useContext(UserContext) as IContextType;
+  const navigate = useNavigate();
 
   async function handleDeposit() {
     try {
@@ -95,7 +97,7 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
         </div>
         <div className="flex w-2/5 justify-between items-center">
           {DaoDetail.map((detail) => (
-            <a href={detail.url}>
+            <div onClick={() => navigate(detail.url)}>
               <div
                 className="hover:bg-[#F4FFF1] cursor-pointer rounded-lg p-1 trans"
                 key={detail.name}
@@ -103,7 +105,7 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
                 {detail.icon}
                 <p className="text-[10px]">{detail.name}</p>
               </div>
-            </a>
+            </div>
           ))}
 
           <div className="bg-quaternary py-6 px-3 rounded-tr-xl rounded-br-xl ml-3 cursor-pointer" ref={wrapper} onClick={() => setShowAddProposal((show) => !show)}>{AddIc}</div>

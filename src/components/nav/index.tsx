@@ -8,9 +8,9 @@ const Navbar = () => {
   const navigate = useNavigate();
   return (
     <nav className="flex items-center w-full justify-between bg-bg fixed z-40 px-20 py-4" style={{ boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px" }}>
-      <a href="/">
+      <div onClick={() => { navigate("/") }}>
         <img src={Logo} alt="logo" className="w-4/6" />
-      </a>
+      </div>
       <div className="flex justify-between w-2/4 items-center">
         {NavLinks.map((link) => (
           <div>

@@ -4,11 +4,13 @@ import { ExternalLink } from "../common/ExternalLink.tsx";
 import { UserContext } from "../../UserContext";
 import { IContextType } from "../../types";
 import PageLoader from "../PageLoader";
+import { useNavigate } from "react-router-dom";
 
 const AllDaos = () => {
   const [daos, setDaos] = useState<any>();
   const [allDaos, setAllDaos] = useState<any>();
   const { getDAOs, aeSdk, searchValue } = useContext(UserContext) as IContextType;
+  const navigate = useNavigate();
 
   const getAllDAOs = async () => {
     getDAOs().then((res: any) => {
@@ -45,8 +47,8 @@ const AllDaos = () => {
         <div className="flex flex-wrap w-full py-4 cursor-pointer justify-between px-12">
           {daos &&
             daos.map((dao: any) => (
-              <a
-                href={`${DAOS}/${dao.name}`}
+              <div
+                onClick={() => navigate(`${DAOS}/${dao.name}`)}
                 className="p-8 rounded-xl w-5/12 bg-white my-4"
                 style={{
                   boxShadow:
@@ -102,7 +104,7 @@ const AllDaos = () => {
                     </div>
                   </div>
                 </div>
-              </a>
+              </div>
             ))}
         </div>
       ) : (
