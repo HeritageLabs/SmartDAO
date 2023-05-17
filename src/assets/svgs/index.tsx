@@ -1,5 +1,5 @@
 export const Loader = (
-    <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
+    <svg className="animate-spin h-5 w-5 mr-3 ..." style={{ margin: '0 auto' }} viewBox="0 0 24 24">
     <circle
       className="opacity-25"
       cx="12"

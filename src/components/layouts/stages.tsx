@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 const Stages = () => {
     const { pathname } = useCurrentLocation();
     const navigate = useNavigate();
-
     return (
         <div className="fixed">
             <p className="mb-6">Where you are currently,</p>

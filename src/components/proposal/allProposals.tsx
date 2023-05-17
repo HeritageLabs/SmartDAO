@@ -6,11 +6,9 @@ import {
   CodeIcon,
   DislikeIcon,
   LikeIcon,
+  Loader,
 } from "../../assets/svgs";
 import { IContextType } from "../../types";
-import { PROPOSALS } from "../../utils/constants/pages";
-import { ExternalLink } from "../common/ExternalLink.tsx";
-import { AllActiveProposal } from "./data";
 import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import PageLoader from "../PageLoader";
@@ -20,6 +18,9 @@ import CustomButton from "../common/button";
 const AllProposals = ({ dao }: { dao: any }) => {
   const [proposals, setProposals] = useState<any>();
   const { alertToast } = useToastify();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isVotingAganstLoading, setIsVotingAgainstLoading] = useState(false);
+  const [isExecuting, setIsExecuting] = useState(false);
   const navigate = useNavigate();
   const { searchValue, aeSdk, getDAOs, getProposals, voteForProposal, voteAgainstProposal, executeProposal } = useContext(UserContext) as IContextType;
   const [allProposals, setAllProposals] = useState<any>();
@@ -55,36 +56,47 @@ const AllProposals = ({ dao }: { dao: any }) => {
   const handleVoteForProposal = async (address: any, id: any) => {
     console.log({ aeSdk });
     try {
+      setIsLoading(true);
       await voteForProposal(address, id);
-      window.alert("Successfully voted for proposal!")
+      setIsLoading(false);
+      alertToast('success', 'Successfully voted for proposal!');
+      // window.alert("Successfully voted for proposal!")
     } catch (error: any) {
-      console.log({ error })
-      window.alert(error.message);
-      alertToast('error', { error });
+      // window.alert(error.message);
+      setIsLoading(false);
+      alertToast('error', error.message);
     }
   }
 
   const handleExecuteProposal = async (address: any, id: any) => {
     console.log({ aeSdk });
     try {
+      setIsExecuting(true);
       await executeProposal(address, id);
-      window.alert("Proposal successfully executed!")
+      setIsExecuting(false)
+      alertToast('success', 'Proposal successfully executed!')
+      // window.alert("Proposal successfully executed!")
     } catch (error: any) {
-      console.log({ error })
-      window.alert(error.message);
-      alertToast('error', { error });
+      setIsExecuting(false);
+      // console.log({ error })
+      // window.alert(error.message);
+      alertToast('error', error.message);
     }
   }
 
   const handleVoteAgainstProposal = async (address: any, id: any) => {
     console.log({ aeSdk });
     try {
+      setIsVotingAgainstLoading(true);
       await voteAgainstProposal(address, id);
-      window.alert("Successfully voted against proposal!");
+      setIsVotingAgainstLoading(false);
+      alertToast('success', 'Successfully voted against proposal!')
+      // window.alert("Successfully voted against proposal!");
     } catch (error: any) {
-      console.log({ error })
-      window.alert(error.message);
-      alertToast('error', { error });
+      // console.log({ error })
+      // window.alert(error.message);
+      setIsVotingAgainstLoading(false);
+      alertToast('error', error.message);
     }
   }
 
@@ -200,20 +212,20 @@ const AllProposals = ({ dao }: { dao: any }) => {
                           <div className="flex mt-6 items-center w-4/12 justify-between text-right">
                             {<div className="flex items-center w-full mr-4">
                               <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans cursor-pointer" onClick={() => handleVoteForProposal(proposal.dao.contractAddress, Number(proposal.id))}>
-                                {LikeIcon}
+                                {isLoading ? Loader : LikeIcon}
                               </div>
                               <p className="ml-2">{Number(proposal.votesFor) || 0}</p>
                             </div>}
 
                             {<div className="flex items-center w-full mr-4">
-                              <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans" onClick={() => handleVoteAgainstProposal(proposal.dao.contractAddress, Number(proposal.id))}>
-                                {DislikeIcon}
+                              <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans cursor-pointer" onClick={() => handleVoteAgainstProposal(proposal.dao.contractAddress, Number(proposal.id))}>
+                                {isVotingAganstLoading ? Loader : DislikeIcon}
                               </div>
                               <p className="ml-2">{Number(proposal.votesAgainst) || 0}</p>
                             </div>}
 
                             {!proposal.isExecuted && <div className="flex items-center w-full">
-                              <CustomButton handleClick={() => handleExecuteProposal(proposal.dao.contractAddress, proposal.id)}>Exceute</CustomButton>
+                              <CustomButton handleClick={() => handleExecuteProposal(proposal.dao.contractAddress, proposal.id)} isLoading={isExecuting}>Exceute</CustomButton>
                               {/* <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
                                {ChatIcon}
                              </div> */}

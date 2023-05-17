@@ -93,6 +93,7 @@ const CheckoutForm = () => {
               width="w-full"
               handleClick={handleCheckout}
               isLoading={isLoading}
+              disabled={!getLocalStorage().dao_info || !getLocalStorage().dao_group}
             >
               Checkout
             </CustomButton>
