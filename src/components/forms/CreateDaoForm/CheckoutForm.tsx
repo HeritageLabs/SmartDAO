@@ -9,9 +9,12 @@ import { removeKeys } from "../../../utils/helpers";
 import { UserContext } from "../../../UserContext";
 import { IContextType } from "../../../types";
 import { useNavigate } from "react-router-dom";
+import { useToastify } from "../../../hooks/useToastify";
 
 const CheckoutForm = () => {
   const navigate = useNavigate();
+  const { alertToast } = useToastify();
+  const [isLoading, setIsLoading] = useState(false);
   const { setLocalStorage, getLocalStorage, removeItem } = useLocalStorage();
   const [logoLink, setLogoLink] = useState(getLocalStorage().dao_logo || '');
   const { createDAO } = useContext(UserContext) as IContextType;
@@ -27,12 +30,15 @@ const CheckoutForm = () => {
     const daoSocials = [getLocalStorage().dao_socials[0].link];
     const dao = { name: daoInfo.daoName, description: daoInfo.daoPurpose, tokenSymbol: daoInfo.daoTokenSymbol, image: daoLogo, socials: daoSocials, initialMembers: daoGroup.member_wallet.map((m: any) => m.wallet), startingBalance: 2 };
     try {
+      setIsLoading(true);
       await createDAO(dao);
       removeKeys(removeItem);
       navigate("/daos")
-      window.alert("DAO successfully created!")
+      alertToast('success', 'You have successfully created a DAO!');
+      setIsLoading(false);
     } catch (error: any) {
-      window.alert(error.message);
+      alertToast('error', error.message);
+      setIsLoading(false);
     }
   };
 
@@ -86,7 +92,7 @@ const CheckoutForm = () => {
               bg="bg-quaternary"
               width="w-full"
               handleClick={handleCheckout}
-            // href={CREATE_DAO_URL_CHECKOUT}
+              isLoading={isLoading}
             >
               Checkout
             </CustomButton>

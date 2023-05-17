@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { FeedsLayout } from "../../components/layouts";
-import DetailsNav from "../dao/daoDetails/detailsNav";
 import { AllActiveProposal } from "../../components/proposal/data";
 import { ChatIcon, CodeIcon, DislikeIcon, LikeIcon } from "../../assets/svgs";
 import { ExternalLink } from "../../components/common/ExternalLink.tsx";
 import ProposalUpdate from "../dao/daoDetails/proposalUpdate";
 import VoteDetails from "../../components/proposal/voteDetails";
 import NewProposalTemp from "../../components/common/newProposalTemp";
+import DetailsNav from "../dao/daoDetails/detailsNav";
 
 const ProposalDetails = () => {
   const [enableCreateProposal, setEnableCreateProposal] = useState(false);

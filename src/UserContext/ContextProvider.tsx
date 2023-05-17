@@ -16,13 +16,18 @@ const ContextProvider = ({ children }: IContextProvider) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [account, setAccount] = useState<IAccount>({ address: "", balance: 0 });
   const [showModal, setShowModal] = useState(false);
+  const [amoutDonated, setAmountDonated] = useState<string|number>(0);
   const { setLocalStorage, clearStorage, removeItem } = useLocalStorage();
   const [searchValue, setSearchValue] = useState<string>('');
 
 
   const handleSearch = (value: string) => {
     setSearchValue(value)
-  }
+  };
+
+  const getAmountDonated = (amount: string|number) => {
+    setAmountDonated(amount);
+  };
 
   const loginUser = async () => {
     const client = await login();
@@ -51,8 +56,10 @@ const ContextProvider = ({ children }: IContextProvider) => {
   }
 
   const createDAO = async (dao: IDAO) => {
+    console.log(dao);
     const contract = await aeSdk.initializeContract({ aci: smartdaoACI, address: smartdaoAddress });
     const res = await contract.createDAO(dao.name.toLowerCase(), dao.description, dao.tokenSymbol, dao.image, dao.socials, dao.initialMembers, dao.startingBalance * 1e18, { amount: dao.startingBalance * 1e18 });
+    console.log(res);
   }
 
   async function getDAO(id: string) {
@@ -119,8 +126,8 @@ const ContextProvider = ({ children }: IContextProvider) => {
 
 
   const providerValue = useMemo(
-    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue, donate }),
-    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue, donate]
+    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, getAmountDonated, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue, donate, amoutDonated }),
+    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getAmountDonated, getActiveProposals, handleSearch, searchValue, donate, amoutDonated]
   );
 
   return (

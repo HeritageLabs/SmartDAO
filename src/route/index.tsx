@@ -12,10 +12,12 @@ import {
   HOME_URL,
   PROPOSALS,
   SELECT_TEMPLATE_URL,
+  VIEW_MY_DAO,
 } from "../utils/constants/pages";
 import AOS from "aos";
 import Private from "./private";
 import PageLoader from "../components/PageLoader";
+import MyDao from "../pages/myDaos";
 
 const Home = React.lazy(() => import("../pages/home"));
 const Feeds = React.lazy(() => import("../pages/feeds"));
@@ -59,8 +61,9 @@ const WebRoute = () => {
           <Route path={SELECT_TEMPLATE_URL} element={<Private><DaoTemplate /></Private>} />
           <Route path={CREATE_DAO_URL_PROPOSAL} element={<Private><ProposalCreation /></Private>} />
           <Route path={CREATE_DAO_URL_CHECKOUT} element={<Private><CheckoutPage /></Private>} />
-          <Route path={`${DAOS}/:daoId`} element={<Private><DaoDetails /></Private>} />
+          <Route path={`${DAOS}/:daoId`} element={<DaoDetails />} />
           <Route path={`${PROPOSALS}/:proposalId`} element={<Private><ProposalDetails /></Private>} />
+          <Route path={VIEW_MY_DAO} element={<Private><MyDao /></Private>} />
         </Routes>
     </Suspense>
   );

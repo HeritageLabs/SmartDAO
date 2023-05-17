@@ -24,6 +24,8 @@ export interface IContextType {
     searchValue: string;
     handleSearch: (args: string) => void;
     donate: (DAOAddress: string, amount: number) => void;
+    amoutDonated: string|number;
+    getAmountDonated: (args: string) => void;
 };
 
 export interface IDAO {

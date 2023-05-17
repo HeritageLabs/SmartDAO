@@ -1,25 +1,25 @@
 /* eslint-disable react/style-prop-object */
-import CustomButton from "../../components/common/button";
-import { FeedsLayout } from "../../components/layouts";
-import AllDaos from "../../components/daos/allDaos";
-import { CREATE_DAO_URL } from "../../utils/constants/pages";
 import { useNavigate } from "react-router-dom";
+import { FeedsLayout } from "../components/layouts";
+import CustomButton from "../components/common/button";
+import { CREATE_DAO_URL } from "../utils/constants/pages";
+import MyDaosOnly from "../components/daos/myDaosOnly";
 
-const Feeds = () => {
+const MyDao = () => {
   const navigate = useNavigate()
   return (
     <FeedsLayout>
-      <p className="border-b-2 border-quaternary w-fit ml-8 font-gilroyMd text-quaternary">My Feeds</p>
+      <p className="border-b-2 border-quaternary w-fit ml-8 font-gilroyMd text-quaternary">All My DAOs</p>
       <div className="h-px bg-[#EEEEEE]" />
       <div className="ml-8 pt-14 flex items-center w-3/12 justify-between">
-        <h1>All DAOs</h1>
+        <h1>DAOs</h1>
         <CustomButton bg="bg-bg" handleClick={() => { navigate(CREATE_DAO_URL) }}>Create new DAO</CustomButton>
       </div>
       <div className="mt-8">
-        <AllDaos />
+        <MyDaosOnly />
       </div>
     </FeedsLayout>
-  );
+  )
 };
 
-export default Feeds;
+export default MyDao;

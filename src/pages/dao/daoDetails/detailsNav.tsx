@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useRef, useState } from "react";
-import { AddIc, DepositIcon } from "../../../assets/svgs";
+import { AddIc, DepositIcon, Loader } from "../../../assets/svgs";
 import { ExternalLink } from "../../../components/common/ExternalLink.tsx";
 import TextInput from "../../../components/common/input/TextInput";
 import useOnClickOutside from "../../../hooks/useOnClickOutside";
@@ -8,6 +8,7 @@ import DaoDetail from "./data";
 import { UserContext } from "../../../UserContext";
 import { IContextType } from "../../../types";
 import { useNavigate } from "react-router-dom";
+import { useToastify } from "../../../hooks/useToastify";
 
 interface IDetailsNav {
   children: ReactNode;
@@ -17,21 +18,26 @@ interface IDetailsNav {
 
 const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => {
   const [deposit, setDeposit] = useState("");
+  const [isDonating, setIsDonating] = useState(false);
+  const { alertToast } = useToastify();
   const [showAddProposal, setShowAddProposal] = useState(false);
   const wrapper = useRef(null);
   useOnClickOutside(wrapper, setShowAddProposal);
-  const { donate, aeSdk } = useContext(UserContext) as IContextType;
+  const { donate, aeSdk, getAmountDonated } = useContext(UserContext) as IContextType;
   const navigate = useNavigate();
 
   async function handleDeposit() {
     try {
+      setIsDonating(true);
       await donate(dao.contractAddress, Number(deposit) * 1e18);
-      window.alert("Donation successful")
+      alertToast('success', 'Donation successful!');
       setDeposit("");
-      window.location.reload();
+      setIsDonating(false);
+      getAmountDonated(deposit);
     } catch (error: any) {
-      window.alert(error.message)
-      console.log({ error })
+      // window.alert(error.message)
+      alertToast('error', error.message);
+      setIsDonating(false);
     }
   }
 
@@ -39,7 +45,7 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
     <div className="px-8">
       <div className="bg-lightGrey h-28 -mt-14 -ml-8 -mr-20 z-10" />
       <div className="flex items-end justify-between">
-        <div className="flex items-end w-4/12 justify-between z-0 -mt-[35px]">
+        <div className="flex items-end w-6/12 justify-between z-0 -mt-[35px]">
           <div className="h-32 w-32 rounded-2xl items-center flex justify-center shadow-normal bg-white">
             <img
               width={80}
@@ -72,8 +78,8 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
             value={deposit}
             onChange={({ target }) => setDeposit(target.value)}
           />
-          <div className="h-9 w-9 mt-2 bg-[#F8F8F8] text-[#8C8F95] flex items-center rounded-lg -ml-10 cursor-pointer hover:bg-[#F4FFF1] trans" onClick={() => handleDeposit()}>
-            {DepositIcon}
+          <div className="h-9 w-9 bg-[#F8F8F8] text-[#8C8F95] flex items-center rounded-lg -ml-10 cursor-pointer hover:bg-[#F4FFF1] trans" onClick={() => handleDeposit()}>
+            {isDonating ? Loader : DepositIcon}
           </div>
         </form>
       </div>
@@ -112,6 +118,7 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
         </div>
       </div>
       {showAddProposal && (<AddProposalModal setEnableCreateProposal={setEnableCreateProposal} />)}
+
       <div className="my-12">{children}</div>
     </div>
   );

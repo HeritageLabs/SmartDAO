@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { useContext, useEffect, useState } from "react";
 import NewProposalTemp from "../../../components/common/newProposalTemp";
 import { FeedsLayout } from "../../../components/layouts";
@@ -16,7 +18,7 @@ const DaoDetails = () => {
   const { daoId } = useParams();
   const [dao, setDao] = useState<any>();
   const [enableCreateProposal, setEnableCreateProposal] = useState(false);
-  const { getDAO, aeSdk } = useContext(UserContext) as IContextType;
+  const { getDAO, aeSdk, amoutDonated } = useContext(UserContext) as IContextType;
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -30,11 +32,10 @@ const DaoDetails = () => {
           setIsLoading(false)
         })
         .catch((error) => {
-          console.log({ error });
-          if (error.name == "NodeInvocationError") navigate("/daos");
+          if (error.name === "NodeInvocationError") navigate("/daos");
           setIsLoading(false);
         })
-  }, [aeSdk]);
+  }, [aeSdk, amoutDonated]);
 
   return isLoading ? (
     <PageLoader />

@@ -61,7 +61,7 @@ const AddGroupsForm = () => {
           readOnly
         />
 
-        <CreateDaoHeader header="Add Memebers" optional="(Optional)" />
+        <CreateDaoHeader header="Add Memebers" optional="" />
 
         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Add members to your DAO.
@@ -71,6 +71,7 @@ const AddGroupsForm = () => {
             key={new_member.id}
             label=""
             placeholder="Enter member wallet address"
+
             onChange={(e) => handleOnChange(e.target.value, idx)}
             value={new_member.wallet}
             hasCancel={newMemberWallet.length > 1}
@@ -101,6 +102,7 @@ const AddGroupsForm = () => {
               bg="bg-quaternary"
               width="w-full"
               handleClick={handleSubmit}
+              disabled={!newMemberWallet}
             >
               Next
             </CustomButton>
