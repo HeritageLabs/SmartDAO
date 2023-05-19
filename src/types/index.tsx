@@ -24,7 +24,7 @@ export interface IContextType {
     searchValue: string;
     handleSearch: (args: string) => void;
     donate: (DAOAddress: string, amount: number) => void;
-    amoutDonated: string|number;
+    amoutDonated: string | number;
     getAmountDonated: (args: string) => void;
 };
 
@@ -34,7 +34,7 @@ export interface IDAO {
     tokenSymbol: string;
     image: string;
     socials: any;
-    initialMembers: [string];
+    initialMembers: string[];
     startingBalance: number
 }
 
