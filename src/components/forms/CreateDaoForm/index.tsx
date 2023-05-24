@@ -36,7 +36,7 @@ const DaoInfoForm = () => {
                 <TextInput label="DAO name:" placeholder="Enter DAO name" onChange={(e) => setDaoName(e.target.value)} value={daoName} isCompulsory />
                 <TextInput label="DAO Address (auto filled):" placeholder="Enter DAO name" value={daoAddress} onChange={(e) => setDaoAddress(`smart-dao.vercel.app/${e.target.value}`)} textTransform="lowercase" readOnly isCompulsory />
                 <TextAreaInput label="Purpose:" placeholder="Enter the purpose of the DAO" onChange={(e) => setDaoPurpose(e.target.value)} value={daoPurpose} />
-                <TextInput label="Membership token symbol:" placeholder="Enter a symbol for your DAO token" onChange={(e) => setDaoTokenSymbol(e.target.value)} value={daoTokenSymbol} textTransform="uppercase" />
+                <TextInput label="Membership token symbol:" placeholder="Enter a symbol for your DAO token" onChange={(e) => setDaoTokenSymbol(e.target.value)} value={daoTokenSymbol} textTransform="uppercase" isCompulsory />
 
                 <CreateDaoHeader header="KYC" optional="(Optional)" currentStage="1" />
 

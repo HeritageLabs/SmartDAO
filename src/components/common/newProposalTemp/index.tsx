@@ -7,6 +7,8 @@ import TextInput from "../input/TextInput";
 import { UserContext } from "../../../UserContext";
 import { IContextType, IProposal } from "../../../types";
 import useLocalStorage from "../../../hooks/useLocalStorage";
+import { useToastify } from "../../../hooks/useToastify";
+import { useNavigate } from "react-router-dom";
 
 
 const NewProposalTemp = ({ dao }: { dao: string }) => {
@@ -18,6 +20,8 @@ const NewProposalTemp = ({ dao }: { dao: string }) => {
   const { account, createProposal } = useContext(UserContext) as IContextType;
   const [showTarget, setShowTarget] = useState(true);
   const [showValue, setShowValue] = useState(true);
+  const { alertToast } = useToastify();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (hasTarget(proposalType)) {
@@ -25,7 +29,7 @@ const NewProposalTemp = ({ dao }: { dao: string }) => {
       setTarget("");
     } else {
       setShowTarget(false);
-      setTarget(account.address)
+      setTarget(account.address);
     }
     if (hasValue(proposalType)) {
       setShowValue(true);
@@ -37,13 +41,13 @@ const NewProposalTemp = ({ dao }: { dao: string }) => {
   }, [proposalType])
 
   const handlePropose = async () => {
-    const proposal: IProposal = { proposalType, description: desc, target, value: proposalType == "transfer" ? Number(value) * 1e18 : Number(value) };
+    const proposal: IProposal = { proposalType, description: desc, target: account.address, value: proposalType == "transfer" ? Number(value) * 1e18 : Number(value) };
     try {
       await createProposal(dao, proposal);
-      window.alert("Proposal created successfully");
-      window.location.reload();
+      alertToast("success", "Proposal created successfully");
+      navigate(0);
     } catch (error: any) {
-      window.alert(error.message)
+      alertToast("error", "Proposal created successfully");
     }
   };
 

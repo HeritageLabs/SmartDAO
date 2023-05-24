@@ -30,11 +30,11 @@ const CheckoutForm = () => {
     const daoSocials = [getLocalStorage().dao_socials[0].link];
     const initialMembers: string[] = [];
     for (let i = 0; i < daoGroup.member_wallet.length; i++) {
-      if (daoGroup.member_wallet[i].wallet.slice(3) == "ak_") {
+      if (daoGroup.member_wallet[i].wallet.slice(0, 3) == "ak_") {
         initialMembers.push(daoGroup.member_wallet[i].wallet);
       }
     }
-    console.log(initialMembers)
+    console.log({ initialMembers })
     const dao = { name: daoInfo.daoName, description: daoInfo.daoPurpose, tokenSymbol: daoInfo.daoTokenSymbol, image: daoLogo, socials: daoSocials, initialMembers: initialMembers, startingBalance: 2 };
     try {
       setIsLoading(true);

@@ -34,6 +34,10 @@ const AllProposals = ({ dao }: { dao: any }) => {
     // navigate(`${PROPOSALS}/${id}`);
   }
 
+  const calculateQuorum = (votesFor: number, votesAgainst: number, totalMembers: number) => {
+    return (votesFor + votesAgainst) * 100 / totalMembers;
+  }
+
   const getAllProposals = async () => {
     try {
       const daos = await getDAOs();
@@ -59,6 +63,7 @@ const AllProposals = ({ dao }: { dao: any }) => {
       setIsLoading(true);
       await voteForProposal(address, id);
       setIsLoading(false);
+      getAllProposals();
       alertToast('success', 'Successfully voted for proposal!');
       // window.alert("Successfully voted for proposal!")
     } catch (error: any) {
@@ -73,8 +78,9 @@ const AllProposals = ({ dao }: { dao: any }) => {
     try {
       setIsExecuting(true);
       await executeProposal(address, id);
-      setIsExecuting(false)
-      alertToast('success', 'Proposal successfully executed!')
+      setIsExecuting(false);
+      getAllProposals();
+      alertToast('success', 'Proposal successfully executed!');
       // window.alert("Proposal successfully executed!")
     } catch (error: any) {
       setIsExecuting(false);
@@ -90,7 +96,7 @@ const AllProposals = ({ dao }: { dao: any }) => {
       setIsVotingAgainstLoading(true);
       await voteAgainstProposal(address, id);
       setIsVotingAgainstLoading(false);
-      alertToast('success', 'Successfully voted against proposal!')
+      alertToast('success', 'Successfully voted against proposal!');
       // window.alert("Successfully voted against proposal!");
     } catch (error: any) {
       // console.log({ error })
@@ -208,7 +214,13 @@ const AllProposals = ({ dao }: { dao: any }) => {
                           </p>
                         </div>}
 
-                        <div className="flex justify-end">
+                        <div className="flex justify-between">
+                          <p className="mt-6">
+                            {
+                              `Total votes: ${calculateQuorum(Number(proposal.votesFor), Number(proposal.votesAgainst), proposal.dao.members.length)}% ${calculateQuorum(Number(proposal.votesFor), Number(proposal.votesAgainst), proposal.dao.members.length) > Number(proposal.dao.quorum) ? "Quorum reached!" : "Qurom not reached!"}`
+
+                            }
+                          </p>
                           <div className="flex mt-6 items-center w-4/12 justify-between text-right">
                             {<div className="flex items-center w-full mr-4">
                               <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans cursor-pointer" onClick={() => handleVoteForProposal(proposal.dao.contractAddress, Number(proposal.id))}>

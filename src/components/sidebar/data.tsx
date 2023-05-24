@@ -54,11 +54,5 @@ export const Creation: CreationProp[] = [
         icon: AddIcon,
         url: SELECT_TEMPLATE_URL,
         id: 1
-    },
-    {
-        title: 'Create Proposal',
-        icon: AddIcon,
-        url: DAOS,
-        id: 2
-    },
+    }
 ]
