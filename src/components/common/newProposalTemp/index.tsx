@@ -15,13 +15,12 @@ const NewProposalTemp = ({ dao }: { dao: string }) => {
   const [desc, setDesc] = useState<string>('');
   const [target, setTarget] = useState<string>('');
   const [value, setValue] = useState<string>('');
-  const [proposalType, setProposalType] = useState<string>('');
+  const [proposalType, setProposalType] = useState<string>('transfer');
   const { getLocalStorage } = useLocalStorage();
   const { account, createProposal } = useContext(UserContext) as IContextType;
   const [showTarget, setShowTarget] = useState(true);
   const [showValue, setShowValue] = useState(true);
   const { alertToast } = useToastify();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (hasTarget(proposalType)) {
@@ -45,7 +44,9 @@ const NewProposalTemp = ({ dao }: { dao: string }) => {
     try {
       await createProposal(dao, proposal);
       alertToast("success", "Proposal created successfully");
-      navigate(0);
+      setTarget("");
+      setValue("");
+      setDesc("");
     } catch (error: any) {
       alertToast("error", "Proposal created successfully");
     }

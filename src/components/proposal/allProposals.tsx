@@ -96,6 +96,7 @@ const AllProposals = ({ dao }: { dao: any }) => {
       setIsVotingAgainstLoading(true);
       await voteAgainstProposal(address, id);
       setIsVotingAgainstLoading(false);
+      getAllProposals();
       alertToast('success', 'Successfully voted against proposal!');
       // window.alert("Successfully voted against proposal!");
     } catch (error: any) {
@@ -217,7 +218,7 @@ const AllProposals = ({ dao }: { dao: any }) => {
                         <div className="flex justify-between">
                           <p className="mt-6">
                             {
-                              `Total votes: ${calculateQuorum(Number(proposal.votesFor), Number(proposal.votesAgainst), proposal.dao.members.length)}% ${calculateQuorum(Number(proposal.votesFor), Number(proposal.votesAgainst), proposal.dao.members.length) > Number(proposal.dao.quorum) ? "Quorum reached!" : "Qurom not reached!"}`
+                              `Total votes: ${calculateQuorum(Number(proposal.votesFor), Number(proposal.votesAgainst), proposal.dao.members.length).toFixed(2)}% ${calculateQuorum(Number(proposal.votesFor), Number(proposal.votesAgainst), proposal.dao.members.length) > Number(proposal.dao.quorum) ? "Quorum reached!" : "Qurom not reached!"}`
 
                             }
                           </p>

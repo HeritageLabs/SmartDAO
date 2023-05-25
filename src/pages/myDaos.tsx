@@ -12,8 +12,7 @@ const MyDao = () => {
       <p className="border-b-2 border-quaternary w-fit ml-8 font-gilroyMd text-quaternary">All My DAOs</p>
       <div className="h-px bg-[#EEEEEE]" />
       <div className="ml-8 pt-14 flex items-center w-3/12 justify-between">
-        <h1>DAOs</h1>
-        <CustomButton bg="bg-bg" handleClick={() => { navigate(CREATE_DAO_URL) }}>Create new DAO</CustomButton>
+        <h1>DAOs you're member of</h1>
       </div>
       <div className="mt-8">
         <MyDaosOnly />
