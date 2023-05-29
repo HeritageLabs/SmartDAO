@@ -1,8 +1,6 @@
 /* eslint-disable react/style-prop-object */
-import CustomButton from "../../components/common/button";
 import { FeedsLayout } from "../../components/layouts";
 import AllDaos from "../../components/daos/allDaos";
-import { useNavigate } from "react-router-dom";
 
 const Feeds = () => {
   return (

@@ -1,46 +1,53 @@
 import { ReactNode } from "react";
-import { FundsIcon, MembersIcon, PoolsIcon, SettingsIc, WriteIcon } from "../../../assets/svgs";
+import { FundsIcon, HomeIconDark, MembersIcon, PoolsIcon, SettingsIc, WriteIcon } from "../../../assets/svgs";
+import { DAOS } from "../../../utils/constants/pages";
 
 interface IDaoDetail {
   icon: ReactNode,
   name: string;
   id: number;
-  url: string;
+  url: string|any;
 }
 
 const DaoDetail: IDaoDetail[] = [
   {
+    icon: HomeIconDark,
+    name: 'Home',
+    id: 1,
+    url:  (dao: {name: string}) => `${DAOS}/${dao.name}`
+  },
+  {
     icon: WriteIcon,
     name: 'Proposals',
-    id: 1,
+    id: 2,
     url: ""
   },
   {
     icon: FundsIcon,
     name: 'Funds',
-    id: 2,
+    id: 3,
     url: ""
   },
   {
     icon: MembersIcon,
     name: 'Members',
-    id: 3,
-    url: ""
+    id: 4,
+    url: (dao: {name: string}) => `${DAOS}/${dao.name}/members`
   },
   {
     icon: SettingsIc,
     name: 'Settings',
-    id: 4,
+    id: 5,
     url: ""
   },
   {
     icon: PoolsIcon,
     name: 'Pools',
-    id: 5,
+    id: 6,
     url: ""
   },
 ];
-
+// onClick={() => navigate(`${DAOS}/${dao.name}/members`)}
 export const FundData = [
   {
     name: '',

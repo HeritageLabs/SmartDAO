@@ -19,10 +19,15 @@ const ContextProvider = ({ children }: IContextProvider) => {
   const [amoutDonated, setAmountDonated] = useState<string|number>(0);
   const { setLocalStorage, clearStorage, removeItem } = useLocalStorage();
   const [searchValue, setSearchValue] = useState<string>('');
+  const [allDaoMembers, setAllDaoMembers] = useState<[]>([]);
 
 
   const handleSearch = (value: string) => {
     setSearchValue(value)
+  };
+
+  const handleSetAllDaoMembers = (allDao: []) => {
+    setAllDaoMembers(allDao);
   };
 
   const getAmountDonated = (amount: string|number) => {
@@ -126,8 +131,8 @@ const ContextProvider = ({ children }: IContextProvider) => {
 
 
   const providerValue = useMemo(
-    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, getAmountDonated, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue, donate, amoutDonated }),
-    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getAmountDonated, getActiveProposals, handleSearch, searchValue, donate, amoutDonated]
+    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, getAmountDonated, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue, donate, handleSetAllDaoMembers, amoutDonated, allDaoMembers }),
+    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getAmountDonated, getActiveProposals, handleSearch, searchValue, donate,  handleSetAllDaoMembers, amoutDonated, allDaoMembers]
   );
 
   return (

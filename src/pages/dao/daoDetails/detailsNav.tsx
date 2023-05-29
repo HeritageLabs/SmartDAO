@@ -9,6 +9,7 @@ import { UserContext } from "../../../UserContext";
 import { IContextType } from "../../../types";
 import { useNavigate } from "react-router-dom";
 import { useToastify } from "../../../hooks/useToastify";
+import useCurrentLocation from "../../../hooks/useCurrentLocation";
 
 interface IDetailsNav {
   children: ReactNode;
@@ -17,13 +18,14 @@ interface IDetailsNav {
 }
 
 const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => {
+ const { pathname } = useCurrentLocation();
   const [deposit, setDeposit] = useState("");
   const [isDonating, setIsDonating] = useState(false);
   const { alertToast } = useToastify();
   const [showAddProposal, setShowAddProposal] = useState(false);
   const wrapper = useRef(null);
   useOnClickOutside(wrapper, setShowAddProposal);
-  const { donate, aeSdk, getAmountDonated } = useContext(UserContext) as IContextType;
+  const { donate, getAmountDonated } = useContext(UserContext) as IContextType;
   const navigate = useNavigate();
 
   async function handleDeposit() {
@@ -40,12 +42,11 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
       setIsDonating(false);
     }
   }
-
   return (
     <div className="px-8">
       <div className="bg-lightGrey h-28 -mt-14 -ml-8 -mr-20 z-10" />
       <div className="flex items-end justify-between">
-        <div className="flex items-end w-6/12 justify-between z-0 -mt-[35px]">
+        <div className="flex items-end w-7/12 justify-between z-0 -mt-[35px]">
           <div className="h-32 w-32 rounded-2xl items-center flex justify-center shadow-normal bg-white">
             <img
               width={80}
@@ -59,7 +60,7 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
           </div>
           <div className="text-center">
             <p className="text-grey text-sm">Quorum</p>
-            <p className="font-gilroyBold">{Number(dao.quorum)}%</p>
+            <p className="font-gilroyBold">{Number(dao.quorum)/100}%</p>
           </div>
           <div className="text-center">
             <p className="text-grey text-sm">Voting time</p>
@@ -103,9 +104,9 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
         </div>
         <div className="flex w-2/5 justify-between items-center">
           {DaoDetail.map((detail) => (
-            <div onClick={() => navigate(detail.url)}>
+            <div onClick={() => navigate(detail.url(dao))}>
               <div
-                className="hover:bg-[#F4FFF1] cursor-pointer rounded-lg p-1 trans"
+                className={`hover:bg-[#F4FFF1] cursor-pointer rounded-lg p-1 trans ${pathname.includes(detail.name.toLocaleLowerCase()) ? 'bg-[#F4FFF1] text-quaternary' : 'bg-none'} `}
                 key={detail.name}
               >
                 {detail.icon}

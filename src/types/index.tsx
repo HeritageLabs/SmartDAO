@@ -26,6 +26,7 @@ export interface IContextType {
     donate: (DAOAddress: string, amount: number) => void;
     amoutDonated: string | number;
     getAmountDonated: (args: string) => void;
+    allDaoMembers: []
 };
 
 export interface IDAO {
