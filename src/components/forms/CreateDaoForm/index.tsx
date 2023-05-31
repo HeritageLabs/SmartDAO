@@ -12,14 +12,16 @@ const DaoInfoForm = () => {
     const { setLocalStorage, getLocalStorage } = useLocalStorage();
 
     const [daoName, setDaoName] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoName : '');
-    const [daoAddress, setDaoAddress] = useState<string>(`${daoName}.smartdaov2.testnet`);
+    const [daoAddress, setDaoAddress] = useState<string>('');
     const [daoPurpose, setDaoPurpose] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoPurpose : '');
     const [daoLegalStatus, setDaoLegalStatus] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoLegalStatus : '');
     const [daoLegalDoc, setDaoLegalDoc] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoLegalDoc : '');
     const [daoTokenSymbol, setDaoTokenSymbol] = useState<string>(getLocalStorage().dao_info ? getLocalStorage().dao_info.daoTokenSymbol : '');
 
     useEffect(() => {
-        setDaoAddress(`https://smart-dao.vercel.app/${daoName}`)
+        if(daoName) {
+            setDaoAddress(`https://smart-dao.vercel.app/${daoName.replace(/\s/g, '')}`)
+        }
     }, [daoName]);
 
     const handleSubmit = (e: any) => {

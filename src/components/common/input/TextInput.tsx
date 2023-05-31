@@ -16,10 +16,11 @@ const defaultProps: IInput = {
     mb: '6',
     name: '',
     isCompulsory: false,
-    error: ''
+    error: '',
+    onKeyPress: undefined,
 };
 
-const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue, value, textTransform, readOnly, hasCancel, handleClickCancel, mb, name, isCompulsory, error }: IInput) => (
+const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue, value, textTransform, readOnly, hasCancel, handleClickCancel, mb, name, isCompulsory, error, onKeyPress }: IInput) => (
   <div className={`mb-${mb}`}>
     <div className="flex items-center">
       <label
@@ -42,6 +43,7 @@ const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue,
         defaultValue={defaultValue}
         value={value}
         readOnly={readOnly}
+        onKeyPress={onKeyPress}
       />
       {hasCancel && (
         <div className="border border-grey rounded-full h-10 w-10 ml-4 items-center flex hover:text-red cursor-pointer trans hover:border-red" onClick={handleClickCancel}>{CancelIcon}</div>
