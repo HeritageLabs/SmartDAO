@@ -5,17 +5,21 @@ import CustomButton from "../../common/button";
 import TextInput from "../../common/input/TextInput";
 import CreateDaoHeader from "./CreateDaoheader";
 import useLocalStorage from "../../../hooks/useLocalStorage";
-import { removeKeys } from "../../../utils/helpers";
+import { removeKeys, uploadImage } from "../../../utils/helpers";
 import { UserContext } from "../../../UserContext";
 import { IContextType } from "../../../types";
 import { useNavigate } from "react-router-dom";
 import { useToastify } from "../../../hooks/useToastify";
+import { Loader } from "../../../assets/svgs";
 
 const CheckoutForm = () => {
   const navigate = useNavigate();
   const { alertToast } = useToastify();
   const [isLoading, setIsLoading] = useState(false);
   const { setLocalStorage, getLocalStorage, removeItem } = useLocalStorage();
+  const [isUploading, setIsUploading] = useState(false);
+  const [fileName, setFileName] = useState<string>('');
+  const [result, setResult] = useState<{type: string, message: string }>();
   const [logoLink, setLogoLink] = useState(getLocalStorage().dao_logo || '');
   const { createDAO } = useContext(UserContext) as IContextType;
 
@@ -49,19 +53,43 @@ const CheckoutForm = () => {
     }
   };
 
+  const handleUploadImage = (e: any) => {
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file", e.target.files[0]);
+    formData.append("upload_preset", "mvybpnf0");
+    uploadImage(formData, setLogoLink, setIsUploading, setFileName, setResult);
+  };
+
+  console.log(logoLink);
+
   return (
     <div className="w-full">
       <form className="w-full">
         <CreateDaoHeader header="Create DAO assets" currentStage="5" hasStage />
         <p className="-mt-5 text-normal text-grey mb-8">Field are optional. If you skip, default image will be used instead. A logo form a flag of your DAO</p>
+      <div className="relative">
+            <TextInput
+              label="DAO Logo:"
+              type="file"
+              placeholder="Paste a link to your png logo"
+              accept="image/*"
+              isCompulsory
+              opacity="opacity-1"
+              onChange={handleUploadImage}
+            />
+            <p className="text-normal absolute top-10 bg-white left-28 w-[80%]">{fileName || 'No file uploaded yet'}</p>
+            {isUploading && (
+              <div className="-mt-3 flex">
+                <p className="text-sm text-grey">Uploading...</p>
+                <div className="ml-4">{Loader}</div>
+              </div>
+            )}
+            {result?.message && (
+              <p className={`${result?.type === "success" ? 'text-quaternary' : 'text-error'} -mt-4 text-normal`}>{result && result?.message}</p>
+            )}
+      </div>
 
-        <TextInput
-          label="DAO Logo:"
-          placeholder="Paste a link to your png logo"
-          value={logoLink}
-          isCompulsory
-          onChange={(e) => setLogoLink(e.target.value)}
-        />
 
         <div className="h-px bg-grey my-10" />
 
@@ -75,10 +103,6 @@ const CheckoutForm = () => {
               <p className="text-grey text-sm">Inital DAO balance</p>
               <p className="mt-1">2 AE</p>
             </div>
-            {/* <div className="ml-8">
-              <p className="text-grey text-sm">TGas</p>
-              <p className="mt-1">300</p>
-            </div> */}
           </div>
         </div>
 

@@ -62,7 +62,9 @@ export interface IInput {
     name: string;
     error: string;
     isCompulsory: boolean;
+    accept: any;
     onKeyPress: any;
+    opacity: string;
 }
 
 export interface ITextAreaInput {
