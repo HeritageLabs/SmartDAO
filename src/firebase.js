@@ -57,7 +57,8 @@ const sendMessage = async (message, setMessage, proposalId, user, toastMessage) 
     alert("Enter valid message");
     return;
   }
-  if (user) {
+  console.log(user);
+  if (user !== null) {
     setMessage("");
     await addDoc(collection(db, "proposals", proposalId, 'messages'), {
       text: message.trim(),
@@ -67,6 +68,7 @@ const sendMessage = async (message, setMessage, proposalId, user, toastMessage) 
       uid: user.uid,
     });
   } else {
+    setMessage("");
     toastMessage("error", "Please connect wallet first");
   }
 };

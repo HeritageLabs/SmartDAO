@@ -78,6 +78,9 @@ const CommentBox = ({
             ))}
           </>
         )}
+        {user === null && (
+        <p className="text-sm mt-8">Please connect your wallet to view comments on each DAO</p>
+        )}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -96,6 +99,7 @@ const CommentBox = ({
                 width="h-[38px] w-[150px]"
                 bg="bg-quaternary"
                 disabled={!message}
+                handleClick={() => sendMessage(message, setMessage, proposalId, user, alertToast)}
               >
                 Send
               </CustomButton>
