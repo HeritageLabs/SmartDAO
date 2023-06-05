@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { ReactNode, useContext, useEffect, useState } from "react";
@@ -14,16 +15,17 @@ import AllProposals from "../../../components/proposal/allProposals";
 
 interface IDaoDetails {
   children: ReactNode;
-  hasProposal: boolean;
+  // hasProposal: boolean;
 }
 
-const DaoDetails = ({ children, hasProposal }: IDaoDetails) => {
+const DaoDetails = ({ children }: IDaoDetails) => {
   const navigate = useNavigate();
   const { daoId } = useParams();
   const [dao, setDao] = useState<any>();
+  const [hasProposal, setHasProposal] = useState(false);
   const [enableCreateProposal, setEnableCreateProposal] = useState(false);
   const { getDAO, aeSdk, amoutDonated, handleSetAllDaoMembers } = useContext(UserContext) as IContextType;
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     daoId &&
@@ -35,13 +37,14 @@ const DaoDetails = ({ children, hasProposal }: IDaoDetails) => {
           SideBar[2].value = Number(res.proposals).toString();
           setIsLoading(false);
           handleSetAllDaoMembers(res?.members);
+          setHasProposal(Number(res?.activeProposals) === 0 ? false : true);
         })
         .catch((error) => {
           if (error.name === "NodeInvocationError") navigate("/daos");
           setIsLoading(false);
         })
   }, [aeSdk, amoutDonated]);
-
+  
   return isLoading ? (
     <PageLoader />
   ) : (

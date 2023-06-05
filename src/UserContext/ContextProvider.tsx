@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import { UserContext } from ".";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { login, smartdaoAddress, aeSdk as client } from "../utils/contract/smartdao.js";
 import smartdaoACI from "../utils/contract/smartdao.json";
 import daoACI from "../utils/contract/dao.json";
 import { IAccount, IDAO, IProposal } from "../types";
+import { createUser, logoutFirebase, signIn } from "../firebase";
 
 interface IContextProvider {
   children: ReactNode;
@@ -17,10 +18,9 @@ const ContextProvider = ({ children }: IContextProvider) => {
   const [account, setAccount] = useState<IAccount>({ address: "", balance: 0 });
   const [showModal, setShowModal] = useState(false);
   const [amoutDonated, setAmountDonated] = useState<string|number>(0);
-  const { setLocalStorage, clearStorage, removeItem } = useLocalStorage();
+  const { clearStorage } = useLocalStorage();
   const [searchValue, setSearchValue] = useState<string>('');
   const [allDaoMembers, setAllDaoMembers] = useState<[]>([]);
-
 
   const handleSearch = (value: string) => {
     setSearchValue(value)
@@ -44,7 +44,8 @@ const ContextProvider = ({ children }: IContextProvider) => {
       address,
       balance: parseFloat(balance) / 1e18
     });
-
+    await createUser(address);
+    signIn(address)
     // setLocalStorage({ key: 'isLoggedIn', value: true });
     // setLocalStorage({ key: 'address', value: address });
     // setLocalStorage({ key: 'balance', value: parseFloat(balance) / 1e18 });
@@ -57,14 +58,13 @@ const ContextProvider = ({ children }: IContextProvider) => {
     await aeSdk.disconnectWallet();
     setIsLoggedIn(false);
     setAccount({ address: "", balance: 0 });
+    logoutFirebase()
     window.location.reload();
   }
 
   const createDAO = async (dao: IDAO) => {
-    console.log(dao);
     const contract = await aeSdk.initializeContract({ aci: smartdaoACI, address: smartdaoAddress });
     const res = await contract.createDAO(dao.name.toLowerCase(), dao.description, dao.tokenSymbol, dao.image, dao.socials, dao.initialMembers, dao.startingBalance * 1e18, { amount: dao.startingBalance * 1e18 });
-    console.log(res);
   }
 
   async function getDAO(id: string) {
@@ -97,7 +97,6 @@ const ContextProvider = ({ children }: IContextProvider) => {
   }
 
   async function executeProposal(DAOAddress: string, proposalId: number) {
-    console.log({ DAOAddress, proposalId })
     const contract = await aeSdk.initializeContract({ aci: daoACI, address: DAOAddress });
     const res = await contract.executeProposal(proposalId);
   }

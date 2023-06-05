@@ -26,7 +26,7 @@ const defaultProps: buttonProps = {
   borderColor: 'border-none'
 };
 
-const CustomButton = ({ children, bg, isLoading, disabled, width, href, color, handleClick, borderColor }: buttonProps) => {
+const  CustomButton = ({ children, bg, isLoading, disabled, width, href, color, handleClick, borderColor }: buttonProps) => {
   const navigate = useNavigate();
 
   return (

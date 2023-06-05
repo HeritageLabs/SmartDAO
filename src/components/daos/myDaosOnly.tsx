@@ -12,8 +12,6 @@ const MyDaosOnly = () => {
   const { getDAOs, aeSdk, searchValue, account } = useContext(UserContext) as IContextType;
   const navigate = useNavigate();
 
-  console.log(account);
-
   const getAllDAOs = async () => {
     getDAOs().then((res: any) => {
       for (let i = 0; i < res.length; i++) {
@@ -27,7 +25,6 @@ const MyDaosOnly = () => {
       const myDaos = res.filter((dao: any) => {
         if (dao.members.includes(account.address)) return res;
       });
-      console.log(myDaos);
       setAllDaos(myDaos);
       setDaos(myDaos);
     });
@@ -90,7 +87,7 @@ const MyDaosOnly = () => {
                         </p>
                       </div>
                       <div className="text-center">
-                        <p className="text-sm text-grey">Memeber/Groups</p>
+                        <p className="text-sm text-grey">Member/Groups</p>
                         <p className="font-gilroyBold text-lg">
                           {dao.members.length}/1
                         </p>

@@ -38,7 +38,6 @@ const CheckoutForm = () => {
         initialMembers.push(daoGroup.member_wallet[i].wallet);
       }
     }
-    console.log({ initialMembers })
     const dao = { name: daoInfo.daoName, description: daoInfo.daoPurpose, tokenSymbol: daoInfo.daoTokenSymbol, image: daoLogo, socials: daoSocials, initialMembers: initialMembers, startingBalance: 2 };
     try {
       setIsLoading(true);
@@ -60,8 +59,6 @@ const CheckoutForm = () => {
     formData.append("upload_preset", "mvybpnf0");
     uploadImage(formData, setLogoLink, setIsUploading, setFileName, setResult);
   };
-
-  console.log(logoLink);
 
   return (
     <div className="w-full">

@@ -65,6 +65,7 @@ export interface IInput {
     accept: any;
     onKeyPress: any;
     opacity: string;
+    pr: string;
 }
 
 export interface ITextAreaInput {

@@ -61,7 +61,7 @@ const AddGroupsForm = () => {
           readOnly
         />
 
-        <CreateDaoHeader header="Add Memebers" optional="" />
+        <CreateDaoHeader header="Add Members" optional="" />
 
         <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Add members to your DAO.

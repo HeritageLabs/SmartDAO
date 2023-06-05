@@ -3,11 +3,12 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../UserContext";
 import Logo from "../../assets/icons/logo-icon.svg";
-import { CodeIcon, DislikeIcon, LikeIcon, Loader } from "../../assets/svgs";
+import { ChatIcon, CodeIcon, DislikeIcon, LikeIcon, Loader } from "../../assets/svgs";
 import { IContextType } from "../../types";
 import PageLoader from "../PageLoader";
 import { useToastify } from "../../hooks/useToastify";
 import CustomButton from "../common/button";
+import CommentBox from "./commentBox";
 
 const AllProposals = ({ dao }: { dao: any }) => {
   const [proposals, setProposals] = useState<any>();
@@ -15,6 +16,7 @@ const AllProposals = ({ dao }: { dao: any }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isVotingAganstLoading, setIsVotingAgainstLoading] = useState(false);
   const [isExecuting, setIsExecuting] = useState(false);
+  const [messages, setMessages] = useState([]);
   const {
     searchValue,
     aeSdk,
@@ -34,6 +36,17 @@ const AllProposals = ({ dao }: { dao: any }) => {
     return ((votesFor + votesAgainst) * 100) / totalMembers;
   };
 
+  const handleChat = (index: number) => {
+    const prevProposal = [...proposals];
+    if (prevProposal[index].showComment === true) {
+      prevProposal[index].showComment = false;
+      setProposals(prevProposal)
+    } else {
+      prevProposal[index].showComment = true;
+      setProposals(prevProposal);
+    }
+  }
+
   const getAllProposals = async () => {
     try {
       const daos = await getDAOs();
@@ -48,15 +61,15 @@ const AllProposals = ({ dao }: { dao: any }) => {
       propps.sort((proposal1, proposal2) =>
         Number(proposal2.endTime - proposal1.endTime)
       );
-      setProposals(propps);
-      setAllProposals(propps);
+      const addComment = propps.map((propp) => ({ ...propp, showComment: false }));
+      setProposals(addComment);
+      setAllProposals(addComment);
     } catch (error) {
       console.log({ error });
     }
   };
 
   const handleVoteForProposal = async (address: any, id: any) => {
-    console.log({ aeSdk });
     try {
       setIsLoading(true);
       await voteForProposal(address, id);
@@ -70,7 +83,6 @@ const AllProposals = ({ dao }: { dao: any }) => {
   };
 
   const handleExecuteProposal = async (address: any, id: any) => {
-    console.log({ aeSdk });
     try {
       setIsExecuting(true);
       await executeProposal(address, id);
@@ -85,7 +97,6 @@ const AllProposals = ({ dao }: { dao: any }) => {
   };
 
   const handleVoteAgainstProposal = async (address: any, id: any) => {
-    console.log({ aeSdk });
     try {
       setIsVotingAgainstLoading(true);
       await voteAgainstProposal(address, id);
@@ -154,9 +165,9 @@ const AllProposals = ({ dao }: { dao: any }) => {
       ) : (
         <div>
           {proposals ? (
-            <div className="w-full px-14">
+            <div className="w-full px-14 relative">
               {proposals &&
-                proposals?.map((proposal: any) => {
+                proposals?.map((proposal: any, index: number) => {
                   if (dao?.name && proposal?.dao?.name != dao?.name) {
                     return;
                   }
@@ -185,7 +196,7 @@ const AllProposals = ({ dao }: { dao: any }) => {
                           Proposal ID: <span>{Number(proposal.id)}</span>
                         </p>
                         <div className="rounded-lg h-fit shadow-card hover:shadow-normal">
-                          <div className="flex">
+                          <div className="flex z-10">
                             <div className="w-14 bg-bg flex">
                               <div className="mx-auto mt-4">{CodeIcon}</div>
                             </div>
@@ -256,7 +267,7 @@ const AllProposals = ({ dao }: { dao: any }) => {
                                 </div>
                               )}
 
-                              <div className="flex justify-between">
+                              <div className="flex justify-between ">
                                 <p className="mt-6">
                                   {`Total votes: ${calculateQuorum(
                                     Number(proposal.votesFor),
@@ -272,7 +283,9 @@ const AllProposals = ({ dao }: { dao: any }) => {
                                       : "Qurom not reached!"
                                   }`}
                                 </p>
-                                <div className="flex mt-6 items-center w-4/12 justify-between text-right">
+                                <div className="flex mt-8 items-center max-w-5/12 justify-between text-right">
+                                <div className="mr-8 flex items-center">
+                              </div>
                                   {
                                     <div className="flex items-center w-full mr-4">
                                       <div
@@ -312,9 +325,12 @@ const AllProposals = ({ dao }: { dao: any }) => {
                                       </p>
                                     </div>
                                   }
+                                  <div className="flex items-center border h-9 px-2 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans cursor-pointer" onClick={() => handleChat(index)}>
+                                  {ChatIcon}
+                                </div>
 
-                                  {!proposal.isExecuted && (
-                                    <div className="flex items-center w-full">
+                                  {/* {!proposal.isExecuted && ( */}
+                                    <div className={`flex items-center ml-14 w-full ${!proposal.isExecuted ? 'invisible' : 'visible'}`}>
                                       <CustomButton
                                         handleClick={() =>
                                           handleExecuteProposal(
@@ -326,16 +342,14 @@ const AllProposals = ({ dao }: { dao: any }) => {
                                       >
                                         Exceute
                                       </CustomButton>
-                                      {/* <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
-                            {ChatIcon}
-                          </div> */}
                                     </div>
-                                  )}
+                                  {/* )} */}
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
+                      <CommentBox showComment={proposal.showComment} messages={messages} setMessages={setMessages} proposalId={`${proposal.dao.name}-${proposal.id}`} />
                       </div>
                     </div>
                   );
