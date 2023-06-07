@@ -6,15 +6,15 @@ interface IDaoDetail {
   icon: ReactNode,
   name: string;
   id: number;
-  url: string|any;
+  url: string | any;
 }
 
-const DaoDetail: IDaoDetail[] = [
+const DaoMenu: IDaoDetail[] = [
   {
     icon: HomeIconDark,
     name: 'Home',
     id: 1,
-    url:  (dao: {name: string}) => `${DAOS}/${dao.name}`
+    url: (dao: { name: string }) => `${DAOS}/${dao.name}`
   },
   {
     icon: WriteIcon,
@@ -32,7 +32,7 @@ const DaoDetail: IDaoDetail[] = [
     icon: MembersIcon,
     name: 'Members',
     id: 4,
-    url: (dao: {name: string}) => `${DAOS}/${dao.name}/members`
+    url: (dao: { name: string }) => `${DAOS}/${dao.name}/members`
   },
   {
     icon: SettingsIc,
@@ -93,4 +93,4 @@ export const SideBar = [
   },
 ]
 
-export default DaoDetail;
+export default DaoMenu;

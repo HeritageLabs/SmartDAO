@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Logo from "../../assets/icons/logo-dark.svg";
 import { LogoutIcon } from "../../assets/svgs";
 import { useToastify } from "../../hooks/useToastify";
@@ -9,14 +9,30 @@ import CustomButton from "../common/button";
 import DropdownMenu from "../common/dropdownMenu";
 import SearchInput from "../common/input/SearchInput";
 import ConnectWalletPopup from "../modals/connectWalletPopup";
-import useLocalStorage from "../../hooks/useLocalStorage";
-import { useSearchValue } from "../../hooks/useSearchValue";
 import { useNavigate } from "react-router-dom";
+import { DAOS, FEEDS, PROPOSALS, VIEW_MY_DAO } from "../../utils/constants/pages";
 
 const AuthNav = () => {
-  const { showModal, setShowModal, loginUser, logoutUser, handleSearch, account } = useContext(UserContext) as IContextType;
+  const { showModal, setShowModal, loginUser, logoutUser, handleSearchDaos, handleSearchProposals, account } = useContext(UserContext) as IContextType;
   const { alertToast } = useToastify();
   const navigate = useNavigate();
+
+  const handleSearch = (value: string) => {
+    const path = window.location.pathname;
+    if (value) {
+      if (path == DAOS || path == VIEW_MY_DAO || path == FEEDS) {
+        handleSearchDaos(value);
+      }
+      if (path == PROPOSALS || path == FEEDS) {
+        handleSearchProposals(value);
+      }
+    }
+  }
+
+  useEffect(() => {
+    handleSearchProposals("");
+    handleSearchDaos("");
+  }, [])
 
   return (
     <nav

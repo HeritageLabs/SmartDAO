@@ -7,52 +7,23 @@ import PageLoader from "../PageLoader";
 import { useNavigate } from "react-router-dom";
 
 const MyDaosOnly = () => {
-  const [daos, setDaos] = useState<any>();
-  const [allDaos, setAllDaos] = useState<any>();
-  const { getDAOs, aeSdk, searchValue, account } = useContext(UserContext) as IContextType;
+  const { account, daos } = useContext(UserContext) as IContextType;
+  const [myDaos, setMyDaos] = useState<any[]>()
   const navigate = useNavigate();
 
-  console.log(account);
-
-  const getAllDAOs = async () => {
-    getDAOs().then((res: any) => {
-      for (let i = 0; i < res.length; i++) {
-        let dao = res[i];
-        for (let key in dao) {
-          if (typeof dao[key] == "bigint") {
-            dao[key] = Number(dao[key]);
-          }
-        }
-      }
-      const myDaos = res.filter((dao: any) => {
-        if (dao.members.includes(account.address)) return res;
-      });
-      console.log(myDaos);
-      setAllDaos(myDaos);
-      setDaos(myDaos);
+  useEffect(() => {
+    const filteredDaos = daos?.filter((dao: any) => {
+      if (dao.members.includes(account.address)) return dao;
     });
-  };
-  useEffect(() => {
-    if (aeSdk) {
-      getAllDAOs();
-    }
-  }, [aeSdk]);
-
-  useEffect(() => {
-    if (searchValue) {
-      const filterDao = allDaos.filter((dao: any) => dao.name === searchValue);
-      setDaos(filterDao);
-    } else {
-      setDaos(allDaos);
-    }
-  }, [searchValue]);
+    setMyDaos(filteredDaos);
+  }, []);
 
   return (
     <div>
-      {daos ? (
+      {myDaos ? (
         <div className="flex flex-wrap w-full py-4 cursor-pointer justify-between px-12">
-          {daos &&
-            daos.map((dao: any) => (
+          {myDaos &&
+            myDaos.map((dao: any) => (
               <div
                 onClick={() => navigate(`${DAOS}/${dao.name}`)}
                 className="p-8 rounded-xl w-5/12 bg-white my-4"

@@ -34,39 +34,35 @@ const ProposalCreation = React.lazy(
 );
 const CheckoutPage = React.lazy(() => import("../pages/create-dao/checkout"));
 const DaoDetailsHome = React.lazy(() => import("../pages/dao/daoDetails/home"));
-const DaoDetailsMembers = React.lazy(() => import("../pages/dao/daoDetails/members"));
-const ProposalDetails = React.lazy(() => import("../pages/proposals/details"));
 
 const WebRoute = () => {
   useEffect(() => {
     AOS.init();
   }, []);
-  
+
   return (
     <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route index path={HOME_URL} element={<Home />} />
-          <Route path={FEEDS} element={<Feeds />} />
-          <Route path={PROPOSALS} element={<Proposals />} />
-          <Route path={DAOS} element={<Daos />} />
-          <Route
-            path={CREATE_DAO_URL}
-            element={
-              <Private>
-                <CreateDAOName />
-              </Private>
-            }
-          />
-          <Route path={CREATE_DAO_URL_SOCIALS} element={<Private><AddSocialInfo /></Private>} />
-          <Route path={CREATE_DAO_URL_ADD_GROUPS} element={<Private><AddGroups /></Private>} />
-          <Route path={SELECT_TEMPLATE_URL} element={<Private><DaoTemplate /></Private>} />
-          <Route path={CREATE_DAO_URL_PROPOSAL} element={<Private><ProposalCreation /></Private>} />
-          <Route path={CREATE_DAO_URL_CHECKOUT} element={<Private><CheckoutPage /></Private>} />
-          <Route path={`${DAOS}/:daoId`} element={<DaoDetailsHome />} />
-          <Route path={`${DAOS}/:daoId/members`} element={<DaoDetailsMembers />} />
-          <Route path={`${PROPOSALS}/:proposalId`} element={<Private><ProposalDetails /></Private>} />
-          <Route path={VIEW_MY_DAO} element={<Private><MyDao /></Private>} />
-        </Routes>
+      <Routes>
+        <Route index path={HOME_URL} element={<Home />} />
+        <Route path={FEEDS} element={<Feeds />} />
+        <Route path={PROPOSALS} element={<Proposals />} />
+        <Route path={DAOS} element={<Daos />} />
+        <Route
+          path={CREATE_DAO_URL}
+          element={
+            <Private>
+              <CreateDAOName />
+            </Private>
+          }
+        />
+        <Route path={CREATE_DAO_URL_SOCIALS} element={<Private><AddSocialInfo /></Private>} />
+        <Route path={CREATE_DAO_URL_ADD_GROUPS} element={<Private><AddGroups /></Private>} />
+        <Route path={SELECT_TEMPLATE_URL} element={<Private><DaoTemplate /></Private>} />
+        <Route path={CREATE_DAO_URL_PROPOSAL} element={<Private><ProposalCreation /></Private>} />
+        <Route path={CREATE_DAO_URL_CHECKOUT} element={<Private><CheckoutPage /></Private>} />
+        <Route path={`${DAOS}/:daoId`} element={<DaoDetailsHome />} />
+        <Route path={VIEW_MY_DAO} element={<Private><MyDao /></Private>} />
+      </Routes>
     </Suspense>
   );
 };
