@@ -55,20 +55,18 @@ const CommentBox = ({
     <>
       <p className="absolute right-[210px] -mt-12">{comments.length}</p>
       <div
-        className={`bg-white border-x border-b border-quaternary px-5 py-3 mx-[30px] shadow-card hover:shadow-normal trans z-0 ${
-          showComment ? "block" : "hidden"
-        }`}
+        className={`bg-white border-x border-b border-quaternary px-5 py-3 mx-[30px] shadow-card hover:shadow-normal trans z-0 ${showComment ? "block" : "hidden"
+          }`}
         ref={containerRef}
       >
         {user && (
           <>
             {comments.map((msg: any) => (
               <div
-                className={`max-w-[250px] text-sm py-2.5 px-4 rounded-t-2xl rounded-l-2xl my-4 ${
-                  msg?.uid !== user.uid
-                    ? "bg-primary text-white mr-auto"
-                    : "ml-auto bg-quaternary text-white"
-                }`}
+                className={`max-w-[250px] text-sm py-2.5 px-4 rounded-t-2xl rounded-l-2xl my-4 ${msg?.uid !== user.uid
+                  ? "bg-primary text-white mr-auto"
+                  : "ml-auto bg-quaternary text-white"
+                  }`}
               >
                 <p className="text-[10px] text-lightGrey">
                   {msg?.uid === user.uid ? "You" : msg.displayName}
@@ -79,7 +77,7 @@ const CommentBox = ({
           </>
         )}
         {user === null && (
-        <p className="text-sm mt-8">Please connect your wallet to view comments on each DAO</p>
+          <p className="text-sm mt-8">Please connect your wallet to view comments on each DAO</p>
         )}
         <form
           onSubmit={(e) => {

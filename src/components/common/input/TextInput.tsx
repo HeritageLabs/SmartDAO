@@ -2,25 +2,25 @@ import { CancelIcon } from "../../../assets/svgs";
 import { IInput } from "../../../types";
 
 const defaultProps: IInput = {
-    label: '',
-    placeholder: '',
-    type: 'text',
-    onChange: (e) => e,
-    disabled: false,
-    value: '',
-    defaultValue: '',
-    textTransform: 'normal-case',
-    readOnly: false,
-    hasCancel: false,
-    handleClickCancel: () => null,
-    mb: '6',
-    name: '',
-    isCompulsory: false,
-    error: '',
-    onKeyPress: undefined,
-    accept: '',
-    opacity: "",
-    pr: ""
+  label: '',
+  placeholder: '',
+  type: 'text',
+  onChange: (e) => e,
+  disabled: false,
+  value: '',
+  defaultValue: '',
+  textTransform: 'normal-case',
+  readOnly: false,
+  hasCancel: false,
+  handleClickCancel: () => null,
+  mb: '6',
+  name: '',
+  isCompulsory: false,
+  error: '',
+  onKeyPress: undefined,
+  accept: '',
+  opacity: "",
+  pr: ""
 };
 
 const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue, value, textTransform, readOnly, hasCancel, handleClickCancel, mb, name, isCompulsory, error, onKeyPress, accept, opacity, pr }: IInput) => (
@@ -30,7 +30,7 @@ const TextInput = ({ label, placeholder, type, onChange, disabled, defaultValue,
         htmlFor={label}
         className="block mb-2 text-sm font-medium text-grey"
       >
-      {label}
+        {label}
       </label>
       {isCompulsory && (<p className="text-red ml-px">*</p>)}
     </div>

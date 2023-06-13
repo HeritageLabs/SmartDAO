@@ -2,8 +2,10 @@
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, addDoc, collection, serverTimestamp, onSnapshot,  query,
-  orderBy, } from "firebase/firestore";
+import {
+  getFirestore, addDoc, collection, serverTimestamp, onSnapshot, query,
+  orderBy,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -42,12 +44,12 @@ const createUser = async (wallet_address) => {
 const signIn = async (wallet_address) => {
   try {
     await signInWithEmailAndPassword(auth, `${wallet_address}@gmail.com`, wallet_address)
-    .then((res) => res)
-    .catch((err) => {
-      if (err.code) {
-        return createUser(wallet_address)
-      }
-    });
+      .then((res) => res)
+      .catch((err) => {
+        if (err.code) {
+          return createUser(wallet_address)
+        }
+      });
   } catch (error) {
     console.error(error);
   }
@@ -57,7 +59,6 @@ const sendMessage = async (message, setMessage, proposalId, user, toastMessage) 
     alert("Enter valid message");
     return;
   }
-  console.log(user);
   if (user !== null) {
     setMessage("");
     await addDoc(collection(db, "proposals", proposalId, 'messages'), {
@@ -79,15 +80,15 @@ const logoutFirebase = async () => {
 
 function getMessages(proposalId, callback) {
   return onSnapshot(
-      query(
-          collection(db, 'proposals', proposalId, 'messages'),
-          orderBy('timestamp', 'asc')
-      ),
-      (querySnapshot) => {
-          const messages = querySnapshot.docs.map((doc) => ({id: doc.id, ...doc.data()}));
-          callback(messages);
-      }
+    query(
+      collection(db, 'proposals', proposalId, 'messages'),
+      orderBy('timestamp', 'asc')
+    ),
+    (querySnapshot) => {
+      const messages = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      callback(messages);
+    }
   );
 }
 
-export {db, auth, googleProvider, analytics, createUser, signIn, sendMessage, logoutFirebase, getMessages}
+export { db, auth, googleProvider, analytics, createUser, signIn, sendMessage, logoutFirebase, getMessages }

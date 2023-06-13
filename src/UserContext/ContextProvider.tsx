@@ -17,21 +17,107 @@ const ContextProvider = ({ children }: IContextProvider) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [account, setAccount] = useState<IAccount>({ address: "", balance: 0 });
   const [showModal, setShowModal] = useState(false);
-  const [amoutDonated, setAmountDonated] = useState<string|number>(0);
-  const { clearStorage } = useLocalStorage();
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [allDaoMembers, setAllDaoMembers] = useState<[]>([]);
+  const [amountDonated, setAmountDonated] = useState<string | number>(0);
+  const [allDaos, setAllDaos] = useState<any[]>();
+  const [allProposals, setAllProposals] = useState<any[]>();
+  const [proposals, setProposals] = useState<any[]>();
+  const [daos, setDaos] = useState<any[]>();
 
-  const handleSearch = (value: string) => {
-    setSearchValue(value)
+  useEffect(() => {
+    getAllDaos();
+    getAllProposals();
+  }, []);
+
+  const filterProposals = (active: boolean, executed: boolean) => {
+    const isActive = (proposal: any) => proposal.endTime > Date.now();
+
+    const filteredProposals = proposals?.filter((proposal) => isActive(proposal) == active && proposal.isExecuted == executed)
+    console.log({ filterProposals })
+    setProposals(filteredProposals);
+
+  }
+
+  const handleSearchDaos = (value: string) => {
+    if (value) {
+      value = value.toLowerCase();
+      const filteredDaos = allDaos?.filter((dao: any) =>
+        dao?.name?.toLowerCase().includes(value)
+      );
+      setDaos(filteredDaos);
+      console.log({ value })
+      console.log({ filteredDaos })
+    } else {
+      setDaos(allDaos);
+    }
   };
 
-  const handleSetAllDaoMembers = (allDao: []) => {
-    setAllDaoMembers(allDao);
+  const handleSearchProposals = (value: string) => {
+    if (value) {
+      value = value.toLowerCase();
+      const filteredProposals = allProposals?.filter(
+        (proposal: any) =>
+          proposal?.dao?.name
+            ?.toLowerCase()
+            .includes(value) ||
+          proposal?.description?.toLowerCase().includes(value) ||
+          proposal?.proposer
+            ?.toLowerCase()
+            .includes(value) ||
+          proposal?.target?.toLowerCase().includes(value) ||
+          proposal?.proposalType?.toLowerCase().includes(value)
+      );
+      setProposals(filteredProposals);
+      console.log({ value })
+      console.log({ filteredProposals })
+    } else {
+      setProposals(allProposals)
+    }
   };
 
-  const getAmountDonated = (amount: string|number) => {
+  const getAmountDonated = (amount: string | number) => {
     setAmountDonated(amount);
+  };
+
+  const getAllDaos = async () => {
+    getDAOs().then((res: any) => {
+      for (let i = 0; i < res.length; i++) {
+        let dao = res[i];
+        for (let key in dao) {
+          if (typeof dao[key] == "bigint") {
+            dao[key] = Number(dao[key]);
+          }
+        }
+      }
+      setAllDaos(res);
+      setDaos(res);
+    });
+  };
+
+  const getAllProposals = async () => {
+    try {
+      const daos = await getDAOs();
+      const propps = [];
+      for (let i = 0; i < daos.length; i++) {
+        let daoProposals = await getProposals(daos[i].contractAddress);
+        daoProposals.map((proposal: any) => {
+          for (let key in proposal) {
+            if (typeof proposal[key] == "bigint") {
+              proposal[key] = Number(proposal[key]);
+            }
+          }
+          proposal.dao = daos[i];
+          proposal.showComment = false;
+        });
+        propps.push(...daoProposals);
+      }
+      propps.sort((proposal1, proposal2) =>
+        Number(proposal2.endTime - proposal1.endTime)
+      );
+      setAllProposals(propps);
+      setProposals(propps);
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   const loginUser = async () => {
@@ -44,17 +130,13 @@ const ContextProvider = ({ children }: IContextProvider) => {
       address,
       balance: parseFloat(balance) / 1e18
     });
+
     await createUser(address);
-    signIn(address)
-    // setLocalStorage({ key: 'isLoggedIn', value: true });
-    // setLocalStorage({ key: 'address', value: address });
-    // setLocalStorage({ key: 'balance', value: parseFloat(balance) / 1e18 });
-    setIsLoggedIn(true);
+    signIn(address);
     setShowModal(false);
   };
 
   const logoutUser = async () => {
-    clearStorage()
     await aeSdk.disconnectWallet();
     setIsLoggedIn(false);
     setAccount({ address: "", balance: 0 });
@@ -130,8 +212,8 @@ const ContextProvider = ({ children }: IContextProvider) => {
 
 
   const providerValue = useMemo(
-    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, getAmountDonated, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearch, searchValue, donate, handleSetAllDaoMembers, amoutDonated, allDaoMembers }),
-    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getAmountDonated, getActiveProposals, handleSearch, searchValue, donate,  handleSetAllDaoMembers, amoutDonated, allDaoMembers]
+    () => ({ isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, getAmountDonated, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getActiveProposals, handleSearchDaos, handleSearchProposals, donate, amountDonated, daos, allDaos, getAllDaos, proposals, allProposals, getAllProposals, filterProposals }),
+    [isLoggedIn, loginUser, showModal, setShowModal, logoutUser, account, createDAO, getDAOs, aeSdk, getDAO, createProposal, voteForProposal, voteAgainstProposal, executeProposal, getProposal, getProposals, getAmountDonated, getActiveProposals, handleSearchDaos, handleSearchProposals, donate, amountDonated, daos, allDaos, getAllDaos, proposals, allProposals, getAllProposals, filterProposals]
   );
 
   return (

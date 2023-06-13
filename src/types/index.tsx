@@ -21,12 +21,18 @@ export interface IContextType {
     getProposal: (DAOAddress: string, proposalId: number) => Promise<any>;
     getProposals: (DAOAddress: string) => Promise<any>;
     getActiveProposals: (DAOAddress: string) => Promise<any>;
-    searchValue: string;
-    handleSearch: (args: string) => void;
+    handleSearchDaos: (args: string) => void;
+    handleSearchProposals: (args: string) => void;
     donate: (DAOAddress: string, amount: number) => void;
-    amoutDonated: string | number;
+    amountDonated: string | number;
     getAmountDonated: (args: string) => void;
-    allDaoMembers: []
+    allDaos: any[] | undefined;
+    daos: any[] | undefined;
+    allProposals: any[] | undefined;
+    proposals: any[] | undefined;
+    getAllDaos: () => void;
+    getAllProposals: () => void;
+    filterProposals: (active: boolean, executed: boolean) => void;
 };
 
 export interface IDAO {

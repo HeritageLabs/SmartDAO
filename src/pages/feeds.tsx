@@ -9,7 +9,7 @@ const Feeds = () => {
       <p className="border-b-2 border-quaternary w-fit ml-8 font-gilroyMd text-quaternary">My Feeds</p>
       <div className="h-px bg-[#EEEEEE]" />
       <div className="mt-8">
-        <AllProposals dao={{}} />
+        <AllProposals dao={{}} filters={{ active: undefined, executed: undefined }} />
       </div>
       <div className="mt-8">
         <AllDaos />

@@ -4,7 +4,7 @@ import { ExternalLink } from "../../../components/common/ExternalLink.tsx";
 import TextInput from "../../../components/common/input/TextInput";
 import useOnClickOutside from "../../../hooks/useOnClickOutside";
 import AddProposalModal from "./addProposal";
-import DaoDetail from "./data";
+import DaoMenu from "./data";
 import { UserContext } from "../../../UserContext";
 import { IContextType } from "../../../types";
 import { useNavigate } from "react-router-dom";
@@ -15,10 +15,19 @@ interface IDetailsNav {
   children: ReactNode;
   setEnableCreateProposal: (args0: boolean) => void;
   dao: any;
+  setShowHome: (arg0: boolean) => void;
+  setShowProposals: (arg0: boolean) => void;
+  setShowMembers: (arg0: boolean) => void;
+  setShowFunds: (arg0: boolean) => void;
 }
 
-const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => {
- const { pathname } = useCurrentLocation();
+interface IMenuAction {
+  name: string;
+  setFunction: (arg0: boolean) => void
+}
+
+const DetailsNav = ({ children, setEnableCreateProposal, dao, setShowHome, setShowProposals, setShowMembers, setShowFunds }: IDetailsNav) => {
+  const { pathname } = useCurrentLocation();
   const [deposit, setDeposit] = useState("");
   const [isDonating, setIsDonating] = useState(false);
   const { alertToast } = useToastify();
@@ -26,7 +35,24 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
   const wrapper = useRef(null);
   useOnClickOutside(wrapper, setShowAddProposal);
   const { donate, getAmountDonated } = useContext(UserContext) as IContextType;
-  const navigate = useNavigate();
+  const [activeMenuIndex, setActiveMenuIndex] = useState<number>(0);
+
+  const menuActions: IMenuAction[] = [
+    { name: "Home", setFunction: setShowHome },
+    { name: "Proposals", setFunction: setShowProposals },
+    { name: "Funds", setFunction: setShowFunds },
+    { name: "Members", setFunction: setShowMembers },
+    { name: "settings", setFunction: setShowHome },
+    { name: "pools", setFunction: setShowHome }
+  ]
+
+  const ChangeActiveMenu = (newIndex: number) => {
+    menuActions[activeMenuIndex].setFunction(false);
+    menuActions[newIndex].setFunction(true)
+    // menuActions.map((m, index) => {
+    //   m.setFunction(index == activeMenuIndex ? false : true);
+    // })
+  }
 
   async function handleDeposit() {
     try {
@@ -60,7 +86,7 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
           </div>
           <div className="text-center">
             <p className="text-grey text-sm">Quorum</p>
-            <p className="font-gilroyBold">{Number(dao.quorum)/100}%</p>
+            <p className="font-gilroyBold">{Number(dao.quorum) / 100}%</p>
           </div>
           <div className="text-center">
             <p className="text-grey text-sm">Voting time</p>
@@ -103,14 +129,14 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao }: IDetailsNav) => 
           </div>
         </div>
         <div className="flex w-2/5 justify-between items-center">
-          {DaoDetail.map((detail) => (
-            <div onClick={() => navigate(detail.url(dao))}>
+          {DaoMenu.map((item, index) => (
+            <div onClick={() => { index != activeMenuIndex && ChangeActiveMenu(index); setActiveMenuIndex(index) }}>
               <div
-                className={`hover:bg-[#F4FFF1] cursor-pointer rounded-lg p-1 trans ${pathname.includes(detail.name.toLocaleLowerCase()) ? 'bg-[#F4FFF1] text-quaternary' : 'bg-none'} `}
-                key={detail.name}
+                className={`hover:bg-[#F4FFF1] cursor-pointer rounded-lg p-1 trans ${pathname.includes(item.name.toLocaleLowerCase()) ? 'bg-[#F4FFF1] text-quaternary' : 'bg-none'} `}
+                key={item.name}
               >
-                {detail.icon}
-                <p className="text-[10px]">{detail.name}</p>
+                {item.icon}
+                <p className="text-[10px]">{item.name}</p>
               </div>
             </div>
           ))}

@@ -12,11 +12,11 @@ export const FilterInput: FilterProp[] = [
         icon: ActiveIcon
     },
     {
-        title: 'Failed',
-        icon: FailedIcon
+        title: 'Ended',
+        icon: MemberIcon
     },
     {
-        title: 'Members',
-        icon: MemberIcon
+        title: 'Failed',
+        icon: FailedIcon
     },
 ]

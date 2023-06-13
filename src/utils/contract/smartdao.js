@@ -23,8 +23,6 @@ export const scanForWallets = async () => {
                 newWallet = newWallet || Object.values(wallets)[0]
                 stopScan()
                 await aeSdk.connectToWallet(newWallet.getConnection())
-                const { address: { current } } = await aeSdk.subscribeAddress('subscribe', 'connected')
-                console.log("Connected wallet: ", Object.keys(current)[0]);
                 resolve()
             } catch (err) {
                 console.log(err);
