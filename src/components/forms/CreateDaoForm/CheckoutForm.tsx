@@ -19,7 +19,7 @@ const CheckoutForm = () => {
   const { setLocalStorage, getLocalStorage, removeItem } = useLocalStorage();
   const [isUploading, setIsUploading] = useState(false);
   const [fileName, setFileName] = useState<string>('');
-  const [result, setResult] = useState<{type: string, message: string }>();
+  const [result, setResult] = useState<{ type: string, message: string }>();
   const [logoLink, setLogoLink] = useState(getLocalStorage().dao_logo || '');
   const { createDAO } = useContext(UserContext) as IContextType;
 
@@ -38,7 +38,6 @@ const CheckoutForm = () => {
         initialMembers.push(daoGroup.member_wallet[i].wallet);
       }
     }
-    console.log({ initialMembers })
     const dao = { name: daoInfo.daoName, description: daoInfo.daoPurpose, tokenSymbol: daoInfo.daoTokenSymbol, image: daoLogo, socials: daoSocials, initialMembers: initialMembers, startingBalance: 2 };
     try {
       setIsLoading(true);
@@ -61,34 +60,33 @@ const CheckoutForm = () => {
     uploadImage(formData, setLogoLink, setIsUploading, setFileName, setResult);
   };
 
-  console.log(logoLink);
 
   return (
     <div className="w-full">
       <form className="w-full">
         <CreateDaoHeader header="Create DAO assets" currentStage="5" hasStage />
         <p className="-mt-5 text-normal text-grey mb-8">Field are optional. If you skip, default image will be used instead. A logo form a flag of your DAO</p>
-      <div className="relative">
-            <TextInput
-              label="DAO Logo:"
-              type="file"
-              placeholder="Paste a link to your png logo"
-              accept="image/*"
-              isCompulsory
-              opacity="opacity-1"
-              onChange={handleUploadImage}
-            />
-            <p className="text-normal absolute top-10 bg-white left-28 w-[80%]">{fileName || 'No file uploaded yet'}</p>
-            {isUploading && (
-              <div className="-mt-3 flex">
-                <p className="text-sm text-grey">Uploading...</p>
-                <div className="ml-4">{Loader}</div>
-              </div>
-            )}
-            {result?.message && (
-              <p className={`${result?.type === "success" ? 'text-quaternary' : 'text-error'} -mt-4 text-normal`}>{result && result?.message}</p>
-            )}
-      </div>
+        <div className="relative">
+          <TextInput
+            label="DAO Logo:"
+            type="file"
+            placeholder="Paste a link to your png logo"
+            accept="image/*"
+            isCompulsory
+            opacity="opacity-1"
+            onChange={handleUploadImage}
+          />
+          <p className="text-normal absolute top-10 bg-white left-28 w-[80%]">{fileName || 'No file uploaded yet'}</p>
+          {isUploading && (
+            <div className="-mt-3 flex">
+              <p className="text-sm text-grey">Uploading...</p>
+              <div className="ml-4">{Loader}</div>
+            </div>
+          )}
+          {result?.message && (
+            <p className={`${result?.type === "success" ? 'text-quaternary' : 'text-error'} -mt-4 text-normal`}>{result && result?.message}</p>
+          )}
+        </div>
 
 
         <div className="h-px bg-grey my-10" />

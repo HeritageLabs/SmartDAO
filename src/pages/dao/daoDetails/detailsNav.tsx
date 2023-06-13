@@ -37,15 +37,13 @@ const DetailsNav = ({ children, setEnableCreateProposal, dao, setShowHome, setSh
   const { donate, getAmountDonated } = useContext(UserContext) as IContextType;
   const [activeMenuIndex, setActiveMenuIndex] = useState<number>(0);
 
-
-
   const menuActions: IMenuAction[] = [
     { name: "Home", setFunction: setShowHome },
     { name: "Proposals", setFunction: setShowProposals },
     { name: "Funds", setFunction: setShowFunds },
     { name: "Members", setFunction: setShowMembers },
-    { name: "settings", setFunction: (arg0: boolean) => { } },
-    { name: "pools", setFunction: (arg0: boolean) => { } }
+    { name: "settings", setFunction: setShowHome },
+    { name: "pools", setFunction: setShowHome }
   ]
 
   const ChangeActiveMenu = (newIndex: number) => {

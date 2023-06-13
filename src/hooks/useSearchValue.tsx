@@ -7,7 +7,5 @@ export const useSearchValue = () => {
         setSearchValue(value)
     }
 
-    // console.log(searchValue);
-
     return { handleSearch, searchValue };
 };

@@ -1,18 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useContext } from "react";
-import { UserContext } from "../../../UserContext";
-import { IContextType } from "../../../types";
 import { ArrForward, DraftIcon, ProposalWriteIcon } from "../../../assets/svgs";
-import useLocalStorage from "../../../hooks/useLocalStorage";
 
 interface IProps {
   setEnableCreateProposal: (arg0: boolean) => void;
 }
 
 const AddProposalModal = ({ ...props }: IProps) => {
-  const { setShowModal } = useContext(UserContext) as IContextType;
-  const { getLocalStorage } = useLocalStorage();
-  console.log(getLocalStorage());
+
   return (
     <div className="flex justify-end my-4 absolute right-20">
       <div className="w-80 bg-white rounded-lg p-2 shadow-medium">

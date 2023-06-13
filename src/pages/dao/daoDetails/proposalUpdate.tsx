@@ -8,7 +8,7 @@ interface IMessage {
 }
 
 const defaultProps: IMessage = {
-    msgHeading: 'New Proposal Alert!',
+    msgHeading: 'New Active Proposal Alert!',
     message: 'The proposed changes in DAO Config will affect the other proposals. Further updates might get rewritten if the current proposal won"t get resolved before.',
 }
 

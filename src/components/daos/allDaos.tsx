@@ -61,7 +61,7 @@ const AllDaos = () => {
                       </div>
                       <div className="text-center">
                         <p className="text-sm text-grey">
-                          Memeber/Groups
+                          Member/Groups
                         </p>
                         <p className="font-gilroyBold text-lg">
                           {dao.members.length}/1

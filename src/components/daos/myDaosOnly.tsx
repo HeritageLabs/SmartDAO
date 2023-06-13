@@ -61,7 +61,7 @@ const MyDaosOnly = () => {
                         </p>
                       </div>
                       <div className="text-center">
-                        <p className="text-sm text-grey">Memeber/Groups</p>
+                        <p className="text-sm text-grey">Member/Groups</p>
                         <p className="font-gilroyBold text-lg">
                           {dao.members.length}/1
                         </p>

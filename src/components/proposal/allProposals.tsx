@@ -3,11 +3,12 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../UserContext";
 import Logo from "../../assets/icons/logo-icon.svg";
-import { CodeIcon, DislikeIcon, LikeIcon, Loader } from "../../assets/svgs";
 import { IContextType } from "../../types";
 import PageLoader from "../PageLoader";
 import { useToastify } from "../../hooks/useToastify";
 import CustomButton from "../common/button";
+import { ChatIcon, CodeIcon, DislikeIcon, LikeIcon, Loader } from "../../assets/svgs";
+import CommentBox from "./commentBox"
 
 const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean | undefined, executed: boolean | undefined } }) => {
   const [filteredProposals, setFilteredProposals] = useState<any[]>();
@@ -15,6 +16,7 @@ const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean |
   const [isLoading, setIsLoading] = useState(false);
   const [isVotingAganstLoading, setIsVotingAgainstLoading] = useState(false);
   const [isExecuting, setIsExecuting] = useState(false);
+  const [messages, setMessages] = useState([]);
   const {
     proposals,
     getAllProposals,
@@ -23,18 +25,34 @@ const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean |
     executeProposal,
   } = useContext(UserContext) as IContextType;
 
+  const handleChat = (index: number) => {
+    const prevProposal = [...filteredProposals!];
+    if (prevProposal[index].showComment === true) {
+      prevProposal[index].showComment = false;
+      setFilteredProposals(prevProposal)
+    } else {
+      prevProposal[index].showComment = true;
+      setFilteredProposals(prevProposal);
+    }
+  }
+
   useEffect(() => {
+    console.log(proposals)
     // Filter proposal
     const isActive = (proposal: any) => proposal.endTime > Date.now();
     let fProposals = proposals;
-    if (filters.active != undefined) {
+
+    if (dao?.name) {
+      fProposals = fProposals?.filter((proposal) => proposal.dao?.name == dao?.name);
+    }
+
+    if (filters?.active != undefined) {
       fProposals = fProposals?.filter((proposal) => isActive(proposal) == filters.active)
     }
-    if (filters.executed != undefined) {
+    if (filters?.executed != undefined) {
       fProposals = fProposals?.filter((proposal) => proposal.isExecuted == filters.executed)
     }
-    console.log({ filters })
-    console.log({ fProposals })
+
     setFilteredProposals(fProposals);
   }, [proposals, filters]);
 
@@ -108,14 +126,11 @@ const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean |
   return (
     <div>
       {filteredProposals ? (
-        <div className="w-full px-14">
-          {filteredProposals &&
-            filteredProposals?.map((proposal: any) => {
-              if (dao?.name && proposal?.dao?.name != dao?.name) {
-                return;
-              }
+        <div className="w-full px-14 relative">
+          {filteredProposals.length > 0 ?
+            filteredProposals?.map((proposal: any, index: number) => {
               return (
-                <div className="mb-16 py-3" key={Number(proposal.id)}>
+                <div className="mb-16 py-3" key={proposal.id}>
                   <div className="flex items-center">
                     <div>
                       <div className="border-grey rounded border p-1 w-12 h-12 cursor-pointer">
@@ -136,10 +151,10 @@ const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean |
 
                   <div className="w-full">
                     <p className="text-sm text-grey text-right my-1">
-                      Proposal ID: <span>{Number(proposal.id)}</span>
+                      Proposal ID: <span>{proposal.id}</span>
                     </p>
                     <div className="rounded-lg h-fit shadow-card hover:shadow-normal">
-                      <div className="flex">
+                      <div className="flex z-10">
                         <div className="w-14 bg-bg flex">
                           <div className="mx-auto mt-4">{CodeIcon}</div>
                         </div>
@@ -164,12 +179,10 @@ const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean |
                                 : "text-red"
                                 } font-gilroyMd`}
                             >
-                              {Number(proposal.endTime) > Date.now()
+                              {proposal.endTime > Date.now()
                                 ? "Ending: "
                                 : "Ended at: "}{" "}
-                              {new Date(
-                                Number(proposal.endTime)
-                              ).toLocaleString("en-GB", {
+                              {new Date(proposal.endTime).toLocaleString("en-GB", {
                                 dateStyle: "short",
                                 timeStyle: "short",
                               })}
@@ -201,10 +214,10 @@ const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean |
                               <p className="text-sm text-grey">Value</p>
                               <p className="w-4/5">
                                 {proposal.proposalType == "transfer"
-                                  ? (Number(proposal.value) / 1e18).toFixed(
+                                  ? (proposal.value / 1e18).toFixed(
                                     2
                                   )
-                                  : Number(proposal.value)}
+                                  : proposal.value}
                               </p>
                             </div>
                           )}
@@ -212,19 +225,21 @@ const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean |
                           <div className="flex justify-between">
                             <p className="mt-6">
                               {`Total votes: ${calculateQuorum(
-                                Number(proposal.votesFor),
-                                Number(proposal.votesAgainst),
+                                proposal.votesFor,
+                                proposal.votesAgainst,
                                 proposal.dao.members.length
                               ).toFixed(2)}% ${calculateQuorum(
-                                Number(proposal.votesFor),
-                                Number(proposal.votesAgainst),
+                                proposal.votesFor,
+                                proposal.votesAgainst,
                                 proposal.dao.members.length
-                              ) > Number(proposal.dao.quorum)
+                              ) > proposal.dao.quorum
                                 ? "Quorum reached!"
                                 : "Qurom not reached!"
                                 }`}
                             </p>
-                            <div className="flex mt-6 items-center w-4/12 justify-between text-right">
+                            <div className="flex mt-8 items-center max-w-5/12 justify-between text-right">
+                              <div className="mr-8 flex items-center">
+                              </div>
                               {
                                 <div className="flex items-center w-full mr-4">
                                   <div
@@ -232,14 +247,14 @@ const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean |
                                     onClick={() =>
                                       handleVoteForProposal(
                                         proposal.dao.contractAddress,
-                                        Number(proposal.id)
+                                        proposal.id
                                       )
                                     }
                                   >
                                     {isLoading ? Loader : LikeIcon}
                                   </div>
                                   <p className="ml-2">
-                                    {Number(proposal.votesFor) || 0}
+                                    {proposal.votesFor || 0}
                                   </p>
                                 </div>
                               }
@@ -251,7 +266,7 @@ const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean |
                                     onClick={() =>
                                       handleVoteAgainstProposal(
                                         proposal.dao.contractAddress,
-                                        Number(proposal.id)
+                                        proposal.id
                                       )
                                     }
                                   >
@@ -260,38 +275,41 @@ const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean |
                                       : DislikeIcon}
                                   </div>
                                   <p className="ml-2">
-                                    {Number(proposal.votesAgainst) || 0}
+                                    {proposal.votesAgainst || 0}
                                   </p>
                                 </div>
                               }
+                              <div className="flex items-center border h-9 px-2 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans cursor-pointer" onClick={() => handleChat(index)}>
+                                {ChatIcon}
+                              </div>
 
-                              {!proposal.isExecuted && (
-                                <div className="flex items-center w-full">
-                                  <CustomButton
-                                    handleClick={() =>
-                                      handleExecuteProposal(
-                                        proposal.dao.contractAddress,
-                                        proposal.id
-                                      )
-                                    }
-                                    isLoading={isExecuting}
-                                  >
-                                    Exceute
-                                  </CustomButton>
-                                  {/* <div className="flex items-center border h-9 w-9 rounded-full border-tertiary shadow-card bg-white hover:bg-light trans">
-                            {ChatIcon}
-                          </div> */}
-                                </div>
-                              )}
+                              {/* {!proposal.isExecuted && ( */}
+                              <div className={`flex items-center ml-14 w-full ${!proposal.isExecuted ? 'invisible' : 'visible'}`}>
+                                <CustomButton
+                                  handleClick={() =>
+                                    handleExecuteProposal(
+                                      proposal.dao.contractAddress,
+                                      proposal.id
+                                    )
+                                  }
+                                  isLoading={isExecuting}
+                                >
+                                  Exceute
+                                </CustomButton>
+
+                              </div>
+
+                              {/* )} */}
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                    <CommentBox showComment={proposal.showComment} messages={messages} setMessages={setMessages} proposalId={`${proposal.dao.name}-${proposal.id}`} />
                   </div>
                 </div>
               );
-            })}
+            }) : <p> No proposals!</p>}
         </div>
       ) : (
         <PageLoader />

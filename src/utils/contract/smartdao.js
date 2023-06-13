@@ -1,6 +1,4 @@
 import { AeSdkAepp, Node, BrowserWindowMessageConnection, walletDetector } from '@aeternity/aepp-sdk';
-import smartdaoACI from './smartdao.json';
-import daoACI from "./dao.json";
 
 export const smartdaoAddress = "ct_JkJEkXw82t1boPmb9ogNhxn3L2dHL9yALGEnu2D9fNKmaVsAu"
 // const SECRET_KEY = 'eba8786a506fd20e8b00f117e6d6598fd0943ff3d0bd926aea5e1c35802ce36a54584dc898d97866e538fb8a6bfa26db4ea60d69c87c68949b4531078aab2ea2';
@@ -19,16 +17,12 @@ export const aeSdk = new AeSdkAepp({
 
 
 export const scanForWallets = async () => {
-    console.log("Scanning for wallets...")
     return new Promise((resolve) => {
         const handleWallets = async ({ wallets, newWallet }) => {
             try {
-                console.log({ wallets, newWallet });
                 newWallet = newWallet || Object.values(wallets)[0]
                 stopScan()
                 await aeSdk.connectToWallet(newWallet.getConnection())
-                const { address: { current } } = await aeSdk.subscribeAddress('subscribe', 'connected')
-                console.log("Connected wallet: ", Object.keys(current)[0]);
                 resolve()
             } catch (err) {
                 console.log(err);

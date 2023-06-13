@@ -6,6 +6,7 @@ import { login, smartdaoAddress, aeSdk as client } from "../utils/contract/smart
 import smartdaoACI from "../utils/contract/smartdao.json";
 import daoACI from "../utils/contract/dao.json";
 import { IAccount, IDAO, IProposal } from "../types";
+import { createUser, logoutFirebase, signIn } from "../firebase";
 
 interface IContextProvider {
   children: ReactNode;
@@ -25,7 +26,7 @@ const ContextProvider = ({ children }: IContextProvider) => {
   useEffect(() => {
     getAllDaos();
     getAllProposals();
-  }, [])
+  }, []);
 
   const filterProposals = (active: boolean, executed: boolean) => {
     const isActive = (proposal: any) => proposal.endTime > Date.now();
@@ -35,7 +36,6 @@ const ContextProvider = ({ children }: IContextProvider) => {
     setProposals(filteredProposals);
 
   }
-
 
   const handleSearchDaos = (value: string) => {
     if (value) {
@@ -99,8 +99,14 @@ const ContextProvider = ({ children }: IContextProvider) => {
       const propps = [];
       for (let i = 0; i < daos.length; i++) {
         let daoProposals = await getProposals(daos[i].contractAddress);
-        daoProposals.map((p: any) => {
-          p.dao = daos[i];
+        daoProposals.map((proposal: any) => {
+          for (let key in proposal) {
+            if (typeof proposal[key] == "bigint") {
+              proposal[key] = Number(proposal[key]);
+            }
+          }
+          proposal.dao = daos[i];
+          proposal.showComment = false;
         });
         propps.push(...daoProposals);
       }
@@ -125,6 +131,8 @@ const ContextProvider = ({ children }: IContextProvider) => {
       balance: parseFloat(balance) / 1e18
     });
 
+    await createUser(address);
+    signIn(address)
     setIsLoggedIn(true);
     setShowModal(false);
   };
@@ -133,6 +141,7 @@ const ContextProvider = ({ children }: IContextProvider) => {
     await aeSdk.disconnectWallet();
     setIsLoggedIn(false);
     setAccount({ address: "", balance: 0 });
+    logoutFirebase()
     window.location.reload();
   }
 
