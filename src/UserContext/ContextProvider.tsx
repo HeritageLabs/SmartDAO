@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { UserContext } from ".";
-import useLocalStorage from "../hooks/useLocalStorage";
 import { login, smartdaoAddress, aeSdk as client } from "../utils/contract/smartdao.js";
 import smartdaoACI from "../utils/contract/smartdao.json";
 import daoACI from "../utils/contract/dao.json";
@@ -130,9 +129,9 @@ const ContextProvider = ({ children }: IContextProvider) => {
       address,
       balance: parseFloat(balance) / 1e18
     });
-
     await createUser(address);
-    signIn(address);
+    signIn(address)
+    setIsLoggedIn(true);
     setShowModal(false);
   };
 

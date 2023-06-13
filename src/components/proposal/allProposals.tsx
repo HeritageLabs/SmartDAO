@@ -303,7 +303,6 @@ const AllProposals = ({ dao, filters }: { dao: any, filters: { active: boolean |
                             </div >
                           </div >
                         </div >
-                        <CommentBox showComment={proposal.showComment} messages={messages} setMessages={setMessages} proposalId={`${proposal.dao.name}-${proposal.id}`} />
                       </div >
                     </div >
                     <CommentBox showComment={proposal.showComment} messages={messages} setMessages={setMessages} proposalId={`${proposal.dao.name}-${proposal.id}`} />

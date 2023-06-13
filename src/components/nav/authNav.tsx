@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { DAOS, FEEDS, PROPOSALS, VIEW_MY_DAO } from "../../utils/constants/pages";
 
 const AuthNav = () => {
-  const { showModal, setShowModal, loginUser, logoutUser, handleSearchDaos, handleSearchProposals, account } = useContext(UserContext) as IContextType;
+  const { loginUser, logoutUser, handleSearchDaos, handleSearchProposals, account } = useContext(UserContext) as IContextType;
   const { alertToast } = useToastify();
   const navigate = useNavigate();
 
@@ -27,6 +27,13 @@ const AuthNav = () => {
         handleSearchProposals(value);
       }
     }
+  }
+
+  const handleLogin = async (e: Event) => {
+    e.preventDefault();
+    console.log("Called");
+    await loginUser();
+    alertToast('success', 'Connected successfully');
   }
 
   useEffect(() => {
@@ -64,7 +71,7 @@ const AuthNav = () => {
         </div>
       ) : (
         // <CustomButton bg="bg-quaternary" handleClick={(e) => { setShowModal(true); e.preventDefault(); }}>
-        <CustomButton bg="bg-quaternary" handleClick={(async (e) => { e.preventDefault(); await loginUser(); alertToast('success', 'Connected successfully'); })} >
+        <CustomButton bg="bg-quaternary" handleClick={handleLogin} >
           Connect wallet
         </CustomButton>
       )}
